@@ -59,13 +59,16 @@ public class SortUtil {
             boolean sorted = false;
             ItemType sortType;
             switch (pair.getKey().getType()) {
-                case BOW:
-                case TRIDENT:
+                case TRIDENT:  //三叉戟
                     computed.get(ItemType.WEAPON).add(pair);
                     sorted = true;
                     break;
-                case LADDER:
+                case LADDER:  //梯子
                     computed.get(ItemType.LADDER).add(pair);
+                    sorted = true;
+                    break;
+                case FISHING_ROD:  //鱼竿
+                    computed.get(ItemType.TOOL).add(pair);
                     sorted = true;
                     break;
             }
@@ -95,7 +98,7 @@ public class SortUtil {
             else if (StrUtil.containsIgnoreCaseOr(pair.getKey().getType().toString(), "_FENCE"))  //栅栏、栅栏门
                 sortType = ItemType.FENCE;
 
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_SWORD"))  //剑
+            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_SWORD", "BOW"))  //剑、弓、弩
                 sortType = ItemType.WEAPON;
 
             else if (pair.getKey().getType() == Material.ENCHANTED_BOOK)  //附魔书
