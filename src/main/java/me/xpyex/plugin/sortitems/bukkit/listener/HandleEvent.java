@@ -43,6 +43,10 @@ public class HandleEvent implements Listener {
                 IGNORES.add(m);
             } else if (m.toString().endsWith("_VINES")) {  //藤蔓系列
                 IGNORES.add(m);
+            } else if (m.toString().endsWith("_TRAPDOOR")) {  //活板门
+                IGNORES.add(m);
+            } else if (m.toString().endsWith("_FENCE")) {  //栅栏
+                IGNORES.add(m);
             }
         }
     }
