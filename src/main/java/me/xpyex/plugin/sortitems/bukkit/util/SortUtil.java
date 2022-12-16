@@ -1,11 +1,10 @@
 package me.xpyex.plugin.sortitems.bukkit.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeMap;
 import me.xpyex.plugin.sortitems.bukkit.enums.ItemType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
-import me.xpyex.plugin.xplib.bukkit.util.StrUtil;
+import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -56,23 +55,7 @@ public class SortUtil {
         }
         
         items.values().forEach((pair) -> {
-            boolean sorted = false;
             ItemType sortType;
-            switch (pair.getKey().getType()) {
-                case TRIDENT:  //三叉戟
-                    computed.get(ItemType.WEAPON).add(pair);
-                    sorted = true;
-                    break;
-                case LADDER:  //梯子
-                    computed.get(ItemType.LADDER).add(pair);
-                    sorted = true;
-                    break;
-                case FISHING_ROD:  //鱼竿
-                    computed.get(ItemType.TOOL).add(pair);
-                    sorted = true;
-                    break;
-            }
-            if (sorted)  return;
 
             if (pair.getKey().getType().isRecord())  //唱片
                 sortType = ItemType.RECORD;
@@ -86,6 +69,9 @@ public class SortUtil {
             else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_STAIRS"))  //楼梯
                 sortType = ItemType.STAIR;
 
+            else if (pair.getKey().getType() == Material.LADDER)  //梯子
+                sortType = ItemType.LADDER;
+
             else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "BOAT"))  //船
                 sortType = ItemType.BOAT;
 
@@ -98,7 +84,7 @@ public class SortUtil {
             else if (StrUtil.containsIgnoreCaseOr(pair.getKey().getType().toString(), "_FENCE"))  //栅栏、栅栏门
                 sortType = ItemType.FENCE;
 
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_SWORD", "BOW"))  //剑、弓、弩
+            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_SWORD", "BOW", "TRIDENT"))  //剑、弓、弩、三叉戟
                 sortType = ItemType.WEAPON;
 
             else if (pair.getKey().getType() == Material.ENCHANTED_BOOK)  //附魔书
@@ -107,7 +93,7 @@ public class SortUtil {
             else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_HELMET", "_CHESTPLATE", "_LEGGINGS", "_BOOTS"))  //防具
                 sortType = ItemType.ARMOR;
 
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_AXE", "_PICKAXE", "_SHOVEL", "_HOE"))  //工具
+            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_AXE", "_PICKAXE", "_SHOVEL", "_HOE", "FISHING_ROD"))  //工具
                 sortType = ItemType.TOOL;
 
             else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_HEAD", "_SKULL"))  //头颅

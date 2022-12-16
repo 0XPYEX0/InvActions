@@ -2,6 +2,9 @@ name: SortItems
 version: '${version}'
 main: me.xpyex.plugin.sortitems.bukkit.SortItems
 authors: [ XPYEX ]
-api-version: 1.16
+api-version: 1.13
 softdepend:
   - XPLib
+commands:
+  SortItems:
+
