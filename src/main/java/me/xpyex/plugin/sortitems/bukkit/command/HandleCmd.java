@@ -38,7 +38,7 @@ public class HandleCmd implements CommandExecutor {
             if (sender instanceof Player) {
                 ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId(), GsonUtil.parseStr(DEFAULT_SETTINGS), false);
                 InvSetter setter = new InvSetter(((Player) sender), "F键整理-设定-" + sender.getName(), "#########", "#12    A#", "#########");
-                setter.setSign("#", ItemUtil.getItemStack(Material.BLACK_STAINED_GLASS, " "));
+                setter.setSign("#", ItemUtil.getItemStack(Material.BLACK_STAINED_GLASS_PANE, " "));
                 setter.setSign(" ", new ItemStack(Material.AIR));
                 JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());
                 setter.setSign("1", ItemUtil.getItemStack((o.get("ReplaceBrokenTool").getAsBoolean() ? Material.GREEN_WOOL : Material.RED_WOOL), "&a自动补充道具", "&f当手中物品损坏/用尽时", "&f自动从背包补充", "", "&f当前状态: " + (o.get("ReplaceBrokenTool").getAsBoolean() ? "&a启用" : "&c禁用")));
