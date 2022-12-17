@@ -15,14 +15,17 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrowableProjectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -62,6 +65,12 @@ public class HandleEvent implements Listener {
                 IGNORES.add(m);
             }
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEat(PlayerItemConsumeEvent event) {
+        SortUtil.replaceTool(event.getPlayer(), new ItemStack(event.getItem()));
+        //
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -126,25 +135,7 @@ public class HandleEvent implements Listener {
             if (event.getEntity() instanceof ThrowableProjectile && event.getEntity().getType() != EntityType.TRIDENT) {  //扔的还是投掷物
                 ItemStack before = new ItemStack(((ThrowableProjectile) event.getEntity()).getItem());
                 Player p = (Player) event.getEntity().getShooter();
-                EquipmentSlot slot = ItemUtil.equals(before, p.getInventory().getItemInMainHand()) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
-                JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + p.getUniqueId());
-                if (o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家开启了替换手中道具
-                    Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
-                        if (p.getInventory().getItem(slot).getType() == Material.AIR) {
-                            for (ItemStack content : p.getInventory().getContents()) {  //不遍历盔甲
-                                if (content == null) continue;
-
-                                if (ItemUtil.equals(content, before)) {
-                                    ItemStack copied = new ItemStack(content);
-                                    p.getInventory().setItem(slot, copied);
-                                    content.setAmount(0);
-                                    MsgUtil.sendActionBar(p, "&a您的道具已用尽，从背包补全. &e该功能在 &f/SortItems &e中调整");
-                                    return;
-                                }
-                            }
-                        }
-                    }, 1L);
-                }
+                SortUtil.replaceTool(p, before);
             }
         }
     }
@@ -165,25 +156,7 @@ public class HandleEvent implements Listener {
         }
 
         ItemStack before = new ItemStack(event.getItem());
-
-        JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
-        if (o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家开启了替换手中道具
-            Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
-                if (event.getPlayer().getInventory().getItem(event.getHand()).getType() == Material.AIR) {
-                    for (ItemStack content : event.getPlayer().getInventory().getContents()) {  //不遍历盔甲
-                        if (content == null) continue;
-
-                        if (ItemUtil.equals(content, before)) {
-                            ItemStack copied = new ItemStack(content);
-                            event.getPlayer().getInventory().setItem(event.getHand(), copied);
-                            content.setAmount(0);
-                            MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已用尽，从背包补全. &e该功能在 &f/SortItems &e中调整");
-                            return;
-                        }
-                    }
-                }
-            }, 1L);
-        }
+        SortUtil.replaceTool(event.getPlayer(), before);
     }
 
     @EventHandler
