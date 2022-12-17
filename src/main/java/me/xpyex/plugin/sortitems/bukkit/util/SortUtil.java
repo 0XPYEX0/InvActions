@@ -63,6 +63,12 @@ public class SortUtil {
             else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "RAIL"))  //铁轨
                 sortType = ItemType.RAIL;
 
+            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_WOOL"))
+                sortType = ItemType.WOOL;
+
+            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_CARPET"))
+                sortType = ItemType.CARPET;
+
             else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_SLAB"))  //半砖
                 sortType = ItemType.SLAB;
 

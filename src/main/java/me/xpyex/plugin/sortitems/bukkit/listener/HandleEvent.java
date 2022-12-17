@@ -20,9 +20,7 @@ import org.bukkit.entity.ThrowableProjectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -30,7 +28,6 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.metadata.FixedMetadataValue;
 
 public class HandleEvent implements Listener {
     private final static HashSet<Material> IGNORES = new HashSet<>();
@@ -74,11 +71,11 @@ public class HandleEvent implements Listener {
             if (target.getState() instanceof Container) {  //看向容器了
                 event.setCancelled(true);
                 SortUtil.sortInv(((Container) target.getState()).getInventory());
-                event.getPlayer().sendMessage(MsgUtil.getColorMsg("&a已整理你看向的 &f" + NameUtil.getTranslationName(target.getType())));
+                MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你看向的 &f" + NameUtil.getTranslationName(target.getType()));
             } else if (event.getPlayer().getLocation().getPitch() == 90f) {
                 event.setCancelled(true);
                 SortUtil.sortInv(event.getPlayer().getInventory());
-                event.getPlayer().sendMessage(MsgUtil.getColorMsg("&a已整理你的背包"));
+                MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你的背包");
             }
         }
     }

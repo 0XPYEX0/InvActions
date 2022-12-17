@@ -1,6 +1,5 @@
 package me.xpyex.plugin.sortitems.bukkit;
 
-import java.util.NoSuchElementException;
 import me.xpyex.plugin.sortitems.bukkit.command.HandleCmd;
 import me.xpyex.plugin.sortitems.bukkit.listener.HandleEvent;
 import me.xpyex.plugin.sortitems.bukkit.listener.HandleMenu;
@@ -37,7 +36,7 @@ public final class SortItems extends JavaPlugin {
         try {
             ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //不是每个版本都有这个
             getServer().getPluginManager().registerEvents(new HighVerListener(), getInstance());
-        } catch (NoSuchElementException ignored) {
+        } catch (Throwable ignored) {
             getLogger().warning("您的服务器不支持在玩家背包内按F整理，该功能已被禁用");
         }
         getLogger().info("已注册监听器");

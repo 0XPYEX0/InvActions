@@ -19,6 +19,8 @@ public enum ItemType {
     LADDER,  //梯子
     BOAT,  //船
     CRAY,  //黏土
+    WOOL,
+    CARPET,
     ORE_BLOCK,  //矿石
     RAW_ORE,  //粗矿
     INGOT,  //锭
