@@ -3,13 +3,13 @@ package me.xpyex.plugin.sortitems.bukkit.listener;
 import com.google.gson.JsonObject;
 import java.util.HashSet;
 import me.xpyex.plugin.sortitems.bukkit.SortItems;
+import me.xpyex.plugin.sortitems.bukkit.command.HandleCmd;
 import me.xpyex.plugin.sortitems.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
+import me.xpyex.plugin.xplib.bukkit.util.config.GsonUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.NameUtil;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -133,31 +134,47 @@ public class HandleEvent implements Listener {
             return;
         }
 
-            if (event.getItem() == null) return;
+        if (event.getItem() == null) return;
 
-            if (event.getItem().hasItemMeta() && event.getItem().getItemMeta() instanceof Damageable)
-                return;  //可破坏的物品留给上面处理，不在这处理
+        if (event.getItem().hasItemMeta() && event.getItem().getItemMeta() instanceof Damageable)
+            return;  //可破坏的物品留给上面处理，不在这处理
 
-            ItemStack before = new ItemStack(event.getItem());
+        ItemStack before = new ItemStack(event.getItem());
 
-            Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
 
-                JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
-                if (o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家开启了替换手中道具
-                    if (event.getPlayer().getInventory().getItem(event.getHand()).getType() == Material.AIR) {
-                        for (ItemStack content : event.getPlayer().getInventory().getContents()) {  //不遍历盔甲
-                            if (content == null) continue;
+            JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
+            if (o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家开启了替换手中道具
+                if (event.getPlayer().getInventory().getItem(event.getHand()).getType() == Material.AIR) {
+                    for (ItemStack content : event.getPlayer().getInventory().getContents()) {  //不遍历盔甲
+                        if (content == null) continue;
 
-                            if (ItemUtil.equals(content, before)) {
-                                ItemStack copied = new ItemStack(content);
-                                event.getPlayer().getInventory().setItem(event.getHand(), copied);
-                                content.setAmount(0);
-                                MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已用尽，从背包补全. &e该功能在 &f/SortItems &e中调整");
-                                return;
-                            }
+                        if (ItemUtil.equals(content, before)) {
+                            ItemStack copied = new ItemStack(content);
+                            event.getPlayer().getInventory().setItem(event.getHand(), copied);
+                            content.setAmount(0);
+                            MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已用尽，从背包补全. &e该功能在 &f/SortItems &e中调整");
+                            return;
                         }
                     }
                 }
-            }, 1L);
+            }
+        }, 1L);
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        Bukkit.getScheduler().runTaskAsynchronously(SortItems.getInstance(), () -> {  //异步操作文件
+            ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId(), GsonUtil.parseStr(HandleCmd.DEFAULT_SETTINGS), false);
+            //修复没打开过GUI设定的玩家使用道具会抛错
+            JsonObject before = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
+            JsonObject out = HandleCmd.DEFAULT_SETTINGS.deepCopy();
+            for (String setting : HandleCmd.DEFAULT_SETTINGS.keySet()) {
+                if (before.has(setting)) {
+                    out.add(setting, before.get(setting));
+                }
+            }  //更新设定. 如果以后有新设定，玩家进服便可直接使用
+            ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId(), GsonUtil.parseStr(out), true);
+        });
     }
 }

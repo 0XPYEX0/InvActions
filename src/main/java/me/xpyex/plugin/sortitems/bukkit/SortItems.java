@@ -5,6 +5,7 @@ import me.xpyex.plugin.sortitems.bukkit.command.HandleCmd;
 import me.xpyex.plugin.sortitems.bukkit.listener.HandleEvent;
 import me.xpyex.plugin.sortitems.bukkit.listener.HandleMenu;
 import me.xpyex.plugin.sortitems.bukkit.listener.HighVerListener;
+import me.xpyex.plugin.xplib.bukkit.util.bstats.BStatsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,6 +43,10 @@ public final class SortItems extends JavaPlugin {
 
         getCommand("SortItems").setExecutor(new HandleCmd());
         getLogger().info("已注册命令");
+
+        getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
+            BStatsUtil.hookWith(getInstance());
+        });
 
         getLogger().info("已加载");
         getLogger().info("感谢使用SortItems. 本插件在GitHub与Gitee开源，谨防受骗. 作者QQ1723275529");

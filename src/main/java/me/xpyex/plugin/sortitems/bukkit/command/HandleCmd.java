@@ -17,7 +17,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 
 public class HandleCmd implements CommandExecutor {
-    private static final JsonObject DEFAULT_SETTINGS = new JsonObject();
+    public static final JsonObject DEFAULT_SETTINGS = new JsonObject();
     static {
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenTool", true);
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenArmor", true);
