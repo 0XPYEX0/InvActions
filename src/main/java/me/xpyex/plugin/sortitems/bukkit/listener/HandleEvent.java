@@ -29,12 +29,7 @@ public class HandleEvent implements Listener {
     static {
         for (Material m : Material.values()) {
             switch (m) {
-                case TORCH:  //火把
-                case WALL_TORCH:
-                case SOUL_TORCH:  //灵魂火把
-                case SOUL_WALL_TORCH:
                 case REDSTONE_WIRE:  //红石线
-                case REDSTONE_TORCH:  //红石火把
                 case REDSTONE_WALL_TORCH:
                 case SNOW:  //雪层
                 case LAVA:  //岩浆
@@ -57,6 +52,8 @@ public class HandleEvent implements Listener {
             } else if (m.toString().endsWith("_FENCE")) {  //栅栏
                 IGNORES.add(m);
             } else if (m.toString().endsWith("FIRE")) {  //火、灵魂火
+                IGNORES.add(m);
+            } else if (m.toString().contains("TORCH")) {  //各种火把，为了兼容没有灵魂火把的版本
                 IGNORES.add(m);
             }
         }

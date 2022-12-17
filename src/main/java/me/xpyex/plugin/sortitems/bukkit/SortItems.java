@@ -16,16 +16,16 @@ public final class SortItems extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         INSTANCE = this;
-        if (VersionUtil.getMainVersion() < 9) {
-            getLogger().severe("本插件需要Minecraft至少为1.9才可运行");
-            getLogger().severe("很遗憾，您的服务器不满足此条件...");
+        if (!getServer().getPluginManager().isPluginEnabled("XPLib")) {
+            getLogger().warning("本插件需要XPLib作为前置...");
+            getLogger().warning("请在 https://github.com/0XPYEX0/XPLib/releases 下载后，再加载本插件");
             getServer().getPluginManager().disablePlugin(getInstance());
             return;
         }
 
-        if (!getServer().getPluginManager().isPluginEnabled("XPLib")) {
-            getLogger().warning("本插件需要XPLib作为前置...");
-            getLogger().warning("请在 https://github.com/0XPYEX0/XPLib/releases 下载后，再加载本插件");
+        if (VersionUtil.getMainVersion() < 9) {
+            getLogger().severe("本插件需要Minecraft至少为1.9才可运行");
+            getLogger().severe("很遗憾，您的服务器不满足此条件...");
             getServer().getPluginManager().disablePlugin(getInstance());
             return;
         }
