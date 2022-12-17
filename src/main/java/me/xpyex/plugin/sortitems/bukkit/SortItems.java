@@ -6,6 +6,7 @@ import me.xpyex.plugin.sortitems.bukkit.listener.HandleEvent;
 import me.xpyex.plugin.sortitems.bukkit.listener.HandleMenu;
 import me.xpyex.plugin.sortitems.bukkit.listener.HighVerListener;
 import me.xpyex.plugin.xplib.bukkit.util.bstats.BStatsUtil;
+import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,6 +47,17 @@ public final class SortItems extends JavaPlugin {
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
             BStatsUtil.hookWith(getInstance());
+        });
+
+        getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
+            getLogger().info("开始检查更新");
+            String ver = UpdateUtil.getUpdateFromGitee(getInstance());
+            if (ver != null) {
+                getLogger().info("当前插件版本: " + getInstance().getDescription().getVersion() + " ,有一个更新的版本: " + ver);
+                getLogger().info("前往 https://gitee.com/XPYEX/SortItems/releases 下载吧！");
+            } else {
+                getLogger().info("当前版本已是最新！");
+            }
         });
 
         getLogger().info("已加载");

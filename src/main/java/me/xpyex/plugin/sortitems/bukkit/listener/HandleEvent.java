@@ -14,9 +14,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.ThrowableProjectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -24,6 +30,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class HandleEvent implements Listener {
     private final static HashSet<Material> IGNORES = new HashSet<>();
@@ -78,54 +85,71 @@ public class HandleEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onItemBreak(PlayerItemBreakEvent event) {
-        EquipmentSlot slot;
-        if (event.getBrokenItem().equals(event.getPlayer().getInventory().getItemInOffHand())) {
-            slot = EquipmentSlot.OFF_HAND;
+        EquipmentSlot slot = null;
+        for (EquipmentSlot value : EquipmentSlot.values()) {
+            if (event.getBrokenItem().equals(event.getPlayer().getInventory().getItem(value))) {
+                slot = value;
+                break;
+            }
         }
-        else if (event.getBrokenItem().equals(event.getPlayer().getInventory().getHelmet())) {
-            slot = EquipmentSlot.HEAD;
-        }
-        else if (event.getBrokenItem().equals(event.getPlayer().getInventory().getChestplate())) {
-            slot = EquipmentSlot.CHEST;
-        }
-        else if (event.getBrokenItem().equals(event.getPlayer().getInventory().getLeggings())) {
-            slot = EquipmentSlot.LEGS;
-        }
-        else if (event.getBrokenItem().equals(event.getPlayer().getInventory().getBoots())) {
-            slot = EquipmentSlot.FEET;
-        } else {
-            slot = EquipmentSlot.HAND;
-        }
+        if (slot != null) {
+            JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
+            switch (slot) {
+                case HAND:
+                case OFF_HAND:
+                    if (!o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家未开启替换手中道具
+                        return;
+                    }
+                default:
+                    if (!o.get("ReplaceBrokenArmor").getAsBoolean()) {  //如果玩家未开启替换盔甲
+                        return;
+                    }
+            }
+            EquipmentSlot finalSlot = slot;
+            ItemStack brokenItem = new ItemStack(event.getBrokenItem());
+            Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
+                for (ItemStack content : event.getPlayer().getInventory().getContents()) {
+                    if (content == null) continue;
 
-        JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
-
-
-        switch (slot) {
-            case HAND:
-            case OFF_HAND:
-                if (!o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家未开启替换手中道具
-                    return;
+                    if (content.getType() == brokenItem.getType()) {  //同一种类型的道具
+                        ItemStack out = new ItemStack(content);
+                        content.setAmount(0);
+                        event.getPlayer().getInventory().setItem(finalSlot, out);
+                        MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. &e该功能在 &f/SortItems &e中调整");
+                        return;
+                    }
                 }
-            default:
-                if (!o.get("ReplaceBrokenArmor").getAsBoolean()) {  //如果玩家未开启替换盔甲
-                    return;
-                }
+            }, 2L);
         }
-        ItemStack brokenItem = new ItemStack(event.getBrokenItem());
+    }
 
-        Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
-            for (ItemStack content : event.getPlayer().getInventory().getContents()) {
-                if (content == null) continue;
+    @EventHandler(ignoreCancelled = true)
+    public void onShoot(ProjectileLaunchEvent event) {
+        if (event.getEntity().getShooter() instanceof Player) {  //玩家射东西了
+            if (event.getEntity() instanceof ThrowableProjectile && event.getEntity().getType() != EntityType.TRIDENT) {  //扔的还是投掷物
+                ItemStack before = new ItemStack(((ThrowableProjectile) event.getEntity()).getItem());
+                Player p = (Player) event.getEntity().getShooter();
+                EquipmentSlot slot = ItemUtil.equals(before, p.getInventory().getItemInMainHand()) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
+                JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + p.getUniqueId());
+                if (o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家开启了替换手中道具
+                    Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
+                        if (p.getInventory().getItem(slot).getType() == Material.AIR) {
+                            for (ItemStack content : p.getInventory().getContents()) {  //不遍历盔甲
+                                if (content == null) continue;
 
-                if (content.getType() == brokenItem.getType()) {  //同一种类型的道具
-                    ItemStack out = new ItemStack(content);
-                    content.setAmount(0);
-                    event.getPlayer().getInventory().setItem(slot, out);
-                    MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. &e该功能在 &f/SortItems &e中调整");
-                    return;
+                                if (ItemUtil.equals(content, before)) {
+                                    ItemStack copied = new ItemStack(content);
+                                    p.getInventory().setItem(slot, copied);
+                                    content.setAmount(0);
+                                    MsgUtil.sendActionBar(p, "&a您的道具已用尽，从背包补全. &e该功能在 &f/SortItems &e中调整");
+                                    return;
+                                }
+                            }
+                        }
+                    }, 1L);
                 }
             }
-        }, 2L);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -139,12 +163,15 @@ public class HandleEvent implements Listener {
         if (event.getItem().hasItemMeta() && event.getItem().getItemMeta() instanceof Damageable)
             return;  //可破坏的物品留给上面处理，不在这处理
 
+        if (event.getItem().getType() == Material.EGG || event.getItem().getType() == Material.ENDER_PEARL || event.getItem().getType() == Material.SPLASH_POTION || event.getItem().getType() == Material.SNOWBALL) {
+            return;  //蛋、末影珍珠、喷溅型药水、雪球，  在onShoot方法处理
+        }
+
         ItemStack before = new ItemStack(event.getItem());
 
-        Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
-
-            JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
-            if (o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家开启了替换手中道具
+        JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
+        if (o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家开启了替换手中道具
+            Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
                 if (event.getPlayer().getInventory().getItem(event.getHand()).getType() == Material.AIR) {
                     for (ItemStack content : event.getPlayer().getInventory().getContents()) {  //不遍历盔甲
                         if (content == null) continue;
@@ -158,8 +185,8 @@ public class HandleEvent implements Listener {
                         }
                     }
                 }
-            }
-        }, 1L);
+            }, 1L);
+        }
     }
 
     @EventHandler
