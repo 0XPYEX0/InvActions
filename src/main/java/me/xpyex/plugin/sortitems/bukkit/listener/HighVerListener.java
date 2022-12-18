@@ -1,8 +1,6 @@
 package me.xpyex.plugin.sortitems.bukkit.listener;
 
 import me.xpyex.plugin.sortitems.bukkit.util.SortUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
