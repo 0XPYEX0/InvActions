@@ -2,7 +2,6 @@ package me.xpyex.plugin.sortitems.bukkit;
 
 import me.xpyex.plugin.sortitems.bukkit.command.HandleCmd;
 import me.xpyex.plugin.sortitems.bukkit.listener.HandleEvent;
-import me.xpyex.plugin.sortitems.bukkit.listener.HandleMenu;
 import me.xpyex.plugin.sortitems.bukkit.listener.HighVerListener;
 import me.xpyex.plugin.xplib.bukkit.util.bstats.BStatsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
@@ -32,7 +31,7 @@ public final class SortItems extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new HandleEvent(), getInstance());
-        getServer().getPluginManager().registerEvents(new HandleMenu(), getInstance());
+        //getServer().getPluginManager().registerEvents(new HandleMenu(), getInstance());
         try {
             ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //不是每个版本都有这个
             getServer().getPluginManager().registerEvents(new HighVerListener(), getInstance());

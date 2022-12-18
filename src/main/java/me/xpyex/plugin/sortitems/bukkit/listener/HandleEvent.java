@@ -1,6 +1,7 @@
 package me.xpyex.plugin.sortitems.bukkit.listener;
 
 import com.google.gson.JsonObject;
+import java.util.ArrayList;
 import java.util.HashSet;
 import me.xpyex.plugin.sortitems.bukkit.SortItems;
 import me.xpyex.plugin.sortitems.bukkit.command.HandleCmd;
@@ -15,13 +16,13 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrowableProjectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
@@ -33,7 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 
 public class HandleEvent implements Listener {
-    private final static HashSet<Material> IGNORES = new HashSet<>();
+    private static final HashSet<Material> IGNORES = new HashSet<>();
     static {
         for (Material m : Material.values()) {
             switch (m) {
@@ -121,7 +122,7 @@ public class HandleEvent implements Listener {
                         ItemStack out = new ItemStack(content);
                         content.setAmount(0);
                         event.getPlayer().getInventory().setItem(finalSlot, out);
-                        MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. &e该功能在 &f/SortItems &e中调整");
+                        MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. " + SortUtil.SETTING_HELP);
                         return;
                     }
                 }
@@ -136,6 +137,66 @@ public class HandleEvent implements Listener {
                 ItemStack before = new ItemStack(((ThrowableProjectile) event.getEntity()).getItem());
                 Player p = (Player) event.getEntity().getShooter();
                 SortUtil.replaceTool(p, before);
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onRightClick(PlayerInteractEvent event) {;
+        JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
+        if (!o.get("AutoFarmer").getAsBoolean()) {  //如果玩家没开启自动收割
+            return;
+        }
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (ItemUtil.typeIsOr(event.getClickedBlock(), Material.MELON, Material.PUMPKIN)) {
+                BlockBreakEvent blockBreakEvent = new BlockBreakEvent(event.getClickedBlock(), event.getPlayer());
+                Bukkit.getPluginManager().callEvent(blockBreakEvent);
+                if (blockBreakEvent.isCancelled()) {
+                    return;  //防止收割被保护的地方
+                }
+                MsgUtil.sendActionBar(event.getPlayer(), "&a已为您自动收获 &f" + NameUtil.getTranslationName(event.getClickedBlock().getType()) + "&a. " + SortUtil.SETTING_HELP);
+                event.getClickedBlock().breakNaturally(event.getPlayer().getInventory().getItemInMainHand());
+                return;
+            }
+
+            String blockData = event.getClickedBlock().getBlockData().getAsString();
+
+            if (blockData.contains("[age=")) {
+                int age = Integer.parseInt(blockData.split("")[blockData.length() - 2]);
+                Material type = event.getClickedBlock().getType();
+                boolean canCut = false;
+                if (ItemUtil.typeIsOr(type, Material.WHEAT, Material.CARROTS, Material.POTATOES)) {
+                    if (age == 7) {
+                        canCut = true;
+                    }
+                } else if (ItemUtil.typeIsOr(type, Material.NETHER_WART, Material.BEETROOTS)) {
+                    if (age == 3) {
+                        canCut = true;
+                    }
+                }
+                if (canCut) {
+                    BlockBreakEvent blockBreakEvent = new BlockBreakEvent(event.getClickedBlock(), event.getPlayer());
+                    Bukkit.getPluginManager().callEvent(blockBreakEvent);
+                    if (blockBreakEvent.isCancelled()) {
+                        return;  //防止收割被保护的地方
+                    }
+                    BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent(event.getClickedBlock(), event.getClickedBlock().getState(), event.getClickedBlock(), event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer(), true, event.getHand());
+                    if (blockPlaceEvent.isCancelled()) {
+                        return;  //防止收割被保护的地方
+                    }
+                    event.setCancelled(true);
+                    ArrayList<ItemStack> result = new ArrayList<>(event.getClickedBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand()));
+                    for (ItemStack drop : result) {
+                        if (ItemUtil.typeIsOr(drop, Material.WHEAT, Material.BEETROOT)) continue;
+
+                        drop.setAmount(drop.getAmount() - 1);
+                    }
+                    event.getClickedBlock().setType(type);
+                    for (ItemStack drop : result) {
+                        event.getClickedBlock().getLocation().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), drop);
+                    }
+                    MsgUtil.sendActionBar(event.getPlayer(), "&a已为您自动收获并种植 &f" + NameUtil.getTranslationName(event.getClickedBlock().getType()) + "&a. " + SortUtil.SETTING_HELP);
+                }
             }
         }
     }

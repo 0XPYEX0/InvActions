@@ -19,6 +19,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class SortUtil {
+    public static final String SETTING_HELP = "&e该功能在 &f/SortItems &e中调整";
+
     public static void sortPlayerInv(PlayerInventory inv) {
         Inventory i = Bukkit.createInventory(inv.getHolder(), 27);
         int start_p = 9;
@@ -192,7 +194,7 @@ public class SortUtil {
                             ItemStack copied = new ItemStack(content);
                             p.getInventory().setItem(slot, copied);
                             content.setAmount(0);
-                            MsgUtil.sendActionBar(p, "&a您的道具已用尽，从背包补全. &e该功能在 &f/SortItems &e中调整");
+                            MsgUtil.sendActionBar(p, "&a您的道具已用尽，从背包补全. " + SortUtil.SETTING_HELP);
                             return;
                         }
                     }
