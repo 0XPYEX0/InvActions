@@ -24,6 +24,7 @@ public class HandleCmd implements CommandExecutor {
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenTool", true);
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenArmor", true);
         DEFAULT_SETTINGS.addProperty("AutoFarmer", true);
+        DEFAULT_SETTINGS.addProperty("DefaultF", false);
     }
 
     @Override
@@ -40,7 +41,7 @@ public class HandleCmd implements CommandExecutor {
             }
             if (sender instanceof Player) {
                 ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId(), GsonUtil.parseStr(DEFAULT_SETTINGS), false);
-                InvSetter setter = new InvSetter(((Player) sender), "F键整理-设定-" + sender.getName(), "#########", "#123   A#", "#########");
+                InvSetter setter = new InvSetter(((Player) sender), "F键整理-设定-" + sender.getName(), "#########", "#1234  A#", "#########");
                 setter.setSign("#", ItemUtil.getItemStack(Material.BLACK_STAINED_GLASS_PANE, " "));
                 setter.setSign(" ", new ItemStack(Material.AIR));
 
@@ -56,7 +57,6 @@ public class HandleCmd implements CommandExecutor {
                                           boolean futureMode = !o.get("ReplaceBrokenTool").getAsBoolean();
                                           o.addProperty("ReplaceBrokenTool", futureMode);
                                           ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(o), true);
-
                                       }))
                     )
 
@@ -71,7 +71,6 @@ public class HandleCmd implements CommandExecutor {
                                           boolean futureMode = !o.get("ReplaceBrokenArmor").getAsBoolean();
                                           o.addProperty("ReplaceBrokenArmor", futureMode);
                                           ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(o), true);
-
                                       }))
                     )
 
@@ -86,7 +85,19 @@ public class HandleCmd implements CommandExecutor {
                                           boolean futureMode = !o.get("AutoFarmer").getAsBoolean();
                                           o.addProperty("AutoFarmer", futureMode);
                                           ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(o), true);
-
+                                      }))
+                    )
+                    .setSign("4", new UnmodifiableButton(menu, ((player, clickType) -> {
+                            JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
+                            return o.get("DefaultF").getAsBoolean() ? 1 : 0;
+                        }))
+                                      .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a按下 &fF &a整理", "&f不论是否潜行且低头", "&f按下 &eF &f就整理自身背包", "&5&o该设定不影响 &eShift+F &5&o整理容器", "", "&f当前状态: &c禁用"))
+                                      .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a按下 &fF &a整理", "&f不论是否潜行且低头", "&f按下 &eF &f就整理自身背包", "&5&o该设定不影响 &eShift+F &5&o整理容器", "", "&f当前状态: &a启用"))
+                                      .setClickEffect(((player, clickType, itemStack) -> {
+                                          JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + player.getUniqueId());  //不放到外面是为了实时更新
+                                          boolean futureMode = !o.get("DefaultF").getAsBoolean();
+                                          o.addProperty("DefaultF", futureMode);
+                                          ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(o), true);
                                       }))
                     )
                     .setSign("A", new UnmodifiableButton(menu, ((player, clickType) -> {
