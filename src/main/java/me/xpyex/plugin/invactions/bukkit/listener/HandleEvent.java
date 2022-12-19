@@ -1,11 +1,11 @@
-package me.xpyex.plugin.sortitems.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.listener;
 
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.HashSet;
-import me.xpyex.plugin.sortitems.bukkit.SortItems;
-import me.xpyex.plugin.sortitems.bukkit.command.HandleCmd;
-import me.xpyex.plugin.sortitems.bukkit.util.SortUtil;
+import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.GsonUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
@@ -84,7 +84,7 @@ public class HandleEvent implements Listener {
             MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你看向的 &f" + NameUtil.getTranslationName(target.getType()));
             return;
         }
-        JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
+        JsonObject o = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId());
         if (!o.get("DefaultF").getAsBoolean() && !event.getPlayer().isSneaking()) {
             return;
         }
@@ -104,7 +104,7 @@ public class HandleEvent implements Listener {
             }
         }
         if (slot != null) {
-            JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
+            JsonObject o = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId());
             switch (slot) {
                 case HAND:
                 case OFF_HAND:
@@ -118,7 +118,7 @@ public class HandleEvent implements Listener {
             }
             EquipmentSlot finalSlot = slot;
             ItemStack brokenItem = new ItemStack(event.getBrokenItem());
-            Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
                 for (ItemStack content : event.getPlayer().getInventory().getContents()) {
                     if (content == null) continue;
 
@@ -147,7 +147,7 @@ public class HandleEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onRightClick(PlayerInteractEvent event) {;
-        JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
+        JsonObject o = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId());
         if (!o.get("AutoFarmer").getAsBoolean()) {  //如果玩家没开启自动收割
             return;
         }
@@ -242,17 +242,17 @@ public class HandleEvent implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(SortItems.getInstance(), () -> {  //异步操作文件
-            ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId(), GsonUtil.parseStr(HandleCmd.DEFAULT_SETTINGS), false);
+        Bukkit.getScheduler().runTaskAsynchronously(InvActions.getInstance(), () -> {  //异步操作文件
+            ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId(), GsonUtil.parseStr(HandleCmd.DEFAULT_SETTINGS), false);
             //修复没打开过GUI设定的玩家使用道具会抛错
-            JsonObject before = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId());
+            JsonObject before = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId());
             JsonObject out = HandleCmd.DEFAULT_SETTINGS.deepCopy();
             for (String setting : HandleCmd.DEFAULT_SETTINGS.keySet()) {
                 if (before.has(setting)) {
                     out.add(setting, before.get(setting));
                 }
             }  //更新设定. 如果以后有新设定，玩家进服便可直接使用
-            ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + event.getPlayer().getUniqueId(), GsonUtil.parseStr(out), true);
+            ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId(), GsonUtil.parseStr(out), true);
         });
     }
 }

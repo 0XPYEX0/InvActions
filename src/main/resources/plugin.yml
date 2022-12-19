@@ -1,10 +1,11 @@
-name: SortItems
+name: InvActions
 version: '${version}'
-main: me.xpyex.plugin.sortitems.bukkit.SortItems
+main: me.xpyex.plugin.invactions.bukkit.InvActions
 authors: [ XPYEX ]
 api-version: 1.13
 softdepend:
   - XPLib
 commands:
-  SortItems:
-
+  InvActions:
+    aliases:
+      - SortItems

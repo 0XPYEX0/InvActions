@@ -1,8 +1,8 @@
-package me.xpyex.plugin.sortitems.bukkit;
+package me.xpyex.plugin.invactions.bukkit;
 
-import me.xpyex.plugin.sortitems.bukkit.command.HandleCmd;
-import me.xpyex.plugin.sortitems.bukkit.listener.HandleEvent;
-import me.xpyex.plugin.sortitems.bukkit.listener.HighVerListener;
+import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
+import me.xpyex.plugin.invactions.bukkit.listener.HandleEvent;
+import me.xpyex.plugin.invactions.bukkit.listener.HighVerListener;
 import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.util.bstats.BStatsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
@@ -10,8 +10,8 @@ import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class SortItems extends JavaPlugin {
-    private static SortItems INSTANCE;
+public final class InvActions extends JavaPlugin {
+    private static InvActions INSTANCE;
 
     @Override
     public void onEnable() {
@@ -47,11 +47,12 @@ public final class SortItems extends JavaPlugin {
         }
         getLogger().info("已注册监听器");
 
-        getCommand("SortItems").setExecutor(new HandleCmd());
+        getCommand("InvActions").setExecutor(new HandleCmd());
         getLogger().info("已注册命令");
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
-            BStatsUtil.hookWith(getInstance());
+            BStatsUtil.hookWith(getInstance(), 17118);
+            getLogger().info("与bStats挂钩");
         });
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
@@ -59,14 +60,14 @@ public final class SortItems extends JavaPlugin {
             String ver = UpdateUtil.getUpdateFromGitee(getInstance());
             if (ver != null) {
                 getLogger().info("当前插件版本: " + getInstance().getDescription().getVersion() + " ,有一个更新的版本: " + ver);
-                getLogger().info("前往 https://gitee.com/XPYEX/SortItems/releases 下载吧！");
+                getLogger().info("前往 https://gitee.com/XPYEX/InvActions/releases 下载吧！");
             } else {
                 getLogger().info("当前版本已是最新！");
             }
         });
 
         getLogger().info("已加载");
-        getLogger().info("感谢使用SortItems. 本插件在GitHub与Gitee开源，谨防受骗. 作者QQ1723275529");
+        getLogger().info("感谢使用InvActions. 本插件在GitHub与Gitee开源，谨防受骗. 作者QQ1723275529");
     }
 
     @Override
@@ -75,7 +76,7 @@ public final class SortItems extends JavaPlugin {
         //
     }
 
-    public static SortItems getInstance() {
+    public static InvActions getInstance() {
         return INSTANCE;
         //
     }

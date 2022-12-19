@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'me.xpyex.plugin.sortitems.bukkit'
+group = 'me.xpyex.plugin.invactions.bukkit'
 version = '1.0.7'
 
 repositories {

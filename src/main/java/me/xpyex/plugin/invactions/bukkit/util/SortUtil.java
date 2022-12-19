@@ -1,10 +1,10 @@
-package me.xpyex.plugin.sortitems.bukkit.util;
+package me.xpyex.plugin.invactions.bukkit.util;
 
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.TreeMap;
-import me.xpyex.plugin.sortitems.bukkit.SortItems;
-import me.xpyex.plugin.sortitems.bukkit.enums.ItemType;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class SortUtil {
-    public static final String SETTING_HELP = "&e该功能在 &f/SortItems &e中调整";
+    public static final String SETTING_HELP = "&e该功能在 &f/InvActions &e中调整";
 
     public static void sortPlayerInv(PlayerInventory inv) {
         Inventory i = Bukkit.createInventory(inv.getHolder(), 27);
@@ -183,9 +183,9 @@ public class SortUtil {
 
     public static void replaceTool(Player p, ItemStack before) {
         EquipmentSlot slot = ItemUtil.equals(before, p.getInventory().getItemInMainHand()) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
-        JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + p.getUniqueId());
+        JsonObject o = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + p.getUniqueId());
         if (o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家开启了替换手中道具
-            Bukkit.getScheduler().runTaskLater(SortItems.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
                 if (p.getInventory().getItem(slot).getType() == Material.AIR) {
                     for (ItemStack content : p.getInventory().getContents()) {  //不遍历盔甲
                         if (content == null) continue;

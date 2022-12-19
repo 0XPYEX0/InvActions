@@ -1,6 +1,6 @@
-package me.xpyex.plugin.sortitems.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.listener;
 
-import me.xpyex.plugin.sortitems.bukkit.util.SortUtil;
+import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import org.bukkit.Sound;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;

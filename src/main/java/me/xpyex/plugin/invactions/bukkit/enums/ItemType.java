@@ -1,4 +1,4 @@
-package me.xpyex.plugin.sortitems.bukkit.enums;
+package me.xpyex.plugin.invactions.bukkit.enums;
 
 public enum ItemType {
     TOOL,  //工具
