@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class HandleCmd implements CommandExecutor {
     public static final JsonObject DEFAULT_SETTINGS = new JsonObject();
+
     static {
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenTool", true);
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenArmor", true);
@@ -48,8 +49,8 @@ public class HandleCmd implements CommandExecutor {
                             JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
                             return o.get("ReplaceBrokenTool").getAsBoolean() ? 1 : 0;
                         }))
-                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动补充道具", "&f当手中物品损坏/用尽时", "&f自动从背包补充", "", "&f当前状态: &c禁用"))
-                                       .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a自动补充道具", "&f当手中物品损坏/用尽时", "&f自动从背包补充", "", "&f当前状态: &a启用"))
+                                      .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动补充道具", "&f当手中物品损坏/用尽时", "&f自动从背包补充", "", "&f当前状态: &c禁用"))
+                                      .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a自动补充道具", "&f当手中物品损坏/用尽时", "&f自动从背包补充", "", "&f当前状态: &a启用"))
                                       .setClickEffect(((player, clickType, itemStack) -> {
                                           JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + player.getUniqueId());  //不放到外面是为了实时更新
                                           boolean futureMode = !o.get("ReplaceBrokenTool").getAsBoolean();
@@ -60,11 +61,11 @@ public class HandleCmd implements CommandExecutor {
                     )
 
                     .setSign("2", new UnmodifiableButton(menu, ((player, clickType) -> {
-                        JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
-                        return o.get("ReplaceBrokenArmor").getAsBoolean() ? 1 : 0;
-                    }))
-                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动穿戴盔甲", "&f当穿戴盔甲损坏时", "&f自动从背包补充", "", "&f当前状态: &c禁用"))
-                                       .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a自动穿戴盔甲", "&f当穿戴盔甲损坏时", "&f自动从背包补充", "", "&f当前状态: &a启用"))
+                            JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
+                            return o.get("ReplaceBrokenArmor").getAsBoolean() ? 1 : 0;
+                        }))
+                                      .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动穿戴盔甲", "&f当穿戴盔甲损坏时", "&f自动从背包补充", "", "&f当前状态: &c禁用"))
+                                      .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a自动穿戴盔甲", "&f当穿戴盔甲损坏时", "&f自动从背包补充", "", "&f当前状态: &a启用"))
                                       .setClickEffect(((player, clickType, itemStack) -> {
                                           JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + player.getUniqueId());  //不放到外面是为了实时更新
                                           boolean futureMode = !o.get("ReplaceBrokenArmor").getAsBoolean();
@@ -75,9 +76,9 @@ public class HandleCmd implements CommandExecutor {
                     )
 
                     .setSign("3", new UnmodifiableButton(menu, ((player, clickType) -> {
-                        JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
-                        return o.get("AutoFarmer").getAsBoolean() ? 1 : 0;
-                    }))
+                            JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
+                            return o.get("AutoFarmer").getAsBoolean() ? 1 : 0;
+                        }))
                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动收割", "&f当右键农作物时", "&f若成熟则自动收割", "", "&f当前状态: &c禁用"))
                                       .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a自动收割", "&f当右键农作物时", "&f若成熟则自动收割", "", "&f当前状态: &a启用"))
                                       .setClickEffect(((player, clickType, itemStack) -> {
@@ -89,8 +90,8 @@ public class HandleCmd implements CommandExecutor {
                                       }))
                     )
                     .setSign("A", new UnmodifiableButton(menu, ((player, clickType) -> {
-                        return player.hasPermission("SortItems.admin") ? 1 : 0;
-                    }))
+                            return player.hasPermission("SortItems.admin") ? 1 : 0;
+                        }))
                                       .addMode(1, ItemUtil.getItemStack(Material.ORANGE_WOOL, "&6重载所有玩家的配置文件"))
                                       .addMode(0, new ItemStack(Material.AIR))
                                       .setClickEffect(((player, clickType, itemStack) -> {

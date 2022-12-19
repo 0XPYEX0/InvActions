@@ -31,7 +31,6 @@ public final class SortItems extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new HandleEvent(), getInstance());
-        //getServer().getPluginManager().registerEvents(new HandleMenu(), getInstance());
         try {
             ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //不是每个版本都有这个
             getServer().getPluginManager().registerEvents(new HighVerListener(), getInstance());

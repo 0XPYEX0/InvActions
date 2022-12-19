@@ -149,11 +149,15 @@ public class HandleEvent implements Listener {
         }
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (ItemUtil.typeIsOr(event.getClickedBlock(), Material.MELON, Material.PUMPKIN)) {
+                if (event.getItem() != null && event.getItem().getType() == Material.SHEARS) {
+                    return;
+                }
                 BlockBreakEvent blockBreakEvent = new BlockBreakEvent(event.getClickedBlock(), event.getPlayer());
                 Bukkit.getPluginManager().callEvent(blockBreakEvent);
                 if (blockBreakEvent.isCancelled()) {
                     return;  //防止收割被保护的地方
                 }
+                event.setCancelled(true);
                 MsgUtil.sendActionBar(event.getPlayer(), "&a已为您自动收获 &f" + NameUtil.getTranslationName(event.getClickedBlock().getType()) + "&a. " + SortUtil.SETTING_HELP);
                 event.getClickedBlock().breakNaturally(event.getPlayer().getInventory().getItemInMainHand());
                 return;
