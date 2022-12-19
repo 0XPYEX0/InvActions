@@ -201,6 +201,7 @@ public class HandleEvent implements Listener {
                     return;  //防止收割被保护的地方
                 }
                 BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent(event.getClickedBlock(), event.getClickedBlock().getState(), event.getClickedBlock(), event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer(), true, event.getHand());
+                Bukkit.getPluginManager().callEvent(blockPlaceEvent);
                 if (blockPlaceEvent.isCancelled()) {
                     return;  //防止收割被保护的地方
                 }
