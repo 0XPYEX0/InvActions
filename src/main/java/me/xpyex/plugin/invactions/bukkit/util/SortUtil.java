@@ -1,12 +1,10 @@
 package me.xpyex.plugin.invactions.bukkit.util;
 
-import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
-import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
@@ -183,8 +181,7 @@ public class SortUtil {
 
     public static void replaceTool(Player p, ItemStack before) {
         EquipmentSlot slot = ItemUtil.equals(before, p.getInventory().getItemInMainHand()) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
-        JsonObject o = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + p.getUniqueId());
-        if (o.get("ReplaceBrokenTool").getAsBoolean()) {  //如果玩家开启了替换手中道具
+        if (SettingsUtil.getSetting(p, "ReplaceBrokenTool")) {  //如果玩家开启了替换手中道具
             Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
                 if (p.getInventory().getItem(slot).getType() == Material.AIR) {
                     for (ItemStack content : p.getInventory().getContents()) {  //不遍历盔甲

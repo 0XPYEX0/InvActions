@@ -1,10 +1,16 @@
 package me.xpyex.plugin.invactions.bukkit;
 
+import com.google.gson.JsonObject;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
+import me.xpyex.plugin.invactions.bukkit.listener.AutoFarmer;
 import me.xpyex.plugin.invactions.bukkit.listener.HandleEvent;
 import me.xpyex.plugin.invactions.bukkit.listener.HighVerListener;
+import me.xpyex.plugin.invactions.bukkit.listener.QuickDrop;
+import me.xpyex.plugin.invactions.bukkit.listener.ReplaceBroken;
 import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.util.bstats.BStatsUtil;
+import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
+import me.xpyex.plugin.xplib.bukkit.util.config.GsonUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.event.inventory.ClickType;
@@ -39,6 +45,9 @@ public final class InvActions extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new HandleEvent(), getInstance());
+        getServer().getPluginManager().registerEvents(new AutoFarmer(), getInstance());
+        getServer().getPluginManager().registerEvents(new QuickDrop(), getInstance());
+        getServer().getPluginManager().registerEvents(new ReplaceBroken(), getInstance());
         try {
             ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //不是每个版本都有这个
             getServer().getPluginManager().registerEvents(new HighVerListener(), getInstance());
@@ -64,6 +73,21 @@ public final class InvActions extends JavaPlugin {
             } else {
                 getLogger().info("当前版本已是最新！");
             }
+        });
+
+        getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
+            getServer().getOnlinePlayers().forEach((player -> {
+                ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(HandleCmd.DEFAULT_SETTINGS), false);
+                //如果文件还不存在，则新建一份
+                JsonObject before = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + player.getUniqueId());
+                JsonObject out = HandleCmd.DEFAULT_SETTINGS.deepCopy();
+                for (String setting : HandleCmd.DEFAULT_SETTINGS.keySet()) {
+                    if (before.has(setting)) {
+                        out.add(setting, before.get(setting));
+                    }
+                }  //更新设定，应对热拔插
+                ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(out), true);
+            }));
         });
 
         getLogger().info("已加载");
