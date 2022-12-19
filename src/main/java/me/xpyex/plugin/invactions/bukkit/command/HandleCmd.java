@@ -103,7 +103,7 @@ public class HandleCmd implements CommandExecutor {
                                       .addMode(0, new ItemStack(Material.AIR))
                                       .setClickEffect(((player, clickType, itemStack) -> {
                                           Bukkit.getScheduler().runTask(InvActions.getInstance(), () -> {
-                                              Bukkit.dispatchCommand(player, "sortItems reload");
+                                              Bukkit.dispatchCommand(player, "InvActions reload");
                                           });
                                       }))
                         , 1);
