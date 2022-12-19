@@ -13,6 +13,7 @@ import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.NameUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.entity.EntityType;
@@ -90,6 +91,7 @@ public class HandleEvent implements Listener {
         event.setCancelled(true);
         SortUtil.sortInv(event.getPlayer().getInventory());
         MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你的背包");
+        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
     }
 
     @EventHandler(ignoreCancelled = true)

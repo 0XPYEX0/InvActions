@@ -43,10 +43,11 @@ public class HandleCmd implements CommandExecutor {
                 ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId(), GsonUtil.parseStr(DEFAULT_SETTINGS), false);
                 InvSetter setter = new InvSetter(((Player) sender), "F键整理-设定-" + sender.getName(), "#########", "#1234  A#", "#########");
                 setter.setSign("#", ItemUtil.getItemStack(Material.BLACK_STAINED_GLASS_PANE, " "));
-                setter.setSign(" ", new ItemStack(Material.AIR));
+                setter.setSign(" ", Material.AIR);
 
-                Menu menu = new Menu((Player) sender, setter);
-                menu.setSign("1", new UnmodifiableButton(menu, ((player, clickType) -> {
+                Menu menu = new Menu((Player) sender);
+                menu.setPage(1, setter)
+                    .setSign("1", new UnmodifiableButton(menu, ((player, clickType) -> {
                             JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
                             return o.get("ReplaceBrokenTool").getAsBoolean() ? 1 : 0;
                         }))
@@ -58,7 +59,7 @@ public class HandleCmd implements CommandExecutor {
                                           o.addProperty("ReplaceBrokenTool", futureMode);
                                           ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(o), true);
                                       }))
-                    )
+                        , 1)
 
                     .setSign("2", new UnmodifiableButton(menu, ((player, clickType) -> {
                             JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
@@ -72,7 +73,7 @@ public class HandleCmd implements CommandExecutor {
                                           o.addProperty("ReplaceBrokenArmor", futureMode);
                                           ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(o), true);
                                       }))
-                    )
+                        , 1)
 
                     .setSign("3", new UnmodifiableButton(menu, ((player, clickType) -> {
                             JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
@@ -86,20 +87,20 @@ public class HandleCmd implements CommandExecutor {
                                           o.addProperty("AutoFarmer", futureMode);
                                           ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(o), true);
                                       }))
-                    )
+                        , 1)
                     .setSign("4", new UnmodifiableButton(menu, ((player, clickType) -> {
                             JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + ((Player) sender).getUniqueId());  //不放到外面是为了实时更新
                             return o.get("DefaultF").getAsBoolean() ? 1 : 0;
                         }))
-                                      .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a按下 &fF &a整理", "&f不论是否潜行且低头", "&f按下 &eF &f就整理自身背包", "&5&o该设定不影响 &eShift+F &5&o整理容器", "", "&f当前状态: &c禁用"))
-                                      .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a按下 &fF &a整理", "&f不论是否潜行且低头", "&f按下 &eF &f就整理自身背包", "&5&o该设定不影响 &eShift+F &5&o整理容器", "", "&f当前状态: &a启用"))
+                                      .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a按下 &e&lF &a整理", "&f不论是否潜行且低头", "&f按下 &e&lF &f就整理自身背包", "&5&o该设定不影响 &e&lShift+F &5&o整理容器", "", "&f当前状态: &c禁用"))
+                                      .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a按下 &e&lF &a整理", "&f不论是否潜行且低头", "&f按下 &e&lF &f就整理自身背包", "&5&o该设定不影响 &e&lShift+F &5&o整理容器", "", "&f当前状态: &a启用"))
                                       .setClickEffect(((player, clickType, itemStack) -> {
                                           JsonObject o = ConfigUtil.getConfig(SortItems.getInstance(), "players/" + player.getUniqueId());  //不放到外面是为了实时更新
                                           boolean futureMode = !o.get("DefaultF").getAsBoolean();
                                           o.addProperty("DefaultF", futureMode);
                                           ConfigUtil.saveConfig(SortItems.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(o), true);
                                       }))
-                    )
+                        , 1)
                     .setSign("A", new UnmodifiableButton(menu, ((player, clickType) -> {
                             return player.hasPermission("SortItems.admin") ? 1 : 0;
                         }))
@@ -110,8 +111,10 @@ public class HandleCmd implements CommandExecutor {
                                               Bukkit.dispatchCommand(player, "sortItems reload");
                                           });
                                       }))
-                    );
-                Bukkit.getScheduler().runTask(SortItems.getInstance(), menu::open);
+                        , 1);
+                Bukkit.getScheduler().runTask(SortItems.getInstance(), () -> {
+                    menu.open(1);
+                });
             }
         });
         return true;

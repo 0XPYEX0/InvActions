@@ -3,6 +3,7 @@ package me.xpyex.plugin.sortitems.bukkit;
 import me.xpyex.plugin.sortitems.bukkit.command.HandleCmd;
 import me.xpyex.plugin.sortitems.bukkit.listener.HandleEvent;
 import me.xpyex.plugin.sortitems.bukkit.listener.HighVerListener;
+import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.util.bstats.BStatsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
@@ -26,6 +27,13 @@ public final class SortItems extends JavaPlugin {
         if (VersionUtil.getMainVersion() < 9) {
             getLogger().severe("本插件需要Minecraft至少为1.9才可运行");
             getLogger().severe("很遗憾，您的服务器不满足此条件...");
+            getServer().getPluginManager().disablePlugin(getInstance());
+            return;
+        }
+
+        if (!VersionUtil.requireXPLib(new Version("1.0.4"))) {
+            getLogger().severe("请更新您服务器内的XPLib！");
+            getLogger().severe("当前XPLib无法支持本插件");
             getServer().getPluginManager().disablePlugin(getInstance());
             return;
         }
