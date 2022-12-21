@@ -26,7 +26,7 @@ assignees: ''
  - 操作系统: [如: Windows]
  - Minecraft [如: 1.16.5]
  - 服务端核心 [如: Paper-git-111]
- - FlyWithFood [如: 2.0.3]
+ - InvActions [如: 1.0.7]
 
 **附加信息**
 如果有其它要补充的信息，请写在这里

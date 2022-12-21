@@ -27,7 +27,7 @@ If applicable, add screenshots to help explain your problem.
  - OS: [e.g. Windows]
  - Minecraft [e.g. 1.16.5]
  - Server Core [e.g. Paper-git-111]
- - FlyWithFood [e.g. 2.0.3]
+ - InvActions [e.g. 1.0.7]
 
 **Additional context**
 Add any other context about the problem here.
