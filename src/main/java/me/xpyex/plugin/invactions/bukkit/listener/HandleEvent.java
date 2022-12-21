@@ -3,7 +3,6 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 import com.google.gson.JsonObject;
 import java.util.HashSet;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
@@ -62,6 +61,7 @@ public class HandleEvent implements Listener {
             event.setCancelled(true);
             SortUtil.sortInv(((Container) target.getState()).getInventory());
             MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你看向的 &f" + NameUtil.getTranslationName(target.getType()));
+            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
             return;
         }
         if (!SettingsUtil.getSetting(event.getPlayer(), "DefaultF") && !event.getPlayer().isSneaking()) {
@@ -76,11 +76,11 @@ public class HandleEvent implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(InvActions.getInstance(), () -> {  //异步操作文件
-            ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId(), GsonUtil.parseStr(HandleCmd.DEFAULT_SETTINGS), false);
+            ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
             //修复没打开过GUI设定的玩家使用道具会抛错
             JsonObject before = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId());
-            JsonObject out = HandleCmd.DEFAULT_SETTINGS.deepCopy();
-            for (String setting : HandleCmd.DEFAULT_SETTINGS.keySet()) {
+            JsonObject out = SettingsUtil.DEFAULT_SETTINGS.deepCopy();
+            for (String setting : SettingsUtil.DEFAULT_SETTINGS.keySet()) {
                 if (before.has(setting)) {
                     out.add(setting, before.get(setting));
                 }

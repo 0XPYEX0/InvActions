@@ -7,7 +7,6 @@ import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class QuickDrop implements Listener {
@@ -22,12 +21,12 @@ public class QuickDrop implements Listener {
 
                         if (ItemUtil.equals(content, drop)) {
                             ItemStack copied = new ItemStack(content);
-                            event.getPlayer().getInventory().setItem(EquipmentSlot.HAND, copied);
+                            event.getPlayer().getInventory().setItemInMainHand(copied);
                             content.setAmount(0);
                             event.getPlayer().dropItem(true);
-                            MsgUtil.sendActionBar(event.getPlayer(), "&a已丢出背包所有相同道具. " + SortUtil.SETTING_HELP);
                         }
                     }
+                    MsgUtil.sendActionBar(event.getPlayer(), "&a已丢出背包所有相同道具. " + SortUtil.SETTING_HELP);
                     event.getPlayer().updateInventory();
                 }
             }

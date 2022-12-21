@@ -3,10 +3,13 @@ package me.xpyex.plugin.invactions.bukkit;
 import com.google.gson.JsonObject;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.listener.AutoFarmer;
+import me.xpyex.plugin.invactions.bukkit.listener.CraftDrop;
 import me.xpyex.plugin.invactions.bukkit.listener.HandleEvent;
 import me.xpyex.plugin.invactions.bukkit.listener.HighVerListener;
 import me.xpyex.plugin.invactions.bukkit.listener.QuickDrop;
+import me.xpyex.plugin.invactions.bukkit.listener.QuickMove;
 import me.xpyex.plugin.invactions.bukkit.listener.ReplaceBroken;
+import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.util.bstats.BStatsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
@@ -17,6 +20,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class InvActions extends JavaPlugin {
+    public static final String XPLIB_VER = "1.0.5";
     private static InvActions INSTANCE;
 
     @Override
@@ -37,18 +41,30 @@ public final class InvActions extends JavaPlugin {
             return;
         }
 
-        if (!VersionUtil.requireXPLib(new Version("1.0.4"))) {
+        if (!VersionUtil.requireXPLib(new Version(XPLIB_VER))) {
             getLogger().severe("请更新您服务器内的XPLib！");
             getLogger().severe("当前XPLib无法支持本插件");
+            getLogger().severe("需要: " + XPLIB_VER + " , 当前: " + VersionUtil.getXPLibVersion());
             getServer().getPluginManager().disablePlugin(getInstance());
             return;
         }
 
-        getServer().getPluginManager().registerEvents(new HandleEvent(), getInstance());
+        ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(SettingsUtil.DEFAULT_SERVER_SETTINGS), false);
+        JsonObject o = SettingsUtil.DEFAULT_SERVER_SETTINGS.deepCopy();
+        JsonObject config = ConfigUtil.getConfig(getInstance());
+        for (String key : config.keySet()) {
+            o.add(key, config.get(key));
+        }
+        ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(o), true);
+
         getServer().getPluginManager().registerEvents(new AutoFarmer(), getInstance());
+        getServer().getPluginManager().registerEvents(new CraftDrop(), getInstance());
+        getServer().getPluginManager().registerEvents(new HandleEvent(), getInstance());
         getServer().getPluginManager().registerEvents(new QuickDrop(), getInstance());
+        getServer().getPluginManager().registerEvents(new QuickMove(), getInstance());
         getServer().getPluginManager().registerEvents(new ReplaceBroken(), getInstance());
         try {
+            @SuppressWarnings("unused")
             ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //不是每个版本都有这个
             getServer().getPluginManager().registerEvents(new HighVerListener(), getInstance());
         } catch (Throwable ignored) {
@@ -77,11 +93,11 @@ public final class InvActions extends JavaPlugin {
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
             getServer().getOnlinePlayers().forEach((player -> {
-                ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(HandleCmd.DEFAULT_SETTINGS), false);
+                ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
                 //如果文件还不存在，则新建一份
                 JsonObject before = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + player.getUniqueId());
-                JsonObject out = HandleCmd.DEFAULT_SETTINGS.deepCopy();
-                for (String setting : HandleCmd.DEFAULT_SETTINGS.keySet()) {
+                JsonObject out = SettingsUtil.DEFAULT_SETTINGS.deepCopy();
+                for (String setting : SettingsUtil.DEFAULT_SETTINGS.keySet()) {
                     if (before.has(setting)) {
                         out.add(setting, before.get(setting));
                     }

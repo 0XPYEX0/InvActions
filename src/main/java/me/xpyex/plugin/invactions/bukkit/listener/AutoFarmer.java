@@ -1,6 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
 import java.util.ArrayList;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
@@ -24,9 +25,10 @@ public class AutoFarmer implements Listener {
         }
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (ItemUtil.typeIsOr(event.getClickedBlock(), Material.MELON, Material.PUMPKIN)) {
-                if (event.getItem() != null && event.getItem().getType() == Material.SHEARS) {
-                    return;
-                }
+                if (!SettingsUtil.getServerSetting("AutoFarmer_AllowPumpkinAndMelon")) return;
+
+                if (event.getItem() != null && event.getItem().getType() == Material.SHEARS) return;
+
                 BlockBreakEvent blockBreakEvent = new BlockBreakEvent(event.getClickedBlock(), event.getPlayer());
                 Bukkit.getPluginManager().callEvent(blockBreakEvent);
                 if (blockBreakEvent.isCancelled()) {
@@ -50,7 +52,12 @@ public class AutoFarmer implements Listener {
                     canCut = true;
                 }
             } else if (blockData.contains("[age=")) {
-                age = Integer.parseInt(blockData.split("")[blockData.length() - 2]);
+                try {
+                    age = Integer.parseInt(blockData.split("")[blockData.length() - 2]);
+                } catch (NumberFormatException e) {
+                    MsgUtil.debugLog(InvActions.getInstance(), e);
+                    return;
+                }
                 if (ItemUtil.typeIsOr(type, Material.WHEAT, Material.CARROTS, Material.POTATOES)) {
                     if (age == 7) {
                         canCut = true;
@@ -79,7 +86,7 @@ public class AutoFarmer implements Listener {
                 event.setCancelled(true);
                 ArrayList<ItemStack> result = new ArrayList<>(event.getClickedBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand()));
                 for (ItemStack drop : result) {
-                    if (ItemUtil.typeIsOr(drop, Material.WHEAT, Material.BEETROOT)) continue;
+                    if (ItemUtil.typeIsOr(drop, Material.WHEAT, Material.BEETROOT, Material.POISONOUS_POTATO)) continue;
 
                     drop.setAmount(drop.getAmount() - 1);
                 }

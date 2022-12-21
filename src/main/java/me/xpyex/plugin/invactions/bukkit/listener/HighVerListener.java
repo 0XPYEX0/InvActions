@@ -1,14 +1,13 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
+import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import org.bukkit.Sound;
-import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.BlockInventoryHolder;
 
 public class HighVerListener implements Listener {
 
@@ -18,7 +17,7 @@ public class HighVerListener implements Listener {
             return;
         }
         if (event.getClick() == ClickType.SWAP_OFFHAND) {  //不知道哪个版本加上的
-            if (event.getClickedInventory() == event.getWhoClicked().getInventory() || event.getClickedInventory().getHolder() instanceof BlockInventoryHolder || event.getClickedInventory().getHolder() instanceof DoubleChest) {  //仅允许整理自己的背包，或是方块的界面，不允许整理菜单
+            if (event.getClickedInventory() == event.getWhoClicked().getInventory() || InvUtil.isNotMenu(event.getClickedInventory())) {  //仅允许整理自己的背包，或是方块的界面，不允许整理菜单
                 event.setCancelled(true);
                 SortUtil.sortInv(event.getClickedInventory());
                 if (event.getWhoClicked() instanceof Player) {

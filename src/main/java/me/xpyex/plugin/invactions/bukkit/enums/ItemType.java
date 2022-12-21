@@ -27,7 +27,7 @@ public enum ItemType {
     NUGGET,  //金粒铁粒等
     BLOCK,  //方块
     HEAD,  //头颅
-    POISON,  //药水
+    POTION,  //药水
     BUCKET,  //桶
     OTHER
 }

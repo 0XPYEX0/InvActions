@@ -136,8 +136,8 @@ public class SortUtil {
             else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_TERRACOTTA", "_CONCRETE"))  //陶瓦、混凝土
                 sortType = ItemType.CRAY;
 
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "POISON"))  //药水
-                sortType = ItemType.POISON;
+            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "POTION"))  //药水
+                sortType = ItemType.POTION;
 
             else if (StrUtil.startsWithIgnoreCaseOr(pair.getKey().getType().toString(), "RAW_"))
                 sortType = ItemType.RAW_ORE;
