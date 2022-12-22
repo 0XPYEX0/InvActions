@@ -3,6 +3,7 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 import com.google.gson.JsonObject;
 import java.util.HashSet;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
@@ -36,7 +37,7 @@ public class HandleEvent implements Listener {
                 IGNORES.add(m);
             } else if (m.toString().endsWith("_PRESSURE_PLATE")) {  //压力板
                 IGNORES.add(m);
-            } else if (m.isAir()) {  //任意空气
+            } else if (ItemType.isAir(m)) {  //任意空气
                 IGNORES.add(m);
             } else if (m.toString().endsWith("_SIGN")) {  //牌子
                 IGNORES.add(m);
@@ -79,8 +80,8 @@ public class HandleEvent implements Listener {
             ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
             //修复没打开过GUI设定的玩家使用道具会抛错
             JsonObject before = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId());
-            JsonObject out = SettingsUtil.DEFAULT_SETTINGS.deepCopy();
-            for (String setting : SettingsUtil.DEFAULT_SETTINGS.keySet()) {
+            JsonObject out = GsonUtil.copy(SettingsUtil.DEFAULT_SETTINGS);
+            for (String setting : GsonUtil.getKeysOfJsonObject(SettingsUtil.DEFAULT_SETTINGS)) {
                 if (before.has(setting)) {
                     out.add(setting, before.get(setting));
                 }

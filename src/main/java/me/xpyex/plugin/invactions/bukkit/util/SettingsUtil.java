@@ -20,7 +20,7 @@ public class SettingsUtil {
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenArmor", true);
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenTool", true);
 
-        DEFAULT_SERVER_SETTINGS = DEFAULT_SETTINGS.deepCopy();
+        DEFAULT_SERVER_SETTINGS = GsonUtil.copy(DEFAULT_SETTINGS);
         DEFAULT_SERVER_SETTINGS.addProperty("AutoFarmer_AllowPumpkinAndMelon", false);
         DEFAULT_SERVER_SETTINGS.addProperty("Debug", false);
         DEFAULT_SERVER_SETTINGS.add("AllowInvs", new JsonArray());

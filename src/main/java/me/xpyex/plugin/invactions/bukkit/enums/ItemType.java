@@ -1,5 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.enums;
 
+import org.bukkit.Material;
+
 public enum ItemType {
     TOOL,  //工具
     WEAPON,  //武器
@@ -29,5 +31,13 @@ public enum ItemType {
     HEAD,  //头颅
     POTION,  //药水
     BUCKET,  //桶
-    OTHER
+    OTHER;
+
+    public static boolean isAir(Material material) {
+        try {
+            return material.isAir();
+        } catch (NoSuchMethodError ignored) {
+            return material == Material.AIR;
+        }
+    }
 }

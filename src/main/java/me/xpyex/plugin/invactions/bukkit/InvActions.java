@@ -20,7 +20,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class InvActions extends JavaPlugin {
-    public static final String XPLIB_VER = "1.0.5";
+    public static final String XPLIB_VER = "1.0.6";
     private static InvActions INSTANCE;
 
     @Override
@@ -44,15 +44,15 @@ public final class InvActions extends JavaPlugin {
         if (!VersionUtil.requireXPLib(new Version(XPLIB_VER))) {
             getLogger().severe("请更新您服务器内的XPLib！");
             getLogger().severe("当前XPLib无法支持本插件");
-            getLogger().severe("需要: " + XPLIB_VER + " , 当前: " + VersionUtil.getXPLibVersion());
+            getLogger().severe("需要: " + XPLIB_VER + " , 当前: " + VersionUtil.getXPLibVersion().getVersion());
             getServer().getPluginManager().disablePlugin(getInstance());
             return;
         }
 
         ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(SettingsUtil.DEFAULT_SERVER_SETTINGS), false);
-        JsonObject o = SettingsUtil.DEFAULT_SERVER_SETTINGS.deepCopy();
+        JsonObject o = GsonUtil.copy(SettingsUtil.DEFAULT_SERVER_SETTINGS);
         JsonObject config = ConfigUtil.getConfig(getInstance());
-        for (String key : config.keySet()) {
+        for (String key : GsonUtil.getKeysOfJsonObject(config)) {
             o.add(key, config.get(key));
         }
         ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(o), true);
@@ -96,8 +96,8 @@ public final class InvActions extends JavaPlugin {
                 ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
                 //如果文件还不存在，则新建一份
                 JsonObject before = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + player.getUniqueId());
-                JsonObject out = SettingsUtil.DEFAULT_SETTINGS.deepCopy();
-                for (String setting : SettingsUtil.DEFAULT_SETTINGS.keySet()) {
+                JsonObject out = GsonUtil.copy(SettingsUtil.DEFAULT_SETTINGS);
+                for (String setting : GsonUtil.getKeysOfJsonObject(SettingsUtil.DEFAULT_SETTINGS)) {
                     if (before.has(setting)) {
                         out.add(setting, before.get(setting));
                     }
