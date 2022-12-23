@@ -92,6 +92,9 @@ public class AutoFarmer implements Listener {
                 }
                 event.getClickedBlock().setBlockData(Bukkit.createBlockData(data));
                 for (ItemStack drop : result) {
+                    if (drop == null || drop.getAmount() == 0) {
+                        continue;
+                    }
                     event.getClickedBlock().getLocation().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), drop);
                 }
                 MsgUtil.sendActionBar(event.getPlayer(), "&a已为您自动收获并种植 &f" + NameUtil.getTranslationName(event.getClickedBlock().getType()) + "&a. " + SortUtil.SETTING_HELP);
