@@ -20,7 +20,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class InvActions extends JavaPlugin {
-    private static final String XPLIB_VER = "1.0.6";
+    private static final String XPLIB_VER = "1.0.7";
     private static InvActions INSTANCE;
 
     @Override
