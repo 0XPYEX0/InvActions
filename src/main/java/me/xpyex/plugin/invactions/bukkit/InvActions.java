@@ -28,8 +28,10 @@ public final class InvActions extends JavaPlugin {
         // Plugin startup logic
         INSTANCE = this;
         if (!getServer().getPluginManager().isPluginEnabled("XPLib")) {
-            getLogger().warning("本插件需要XPLib作为前置...");
-            getLogger().warning("请在 https://github.com/0XPYEX0/XPLib/releases 下载后，再加载本插件");
+            getLogger().severe("本插件需要XPLib作为前置...");
+            getLogger().severe("请在下载后，再加载本插件");
+            getLogger().severe("GitHub: https://github.com/0XPYEX0/XPLib/releases");
+            getLogger().severe("Gitee(国内): https://gitee.com/XPYEX/XPLib/releases");
             getServer().getPluginManager().disablePlugin(getInstance());
             return;
         }
@@ -45,6 +47,8 @@ public final class InvActions extends JavaPlugin {
             getLogger().severe("请更新您服务器内的XPLib！");
             getLogger().severe("当前XPLib无法支持本插件");
             getLogger().severe("需要: " + XPLIB_VER + " , 当前: " + VersionUtil.getXPLibVersion().getVersion());
+            getLogger().severe("GitHub: https://github.com/0XPYEX0/XPLib/releases");
+            getLogger().severe("Gitee(国内): https://gitee.com/XPYEX/XPLib/releases");
             getServer().getPluginManager().disablePlugin(getInstance());
             return;
         }
