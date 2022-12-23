@@ -37,7 +37,7 @@ public class CraftDrop implements Listener {
             }
         }
 
-        if (least == null) {
+        if (least == null || least.getAmount() < 2) {
             return;
         }
 
