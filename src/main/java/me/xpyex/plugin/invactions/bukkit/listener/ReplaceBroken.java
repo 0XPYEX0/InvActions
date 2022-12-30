@@ -60,7 +60,7 @@ public class ReplaceBroken implements Listener {
                         ItemStack out = new ItemStack(content);
                         content.setAmount(0);
                         event.getPlayer().getInventory().setItem(finalSlot, out);
-                        MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. " + SortUtil.SETTING_HELP);
+                        MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. " + SettingsUtil.SETTING_HELP);
                         return;
                     }
                 }

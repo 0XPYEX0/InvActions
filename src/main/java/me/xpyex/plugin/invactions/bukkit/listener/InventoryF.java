@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class HighVerListener implements Listener {
+public class InventoryF implements Listener {
 
     @EventHandler
     public void onPressFWithInv(InventoryClickEvent event) {

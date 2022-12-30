@@ -2,7 +2,7 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
+import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
@@ -75,7 +75,7 @@ public class QuickMove implements Listener {
 
                 event.getWhoClicked().getInventory().setItemInMainHand(tool);
                 ((Player) event.getWhoClicked()).updateInventory();
-                MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已丢出所有相同道具. " + SortUtil.SETTING_HELP);
+                MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已丢出所有相同道具. " + SettingsUtil.SETTING_HELP);
                 event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
             } else if (event.getClickedInventory() == event.getWhoClicked().getInventory()) {
                 if (event.getWhoClicked().getOpenInventory().getTopInventory() == event.getWhoClicked().getInventory()) {
@@ -101,7 +101,7 @@ public class QuickMove implements Listener {
                             content.setAmount(0);
                         }
                     }
-                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至你背包. " + SortUtil.SETTING_HELP);
+                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至你背包. " + SettingsUtil.SETTING_HELP);
                     event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
                 }
             } else if (event.getClickedInventory() == event.getWhoClicked().getOpenInventory().getTopInventory()) {
@@ -125,7 +125,7 @@ public class QuickMove implements Listener {
                             content.setAmount(0);
                         }
                     }
-                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至容器内. " + SortUtil.SETTING_HELP);
+                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至容器内. " + SettingsUtil.SETTING_HELP);
                     event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
                 }
             }

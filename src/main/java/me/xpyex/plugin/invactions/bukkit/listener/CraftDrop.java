@@ -1,8 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
-import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -53,6 +51,6 @@ public class CraftDrop implements Listener {
         }
         event.getInventory().setResult(new ItemStack(Material.AIR));
         event.getWhoClicked().getInventory().setItemInMainHand(tool);
-        MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已自动合成所有物品，并自动丢出. " + SortUtil.SETTING_HELP);
+        MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已自动合成所有物品，并自动丢出. " + SettingsUtil.SETTING_HELP);
     }
 }

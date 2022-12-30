@@ -3,7 +3,6 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 import java.util.ArrayList;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.NameUtil;
@@ -35,7 +34,7 @@ public class AutoFarmer implements Listener {
                     return;  //防止收割被保护的地方
                 }
                 event.setCancelled(true);
-                MsgUtil.sendActionBar(event.getPlayer(), "&a已为您自动收获 &f" + NameUtil.getTranslationName(event.getClickedBlock().getType()) + "&a. " + SortUtil.SETTING_HELP);
+                MsgUtil.sendActionBar(event.getPlayer(), "&a已为您自动收获 &f" + NameUtil.getTranslationName(event.getClickedBlock().getType()) + "&a. " + SettingsUtil.SETTING_HELP);
                 event.getClickedBlock().breakNaturally(event.getPlayer().getInventory().getItemInMainHand());
                 return;
             }
@@ -97,7 +96,7 @@ public class AutoFarmer implements Listener {
                     }
                     event.getClickedBlock().getLocation().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), drop);
                 }
-                MsgUtil.sendActionBar(event.getPlayer(), "&a已为您自动收获并种植 &f" + NameUtil.getTranslationName(event.getClickedBlock().getType()) + "&a. " + SortUtil.SETTING_HELP);
+                MsgUtil.sendActionBar(event.getPlayer(), "&a已为您自动收获并种植 &f" + NameUtil.getTranslationName(event.getClickedBlock().getType()) + "&a. " + SettingsUtil.SETTING_HELP);
             }
         }
     }

@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 public class SettingsUtil {
     public static final JsonObject DEFAULT_SETTINGS = new JsonObject();
     public static final JsonObject DEFAULT_SERVER_SETTINGS;
+    public static final String SETTING_HELP = "&e该功能在 &f/InvActions &e中调整";
+
     static {
         DEFAULT_SETTINGS.addProperty("AutoFarmer", true);
         DEFAULT_SETTINGS.addProperty("CraftDrop", true);
@@ -19,6 +21,7 @@ public class SettingsUtil {
         DEFAULT_SETTINGS.addProperty("QuickMove", true);
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenArmor", true);
         DEFAULT_SETTINGS.addProperty("ReplaceBrokenTool", true);
+        DEFAULT_SETTINGS.addProperty("DynamicLight", true);
 
         DEFAULT_SERVER_SETTINGS = GsonUtil.copy(DEFAULT_SETTINGS);
         DEFAULT_SERVER_SETTINGS.addProperty("AutoFarmer_AllowPumpkinAndMelon", false);

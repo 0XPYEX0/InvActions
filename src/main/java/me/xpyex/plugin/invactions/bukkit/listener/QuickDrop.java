@@ -1,7 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.event.EventHandler;
@@ -26,7 +25,7 @@ public class QuickDrop implements Listener {
                             event.getPlayer().dropItem(true);
                         }
                     }
-                    MsgUtil.sendActionBar(event.getPlayer(), "&a已丢出背包所有相同道具. " + SortUtil.SETTING_HELP);
+                    MsgUtil.sendActionBar(event.getPlayer(), "&a已丢出背包所有相同道具. " + SettingsUtil.SETTING_HELP);
                     event.getPlayer().updateInventory();
                 }
             }

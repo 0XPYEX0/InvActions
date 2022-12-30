@@ -60,7 +60,7 @@ public class HandleCmd implements CommandExecutor {
             }
             if (sender instanceof Player) {
                 ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + ((Player) sender).getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
-                InvSetter setter = new InvSetter("F键整理-设定-" + sender.getName(), "#########", "#1234567#", "#A      #", "#########");
+                InvSetter setter = new InvSetter("F键整理-设定-" + sender.getName(), "#########", "#1234567#", "#8     A#", "#########");
                 setter.setSign("#", ItemUtil.getItemStack(Material.BLACK_STAINED_GLASS_PANE, " "));
                 setter.setSign(" ", Material.AIR);
 
@@ -186,6 +186,18 @@ public class HandleCmd implements CommandExecutor {
                                       .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a一键丢出合成结果", "&f当合成时，对着合成结果", "&f按下 &e&lCtrl+Q", "&f丢出所有合成结果", "", "&f当前状态: &a启用"))
                                       .setClickEffect(((player, clickType, itemStack) -> {
                                           SettingsUtil.turnSetting(player, "CraftDrop");
+                                      }))
+                        , 1)
+                    .setSign("8", new UnmodifiableButton(menu, ((player, clickType) -> {
+                            if (!SettingsUtil.getServerSetting("DynamicLight")) return -1;
+
+                            return SettingsUtil.getSetting(player, "DynamicLight") ? 1 : 0;
+                        }))
+                                      .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a动态光源", "&f当手持光源道具时", "&f在玩家位置模拟光源", "", "&f当前状态: &4服务端禁用"))
+                                      .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a动态光源", "&f当手持光源道具时", "&f在玩家位置模拟光源", "", "&f当前状态: &c禁用"))
+                                      .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a动态光源", "&f当手持光源道具时", "&f在玩家位置模拟光源", "", "&f当前状态: &a启用"))
+                                      .setClickEffect(((player, clickType, itemStack) -> {
+                                          SettingsUtil.turnSetting(player, "DynamicLight");
                                       }))
                         , 1)
                     .setSign("A", new UnmodifiableButton(menu, ((player, clickType) -> {
