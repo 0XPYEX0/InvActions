@@ -139,14 +139,18 @@ public final class InvActions extends JavaPlugin {
                             if (!toolType.isBlock() && !offhandType.isBlock()) continue;
 
                             if (StrUtil.containsIgnoreCaseOr(toolType.toString(), LIGHTS) || StrUtil.containsIgnoreCaseOr(offhandType.toString(), LIGHTS)) {  //玩家手里的东西是光源的情况
+                                Location location = player.getLocation();
+                                location.setY(location.getBlockY() + 1);
+                                //只用getLocation()，踩在不完整方块上时会卡方块，无法游泳
+                                //用getEyeLocation()，无法游泳
                                 if (!PLAYER_DYNAMIC_LIGHT.containsKey(player.getUniqueId())) {
                                     MsgUtil.sendActionBar(player, "&a你目前手持光源，动态光源启用. " + SettingsUtil.SETTING_HELP);
-                                    PLAYER_DYNAMIC_LIGHT.put(player.getUniqueId(), player.getLocation());
+                                    PLAYER_DYNAMIC_LIGHT.put(player.getUniqueId(), location);
                                 }
                                 Location loc = PLAYER_DYNAMIC_LIGHT.get(player.getUniqueId());
                                 player.sendBlockChange(loc, loc.getBlock().getBlockData());
-                                player.sendBlockChange(player.getLocation().getBlock().getLocation(), torchData);  //除了火把外的东西大多都有碰撞箱
-                                PLAYER_DYNAMIC_LIGHT.put(player.getUniqueId(), player.getLocation().getBlock().getLocation());
+                                player.sendBlockChange(location.getBlock().getLocation(), torchData);  //除了火把外的东西大多都有碰撞箱
+                                PLAYER_DYNAMIC_LIGHT.put(player.getUniqueId(), location.getBlock().getLocation());
                             } else {  //没有拿着光源，就不显示动态光源
                                 if (PLAYER_DYNAMIC_LIGHT.containsKey(player.getUniqueId())) {
                                     Location loc = PLAYER_DYNAMIC_LIGHT.get(player.getUniqueId());
