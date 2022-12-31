@@ -134,14 +134,13 @@ public final class InvActions extends JavaPlugin {
                         if (SettingsUtil.getSetting(player, "DynamicLight")) {  //玩家启用动态光源
                             Material toolType = player.getInventory().getItemInMainHand().getType();
                             Material offhandType = player.getInventory().getItemInOffHand().getType();
-                            if (!toolType.isBlock() && !offhandType.isBlock()) continue;
 
                             if (StrUtil.containsIgnoreCaseOr(toolType.toString(), LIGHTS) || StrUtil.containsIgnoreCaseOr(offhandType.toString(), LIGHTS)) {  //玩家手里的东西是光源的情况
                                 Location location = player.getLocation();
                                 location.setY(location.getBlockY() + 1.2);
                                 //只用getLocation()，踩在不完整方块上时会卡方块，无法游泳
                                 //用getEyeLocation()，无法游泳
-                                if (location.getBlock().getState() instanceof TileState) {  //TileEntity复原显示会有显示Bug，虽然服务器内无影响，但客户端看着有影响. 如告示牌内容消失
+                                if (!location.getBlock().getType().toString().contains("AIR")) {  //不在有方块的地方模拟光源了，观感不好且影响游泳
                                     //保持动态光源在上一次的位置，直到玩家走出Tile方块
                                     continue;
                                 }
