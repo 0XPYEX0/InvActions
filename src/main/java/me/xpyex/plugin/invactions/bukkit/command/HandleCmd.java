@@ -60,7 +60,7 @@ public class HandleCmd implements CommandExecutor {
             }
             if (sender instanceof Player) {
                 ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + ((Player) sender).getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
-                InvSetter setter = new InvSetter("F键整理-设定-" + sender.getName(), "#########", "#1234567#", "#8     A#", "#########");
+                InvSetter setter = new InvSetter("InvActions-设定-" + sender.getName(), "#########", "#1234567#", "#8     A#", "#########");
                 setter.setSign("#", ItemUtil.getItemStack(Material.BLACK_STAINED_GLASS_PANE, " "));
                 setter.setSign(" ", Material.AIR);
 
