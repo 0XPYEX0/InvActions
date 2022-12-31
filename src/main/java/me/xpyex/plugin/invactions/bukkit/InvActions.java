@@ -22,8 +22,6 @@ import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Banner;
-import org.bukkit.block.TileState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -126,7 +124,7 @@ public final class InvActions extends JavaPlugin {
         });
 
         if (VersionUtil.getMainVersion() >= 13) {  //仅1.13+支持
-            Material light = Material.getMaterial("LIGHT");
+            Material light = Material.getMaterial("LIGHT");  //1.17的光源方块. 除了火把外的大部分光源都有碰撞箱，所以选火把
             BlockData lightData = getServer().createBlockData(light != null ? light : Material.TORCH);  //对于lambda来说的常量
             getServer().getScheduler().runTaskTimerAsynchronously(getInstance(), () -> {
                 if (SettingsUtil.getServerSetting("DynamicLight")) {  //服务端启用动态光源
@@ -136,12 +134,9 @@ public final class InvActions extends JavaPlugin {
                             Material offhandType = player.getInventory().getItemInOffHand().getType();
 
                             if (StrUtil.containsIgnoreCaseOr(toolType.toString(), LIGHTS) || StrUtil.containsIgnoreCaseOr(offhandType.toString(), LIGHTS)) {  //玩家手里的东西是光源的情况
-                                Location location = player.getLocation();
-                                location.setY(location.getBlockY() + 1.2);
-                                //只用getLocation()，踩在不完整方块上时会卡方块，无法游泳
-                                //用getEyeLocation()，无法游泳
+                                Location location = player.getEyeLocation();
                                 if (!location.getBlock().getType().toString().contains("AIR")) {  //不在有方块的地方模拟光源了，观感不好且影响游泳
-                                    //保持动态光源在上一次的位置，直到玩家走出Tile方块
+                                    //保持动态光源在上一次的位置，直到玩家走回空气
                                     continue;
                                 }
                                 if (!PLAYER_DYNAMIC_LIGHT.containsKey(player.getUniqueId())) {
@@ -150,7 +145,7 @@ public final class InvActions extends JavaPlugin {
                                 }
                                 Location loc = PLAYER_DYNAMIC_LIGHT.get(player.getUniqueId());  //上一次模拟的方块
                                 player.sendBlockChange(loc, loc.getBlock().getBlockData());  //复原上次的方块
-                                player.sendBlockChange(location.getBlock().getLocation(), lightData);  //显示当前方块  除了火把外的东西大多都有碰撞箱
+                                player.sendBlockChange(location.getBlock().getLocation(), lightData);  //显示当前方块
                                 PLAYER_DYNAMIC_LIGHT.put(player.getUniqueId(), location.getBlock().getLocation());
                             } else if (PLAYER_DYNAMIC_LIGHT.containsKey(player.getUniqueId())) {  //没有拿着光源，就不显示动态光源
                                 Location loc = PLAYER_DYNAMIC_LIGHT.get(player.getUniqueId());
