@@ -2,7 +2,6 @@ package me.xpyex.plugin.invactions.bukkit;
 
 import com.google.gson.JsonObject;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.UUID;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.listener.AutoFarmer;
@@ -13,28 +12,26 @@ import me.xpyex.plugin.invactions.bukkit.listener.QuickDrop;
 import me.xpyex.plugin.invactions.bukkit.listener.QuickMove;
 import me.xpyex.plugin.invactions.bukkit.listener.ReplaceBroken;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
-import me.xpyex.plugin.xplib.bukkit.api.Pair;
 import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.util.bstats.BStatsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.GsonUtil;
-import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Banner;
+import org.bukkit.block.TileState;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Lightable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.material.Torch;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class InvActions extends JavaPlugin {
     private static final String XPLIB_VER = "1.0.7";
-    public static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "SHROOMLIGHT", "FrogLight", "END_ROD", "CampFire"};
+    public static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "SHROOMLIGHT", "FrogLight", "END_ROD", "CampFire", "LAVA"};
     private static InvActions INSTANCE;
     private static final HashMap<UUID, Location> PLAYER_DYNAMIC_LIGHT = new HashMap<>();
 
@@ -129,7 +126,8 @@ public final class InvActions extends JavaPlugin {
         });
 
         if (VersionUtil.getMainVersion() >= 13) {  //仅1.13+支持
-            BlockData torchData = getServer().createBlockData(Material.TORCH);  //对于lambda来说的常量
+            Material light = Material.getMaterial("LIGHT");
+            BlockData lightData = getServer().createBlockData(light != null ? light : Material.TORCH);  //对于lambda来说的常量
             getServer().getScheduler().runTaskTimerAsynchronously(getInstance(), () -> {
                 if (SettingsUtil.getServerSetting("DynamicLight")) {  //服务端启用动态光源
                     for (Player player : getServer().getOnlinePlayers()) {  //遍历玩家
@@ -140,23 +138,25 @@ public final class InvActions extends JavaPlugin {
 
                             if (StrUtil.containsIgnoreCaseOr(toolType.toString(), LIGHTS) || StrUtil.containsIgnoreCaseOr(offhandType.toString(), LIGHTS)) {  //玩家手里的东西是光源的情况
                                 Location location = player.getLocation();
-                                location.setY(location.getBlockY() + 1);
+                                location.setY(location.getBlockY() + 1.2);
                                 //只用getLocation()，踩在不完整方块上时会卡方块，无法游泳
                                 //用getEyeLocation()，无法游泳
+                                if (location.getBlock().getState() instanceof TileState) {  //TileEntity复原显示会有显示Bug，虽然服务器内无影响，但客户端看着有影响. 如告示牌内容消失
+                                    //保持动态光源在上一次的位置，直到玩家走出Tile方块
+                                    continue;
+                                }
                                 if (!PLAYER_DYNAMIC_LIGHT.containsKey(player.getUniqueId())) {
                                     MsgUtil.sendActionBar(player, "&a你目前手持光源，动态光源启用. " + SettingsUtil.SETTING_HELP);
                                     PLAYER_DYNAMIC_LIGHT.put(player.getUniqueId(), location);
                                 }
+                                Location loc = PLAYER_DYNAMIC_LIGHT.get(player.getUniqueId());  //上一次模拟的方块
+                                player.sendBlockChange(loc, loc.getBlock().getBlockData());  //复原上次的方块
+                                player.sendBlockChange(location.getBlock().getLocation(), lightData);  //显示当前方块  除了火把外的东西大多都有碰撞箱
+                                PLAYER_DYNAMIC_LIGHT.put(player.getUniqueId(), location.getBlock().getLocation());
+                            } else if (PLAYER_DYNAMIC_LIGHT.containsKey(player.getUniqueId())) {  //没有拿着光源，就不显示动态光源
                                 Location loc = PLAYER_DYNAMIC_LIGHT.get(player.getUniqueId());
                                 player.sendBlockChange(loc, loc.getBlock().getBlockData());
-                                player.sendBlockChange(location.getBlock().getLocation(), torchData);  //除了火把外的东西大多都有碰撞箱
-                                PLAYER_DYNAMIC_LIGHT.put(player.getUniqueId(), location.getBlock().getLocation());
-                            } else {  //没有拿着光源，就不显示动态光源
-                                if (PLAYER_DYNAMIC_LIGHT.containsKey(player.getUniqueId())) {
-                                    Location loc = PLAYER_DYNAMIC_LIGHT.get(player.getUniqueId());
-                                    player.sendBlockChange(loc, loc.getBlock().getBlockData());
-                                    PLAYER_DYNAMIC_LIGHT.remove(player.getUniqueId());
-                                }
+                                PLAYER_DYNAMIC_LIGHT.remove(player.getUniqueId());
                             }
                         } else if (PLAYER_DYNAMIC_LIGHT.containsKey(player.getUniqueId())) {
                             Location loc = PLAYER_DYNAMIC_LIGHT.get(player.getUniqueId());
