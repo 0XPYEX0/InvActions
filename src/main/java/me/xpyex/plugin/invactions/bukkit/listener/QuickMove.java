@@ -6,6 +6,7 @@ import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +32,12 @@ public class QuickMove implements Listener {
             }
             ItemStack item = new ItemStack(event.getCursor());
             if (event.getClickedInventory() == null) {  //这就是丢出
-                ItemStack tool = new ItemStack(event.getWhoClicked().getInventory().getItemInMainHand());  //保存手上道具，待会set回去，下面丢出会覆盖主手道具
+                ItemStack tool;
+                if (!ItemUtil.equals(item, event.getWhoClicked().getInventory().getItemInMainHand())) {
+                    tool = new ItemStack(event.getWhoClicked().getInventory().getItemInMainHand());  //保存手上道具，待会set回去，下面丢出会覆盖主手道具
+                } else {
+                    tool = null;
+                }
                 for (ItemStack content : event.getWhoClicked().getInventory().getStorageContents()) {
                     if (content == null) continue;
 
@@ -43,7 +49,7 @@ public class QuickMove implements Listener {
                     }
                 }
 
-                if (event.getWhoClicked().getOpenInventory().getTopInventory() != event.getWhoClicked().getInventory()) {
+                if (event.getWhoClicked().getOpenInventory().getTopInventory() != event.getWhoClicked().getInventory()) {  //点击界面外，且打开了某个物品栏
                     event.getWhoClicked().setMetadata("InvActions_CallingClick", new FixedMetadataValue(InvActions.getInstance(), true));
                     for (int i = 0; i < event.getWhoClicked().getOpenInventory().getTopInventory().getStorageContents().length; i++) {
                         ItemStack content = event.getWhoClicked().getOpenInventory().getTopInventory().getItem(i);
