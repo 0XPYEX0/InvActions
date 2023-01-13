@@ -28,7 +28,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class InvActions extends JavaPlugin {
-    private static final String XPLIB_VER = "1.0.7";
+    private static final String XPLIB_VER = "1.0.8";
     public static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "SHROOMLIGHT", "FrogLight", "END_ROD", "CampFire", "LAVA"};
     private static InvActions INSTANCE;
     private static final HashMap<UUID, Location> PLAYER_DYNAMIC_LIGHT = new HashMap<>();

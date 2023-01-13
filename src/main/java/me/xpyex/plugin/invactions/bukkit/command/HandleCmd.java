@@ -66,7 +66,7 @@ public class HandleCmd implements CommandExecutor {
 
                 Menu menu = new Menu((Player) sender);
                 menu.setPage(1, setter)
-                    .setSign("1", new UnmodifiableButton(menu, ((player, clickType) -> {
+                    .setSign("1", new UnmodifiableButton(menu, (player -> {
                             if (!SettingsUtil.getServerSetting("ReplaceBrokenTool")) return -1;
 
                             return SettingsUtil.getSetting(player, "ReplaceBrokenTool") ? 1 : 0;
@@ -79,7 +79,7 @@ public class HandleCmd implements CommandExecutor {
                                       }))
                         , 1)
 
-                    .setSign("2", new UnmodifiableButton(menu, ((player, clickType) -> {
+                    .setSign("2", new UnmodifiableButton(menu, (player -> {
                             if (!SettingsUtil.getServerSetting("ReplaceBrokenArmor")) return -1;
 
                             return SettingsUtil.getSetting(player, "ReplaceBrokenArmor") ? 1 : 0;
@@ -92,7 +92,7 @@ public class HandleCmd implements CommandExecutor {
                                       }))
                         , 1)
 
-                    .setSign("3", new UnmodifiableButton(menu, ((player, clickType) -> {
+                    .setSign("3", new UnmodifiableButton(menu, (player -> {
                             if (!SettingsUtil.getServerSetting("AutoFarmer")) return -1;
 
                             return SettingsUtil.getSetting(player, "AutoFarmer") ? 1 : 0;
@@ -104,7 +104,7 @@ public class HandleCmd implements CommandExecutor {
                                           SettingsUtil.turnSetting(player, "AutoFarmer");
                                       }))
                         , 1)
-                    .setSign("4", new UnmodifiableButton(menu, ((player, clickType) -> {
+                    .setSign("4", new UnmodifiableButton(menu, (player -> {
                             if (!SettingsUtil.getServerSetting("DefaultF")) return -1;
 
                             return SettingsUtil.getSetting(player, "DefaultF") ? 1 : 0;
@@ -116,7 +116,7 @@ public class HandleCmd implements CommandExecutor {
                                           SettingsUtil.turnSetting(player, "DefaultF");
                                       }))
                         , 1)
-                    .setSign("5", new UnmodifiableButton(menu, ((player, clickType) -> {
+                    .setSign("5", new UnmodifiableButton(menu, (player -> {
                             if (!SettingsUtil.getServerSetting("QuickDrop")) return -1;
 
                             return SettingsUtil.getSetting(player, "QuickDrop") ? 1 : 0;
@@ -128,7 +128,7 @@ public class HandleCmd implements CommandExecutor {
                                           SettingsUtil.turnSetting(player, "QuickDrop");
                                       }))
                         , 1)
-                    .setSign("6", new UnmodifiableButton(menu, ((player, clickType) -> {
+                    .setSign("6", new UnmodifiableButton(menu, (player -> {
                             if (!SettingsUtil.getServerSetting("QuickMove")) return -1;
 
                             return SettingsUtil.getSetting(player, "QuickMove") ? 1 : 0;
@@ -176,7 +176,7 @@ public class HandleCmd implements CommandExecutor {
                                           SettingsUtil.turnSetting(player, "QuickMove");
                                       }))
                         , 1)
-                    .setSign("7", new UnmodifiableButton(menu, ((player, clickType) -> {
+                    .setSign("7", new UnmodifiableButton(menu, (player -> {
                             if (!SettingsUtil.getServerSetting("CraftDrop")) return -1;
 
                             return SettingsUtil.getSetting(player, "CraftDrop") ? 1 : 0;
@@ -188,7 +188,7 @@ public class HandleCmd implements CommandExecutor {
                                           SettingsUtil.turnSetting(player, "CraftDrop");
                                       }))
                         , 1)
-                    .setSign("8", new UnmodifiableButton(menu, ((player, clickType) -> {
+                    .setSign("8", new UnmodifiableButton(menu, (player -> {
                             if (!SettingsUtil.getServerSetting("DynamicLight")) return -1;
 
                             return SettingsUtil.getSetting(player, "DynamicLight") ? 1 : 0;
@@ -200,7 +200,7 @@ public class HandleCmd implements CommandExecutor {
                                           SettingsUtil.turnSetting(player, "DynamicLight");
                                       }))
                         , 1)
-                    .setSign("A", new UnmodifiableButton(menu, ((player, clickType) -> {
+                    .setSign("A", new UnmodifiableButton(menu, (player -> {
                             return player.hasPermission("InvActions.admin") ? 1 : 0;
                         }))
                                       .addMode(1, ItemUtil.getItemStack(Material.ORANGE_WOOL, "&6重载所有配置文件", "&f包括服务端和玩家"))
