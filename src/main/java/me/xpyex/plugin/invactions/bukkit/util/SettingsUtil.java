@@ -15,6 +15,7 @@ public class SettingsUtil {
 
     static {
         DEFAULT_SETTINGS.addProperty("AutoFarmer", true);
+        DEFAULT_SETTINGS.addProperty("AutoTool", true);
         DEFAULT_SETTINGS.addProperty("CraftDrop", true);
         DEFAULT_SETTINGS.addProperty("DefaultF", false);
         DEFAULT_SETTINGS.addProperty("QuickDrop", false);
@@ -52,5 +53,11 @@ public class SettingsUtil {
         boolean futureMode = !o.get(setting).getAsBoolean();
         o.addProperty(setting, futureMode);
         ConfigUtil.saveConfig(InvActions.getInstance(), "config", GsonUtil.parseStr(o), true);
+    }
+
+    public static int getMenuShow(Player player, String setting) {
+        if (!getServerSetting(setting)) return -1;
+
+        return getSetting(player, setting) ? 1 : 0;
     }
 }

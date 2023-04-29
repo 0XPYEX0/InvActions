@@ -60,7 +60,7 @@ public class HandleCmd implements CommandExecutor {
             }
             if (sender instanceof Player) {
                 ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + ((Player) sender).getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
-                InvSetter setter = new InvSetter("InvActions-设定-" + sender.getName(), "#########", "#1234567#", "#8     A#", "#########");
+                InvSetter setter = new InvSetter("InvActions-设定-" + sender.getName(), "#########", "#1234567#", "#89    A#", "#########");
                 setter.setSign("#", ItemUtil.getItemStack(Material.BLACK_STAINED_GLASS_PANE, " "));
                 setter.setSign(" ", Material.AIR);
 
@@ -200,13 +200,21 @@ public class HandleCmd implements CommandExecutor {
                                           SettingsUtil.turnSetting(player, "DynamicLight");
                                       }))
                         , 1)
+                    .setSign("9", new UnmodifiableButton(menu, (player -> SettingsUtil.getMenuShow(player, "AutoTool")))
+                                      .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动更换工具", "&f当尝试破坏方块", "&f或尝试耕地时", "&f自动从背包内换出适合的工具", "", "&f当前状态: &4服务端禁用"))
+                                      .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动更换工具", "&f当尝试破坏方块", "&f或尝试耕地时", "&f自动从背包内换出适合的工具", "", "&f当前状态: &c禁用"))
+                                      .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a自动更换工具", "&f当尝试破坏方块", "&f或尝试耕地时", "&f自动从背包内换出适合的工具", "", "&f当前状态: &a启用"))
+                                      .setClickEffect((player, clickType, itemStack) -> {
+                                          SettingsUtil.turnSetting(player, "AutoTool");
+                                      })
+                        , 1)
                     .setSign("A", new UnmodifiableButton(menu, (player -> {
                             return player.hasPermission("InvActions.admin") ? 1 : 0;
                         }))
                                       .addMode(1, ItemUtil.getItemStack(Material.ORANGE_WOOL, "&6重载所有配置文件", "&f包括服务端和玩家"))
                                       .addMode(0, new ItemStack(Material.AIR))
                                       .setClickEffect(((player, clickType, itemStack) -> {
-                                          if (itemStack.getAmount() == 0) {
+                                          if (itemStack.getAmount() == 0) {  //玩家没权限的时候
                                               return;
                                           }
                                           Bukkit.getScheduler().runTask(InvActions.getInstance(), () -> {

@@ -65,7 +65,7 @@ public class HandleEvent implements Listener {
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
             return;
         }
-        if (!SettingsUtil.getSetting(event.getPlayer(), "DefaultF") && !event.getPlayer().isSneaking()) {
+        if (!SettingsUtil.getSetting(event.getPlayer(), "DefaultF") && !(event.getPlayer().isSneaking() && event.getPlayer().getLocation().getPitch() == 90)) {
             return;
         }
         event.setCancelled(true);

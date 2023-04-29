@@ -40,4 +40,11 @@ public enum ItemType {
             return material == Material.AIR;
         }
     }
+
+    public enum ToolType {
+        AXE,
+        PICKAXE,
+        SHOVEL,
+        HOE
+    }
 }

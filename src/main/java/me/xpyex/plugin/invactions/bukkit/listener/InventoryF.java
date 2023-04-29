@@ -16,7 +16,7 @@ public class InventoryF implements Listener {
         if (event.getClickedInventory() == null) {
             return;
         }
-        if (event.getClick() == ClickType.SWAP_OFFHAND) {  //不知道哪个版本加上的
+        if (event.getClick() == ClickType.SWAP_OFFHAND) {
             if (event.getClickedInventory() == event.getWhoClicked().getInventory() || InvUtil.isNotMenu(event.getClickedInventory())) {  //仅允许整理自己的背包，或是方块的界面，不允许整理菜单
                 event.setCancelled(true);
                 SortUtil.sortInv(event.getClickedInventory());

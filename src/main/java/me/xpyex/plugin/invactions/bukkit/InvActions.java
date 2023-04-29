@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.listener.AutoFarmer;
+import me.xpyex.plugin.invactions.bukkit.listener.AutoTool;
 import me.xpyex.plugin.invactions.bukkit.listener.CraftDrop;
 import me.xpyex.plugin.invactions.bukkit.listener.HandleEvent;
 import me.xpyex.plugin.invactions.bukkit.listener.InventoryF;
@@ -22,6 +23,7 @@ import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -29,79 +31,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class InvActions extends JavaPlugin {
     private static final String XPLIB_VER = "1.0.8";
-    public static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "SHROOMLIGHT", "FrogLight", "END_ROD", "CampFire", "LAVA"};
+    public static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "ShroomLight", "FrogLight", "END_ROD", "CampFire", "LAVA"};
     private static InvActions INSTANCE;
     private static final HashMap<UUID, Location> PLAYER_DYNAMIC_LIGHT = new HashMap<>();
 
     @Override
     public void onEnable() {
         INSTANCE = this;
-        if (!getServer().getPluginManager().isPluginEnabled("XPLib")) {
-            getLogger().severe("本插件需要XPLib作为前置...");
-            getLogger().severe("请在下载后，再加载本插件");
-            getLogger().severe("GitHub: https://github.com/0XPYEX0/XPLib/releases");
-            getLogger().severe("Gitee(国内): https://gitee.com/XPYEX/XPLib/releases");
+        if (!initCheck()) {
             getServer().getPluginManager().disablePlugin(getInstance());
             return;
         }
 
-        if (VersionUtil.getMainVersion() < 9) {
-            getLogger().severe("本插件需要Minecraft至少为1.9才可运行");
-            getLogger().severe("很遗憾，您的服务器不满足此条件...");
-            getServer().getPluginManager().disablePlugin(getInstance());
-            return;
-        }
+        updateServerConfig();
+        getServer().getScheduler().runTaskAsynchronously(getInstance(), this::updatePlayersConfig);
 
-        if (!VersionUtil.requireXPLib(new Version(XPLIB_VER))) {
-            getLogger().severe("请更新您服务器内的XPLib！");
-            getLogger().severe("当前XPLib无法支持本插件");
-            getLogger().severe("需要: " + XPLIB_VER + " , 当前: " + VersionUtil.getXPLibVersion().getVersion());
-            getLogger().severe("GitHub: https://github.com/0XPYEX0/XPLib/releases");
-            getLogger().severe("Gitee(国内): https://gitee.com/XPYEX/XPLib/releases");
-            getServer().getPluginManager().disablePlugin(getInstance());
-            return;
-        }
-
-        {
-            ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(SettingsUtil.DEFAULT_SERVER_SETTINGS), false);
-            JsonObject o = GsonUtil.copy(SettingsUtil.DEFAULT_SERVER_SETTINGS);
-            JsonObject config = ConfigUtil.getConfig(getInstance());
-            for (String key : GsonUtil.getKeysOfJsonObject(config)) {
-                o.add(key, config.get(key));
-            }
-            ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(o), true);
-        }  //更新服务端config.json
-
-        {
-            getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
-                getServer().getOnlinePlayers().forEach((player -> {
-                    ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
-                    //如果文件还不存在，则新建一份
-                    JsonObject before = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + player.getUniqueId());
-                    JsonObject out = GsonUtil.copy(SettingsUtil.DEFAULT_SETTINGS);
-                    for (String setting : GsonUtil.getKeysOfJsonObject(SettingsUtil.DEFAULT_SETTINGS)) {
-                        if (before.has(setting)) {
-                            out.add(setting, before.get(setting));
-                        }
-                    }  //更新设定，应对热拔插
-                    ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(out), true);
-                }));
-            });
-        }  //更新玩家们的设定
-
-        getServer().getPluginManager().registerEvents(new AutoFarmer(), getInstance());
-        getServer().getPluginManager().registerEvents(new CraftDrop(), getInstance());
-        getServer().getPluginManager().registerEvents(new HandleEvent(), getInstance());
-        getServer().getPluginManager().registerEvents(new QuickDrop(), getInstance());
-        getServer().getPluginManager().registerEvents(new QuickMove(), getInstance());
-        getServer().getPluginManager().registerEvents(new ReplaceBroken(), getInstance());
-        try {
-            @SuppressWarnings("unused")
-            ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //不是每个版本都有这个
-            getServer().getPluginManager().registerEvents(new InventoryF(), getInstance());
-        } catch (Throwable ignored) {
-            getLogger().warning("您的服务器不支持在玩家背包内按F整理，该功能已被禁用");
-        }
+        registerListener();
         getLogger().info("已注册监听器");
 
         getCommand("InvActions").setExecutor(new HandleCmd());
@@ -175,5 +120,81 @@ public final class InvActions extends JavaPlugin {
     public static InvActions getInstance() {
         return INSTANCE;
         //
+    }
+
+    public boolean initCheck() {
+        if (!getServer().getPluginManager().isPluginEnabled("XPLib")) {
+            getLogger().severe("本插件需要XPLib作为前置...");
+            getLogger().severe("请在下载后，再加载本插件");
+            getLogger().severe("GitHub: https://github.com/0XPYEX0/XPLib/releases");
+            getLogger().severe("Gitee(国内): https://gitee.com/XPYEX/XPLib/releases");
+            return false;
+        }
+
+        if (VersionUtil.getMainVersion() < 9) {
+            getLogger().severe("本插件需要Minecraft至少为1.9才可运行");
+            getLogger().severe("很遗憾，您的服务器不满足此条件...");
+            return false;
+        }
+
+        if (!VersionUtil.requireXPLib(new Version(XPLIB_VER))) {
+            getLogger().severe("请更新您服务器内的XPLib！");
+            getLogger().severe("当前XPLib无法支持本插件");
+            getLogger().severe("需要: " + XPLIB_VER + " , 当前: " + VersionUtil.getXPLibVersion().getVersion());
+            getLogger().severe("GitHub: https://github.com/0XPYEX0/XPLib/releases");
+            getLogger().severe("Gitee(国内): https://gitee.com/XPYEX/XPLib/releases");
+            getServer().getPluginManager().disablePlugin(getInstance());
+            return false;
+        }
+
+        return true;
+    }
+
+    public void updateServerConfig() {
+        ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(SettingsUtil.DEFAULT_SERVER_SETTINGS), false);
+        JsonObject o = GsonUtil.copy(SettingsUtil.DEFAULT_SERVER_SETTINGS);
+        JsonObject config = ConfigUtil.getConfig(getInstance());
+        for (String key : GsonUtil.getKeysOfJsonObject(config)) {
+            o.add(key, config.get(key));
+        }
+        ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(o), true);
+    }  //更新服务端config.json
+
+    public void updatePlayersConfig() {
+        getServer().getOnlinePlayers().forEach((player -> {
+            ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
+            //如果文件还不存在，则新建一份
+            JsonObject before = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + player.getUniqueId());
+            JsonObject out = GsonUtil.copy(SettingsUtil.DEFAULT_SETTINGS);
+            for (String setting : GsonUtil.getKeysOfJsonObject(SettingsUtil.DEFAULT_SETTINGS)) {
+                if (before.has(setting)) {
+                    out.add(setting, before.get(setting));
+                }
+            }  //更新设定，应对热拔插
+            ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(out), true);
+        }));
+    }
+
+    public void registerListener() {
+        getServer().getPluginManager().registerEvents(new AutoFarmer(), getInstance());
+        getServer().getPluginManager().registerEvents(new CraftDrop(), getInstance());
+        getServer().getPluginManager().registerEvents(new HandleEvent(), getInstance());
+        getServer().getPluginManager().registerEvents(new QuickDrop(), getInstance());
+        getServer().getPluginManager().registerEvents(new QuickMove(), getInstance());
+        getServer().getPluginManager().registerEvents(new ReplaceBroken(), getInstance());
+        try {
+            @SuppressWarnings("unused")
+            ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //1.16+
+            getServer().getPluginManager().registerEvents(new InventoryF(), getInstance());
+        } catch (Throwable ignored) {
+            getLogger().warning("您的服务器不支持在玩家背包内按F整理，该功能已被禁用");
+        }
+
+        try {
+            Block.class.getMethod("getBreakSpeed", Player.class);  //1.17+
+            getServer().getPluginManager().registerEvents(new AutoTool(), getInstance());
+        } catch (NoSuchMethodError | NoSuchMethodException ignored) {
+            getLogger().warning("您的服务器不支持自动切换玩家工具，该功能已禁用");
+        }
     }
 }
