@@ -45,6 +45,9 @@ public enum ItemType {
         AXE,
         PICKAXE,
         SHOVEL,
-        HOE
+        HOE,
+        SHEARS,
+        SWORD,
+        UNKNOWN
     }
 }

@@ -30,10 +30,21 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class InvActions extends JavaPlugin {
-    private static final String XPLIB_VER = "1.0.8";
     public static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "ShroomLight", "FrogLight", "END_ROD", "CampFire", "LAVA"};
-    private static InvActions INSTANCE;
+    private static final String XPLIB_VER = "1.0.8";
     private static final HashMap<UUID, Location> PLAYER_DYNAMIC_LIGHT = new HashMap<>();
+    private static InvActions INSTANCE;
+
+    public static InvActions getInstance() {
+        return INSTANCE;
+        //
+    }
+
+    @Override
+    public void onDisable() {
+        getLogger().info("已卸载");
+        //
+    }
 
     @Override
     public void onEnable() {
@@ -109,17 +120,6 @@ public final class InvActions extends JavaPlugin {
 
         getLogger().info("已加载");
         getLogger().info("感谢使用InvActions. 本插件在GitHub与Gitee开源，谨防受骗. 作者QQ1723275529");
-    }
-
-    @Override
-    public void onDisable() {
-        getLogger().info("已卸载");
-        //
-    }
-
-    public static InvActions getInstance() {
-        return INSTANCE;
-        //
     }
 
     public boolean initCheck() {

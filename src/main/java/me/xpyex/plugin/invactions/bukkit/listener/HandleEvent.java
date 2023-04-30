@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 public class HandleEvent implements Listener {
     private static final HashSet<Material> IGNORES = new HashSet<>();
+
     static {
         for (Material m : Material.values()) {
             switch (m) {

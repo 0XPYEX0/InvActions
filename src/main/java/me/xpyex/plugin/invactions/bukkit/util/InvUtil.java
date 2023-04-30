@@ -8,6 +8,7 @@ import me.xpyex.plugin.xplib.bukkit.api.Pair;
 import me.xpyex.plugin.xplib.bukkit.util.Util;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
+import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -43,15 +44,24 @@ public class InvUtil {
     }
 
     public static int getFastestToolSlot(Player player, Block block, ItemType.ToolType type) {
-        if (player.getInventory().getItemInMainHand().getType().toString().contains("_" + type)) return player.getInventory().getHeldItemSlot();
-        Pair<Float, Integer> fastest = new Pair<>(0f, -1);  //速度, Slot
+        if (player.getInventory().getItemInMainHand().getType().toString().contains("_" + type))
+            return player.getInventory().getHeldItemSlot();
+        Pair<Float, Integer> fastest = new Pair<>(block.getBreakSpeed(player), player.getInventory().getHeldItemSlot());  //速度, Slot
         ItemStack before = new ItemStack(player.getInventory().getItemInMainHand());
         int slot;
         for (slot = 0; slot < player.getInventory().getStorageContents().length; slot++) {
             ItemStack content = player.getInventory().getStorageContents()[slot];
             if (content == null) continue;
 
-            if (content.getType().toString().contains("_" + type)) {
+            boolean shouldCompute = false;
+
+            if (type == ItemType.ToolType.SHEARS && content.getType() == Material.SHEARS) {
+                shouldCompute = true;
+            } else if (StrUtil.endsWithIgnoreCaseOr(content.getType().toString(), "_" + type)) {
+                shouldCompute = true;
+            }
+
+            if (shouldCompute) {
                 player.getInventory().setItemInMainHand(content);
                 float breakSpeed = block.getBreakSpeed(player);
                 if (fastest.getKey() < breakSpeed) {

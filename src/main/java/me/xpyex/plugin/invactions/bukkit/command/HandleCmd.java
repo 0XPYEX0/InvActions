@@ -132,7 +132,7 @@ public class HandleCmd implements CommandExecutor {
                             if (!SettingsUtil.getServerSetting("QuickMove")) return -1;
 
                             return SettingsUtil.getSetting(player, "QuickMove") ? 1 : 0;
-                    }))
+                        }))
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a快速移动道具",
                                           "&f当打开容器或背包时",
                                           "&f1. 拿起任意道具",

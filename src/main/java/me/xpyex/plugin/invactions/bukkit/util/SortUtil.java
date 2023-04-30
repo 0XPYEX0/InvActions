@@ -59,7 +59,7 @@ public class SortUtil {
         for (ItemType t : ItemType.values()) {
             computed.put(t, new ArrayList<>());
         }
-        
+
         items.values().forEach((pair) -> {
             ItemType sortType;
 
