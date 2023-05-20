@@ -73,6 +73,7 @@ public class HandleEvent implements Listener {
         SortUtil.sortInv(event.getPlayer().getInventory());
         MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你的背包");
         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
+        event.getPlayer().updateInventory();  //修复物品暂时不可见(实际还存在)的Bug
     }
 
     @EventHandler

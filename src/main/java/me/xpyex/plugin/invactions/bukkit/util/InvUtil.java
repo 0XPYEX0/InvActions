@@ -1,7 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.util;
 
 import com.google.gson.JsonPrimitive;
-import java.util.Optional;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
@@ -37,7 +36,7 @@ public class InvUtil {
         }
 
         ItemStack copiedTool = new ItemStack(player.getInventory().getItemInMainHand());
-        ItemStack copiedSlot = new ItemStack(Optional.ofNullable(player.getInventory().getItem(slot)).orElse(new ItemStack(Material.AIR)));
+        ItemStack copiedSlot = new ItemStack(Util.getOrDefault(player.getInventory().getItem(slot), new ItemStack(Material.AIR)));
         player.getInventory().setItem(slot, copiedTool);
         player.getInventory().setItemInMainHand(copiedSlot);
         MsgUtil.sendActionBar(player, "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);

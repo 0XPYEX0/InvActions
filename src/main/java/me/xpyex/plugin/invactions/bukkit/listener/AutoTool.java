@@ -41,10 +41,6 @@ public class AutoTool implements Listener {
                     if (StrUtil.containsIgnoreCaseOr(event.getPlayer().getInventory().getItemInMainHand().getType().toString(), "_SHOVEL", "_HOE"))
                         return;  //玩家已经拿着对应道具了，就不要换
                     InvUtil.swapSlotToMainHand(event.getPlayer(), InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), ItemType.ToolType.HOE));
-                } else if (event.getClickedBlock().toString().contains("_LOG")) {  //原木
-                    if (StrUtil.containsIgnoreCaseOr(event.getPlayer().getInventory().getItemInMainHand().getType().toString(), "_AXE"))
-                        return;  //玩家已经拿着对应道具了，就不要换
-                    InvUtil.swapSlotToMainHand(event.getPlayer(), InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), ItemType.ToolType.AXE));
                 }
             }
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {

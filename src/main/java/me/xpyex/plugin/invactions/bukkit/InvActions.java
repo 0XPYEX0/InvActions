@@ -14,7 +14,7 @@ import me.xpyex.plugin.invactions.bukkit.listener.QuickMove;
 import me.xpyex.plugin.invactions.bukkit.listener.ReplaceBroken;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.api.Version;
-import me.xpyex.plugin.xplib.bukkit.util.bstats.BStatsUtil;
+import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.GsonUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
@@ -27,9 +27,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public final class InvActions extends JavaPlugin {
+public final class InvActions extends XPPlugin {
     public static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "ShroomLight", "FrogLight", "END_ROD", "CampFire", "LAVA"};
     private static final String XPLIB_VER = "1.0.8";
     private static final HashMap<UUID, Location> PLAYER_DYNAMIC_LIGHT = new HashMap<>();
@@ -57,14 +56,14 @@ public final class InvActions extends JavaPlugin {
         updateServerConfig();
         getServer().getScheduler().runTaskAsynchronously(getInstance(), this::updatePlayersConfig);
 
-        registerListener();
+        registerListeners();
         getLogger().info("已注册监听器");
 
         getCommand("InvActions").setExecutor(new HandleCmd());
         getLogger().info("已注册命令");
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
-            BStatsUtil.hookWith(getInstance(), 17118);
+            hookBStats(17118);
             getLogger().info("与bStats挂钩");
         });
 
@@ -175,24 +174,24 @@ public final class InvActions extends JavaPlugin {
         }));
     }
 
-    public void registerListener() {
-        getServer().getPluginManager().registerEvents(new AutoFarmer(), getInstance());
-        getServer().getPluginManager().registerEvents(new CraftDrop(), getInstance());
-        getServer().getPluginManager().registerEvents(new HandleEvent(), getInstance());
-        getServer().getPluginManager().registerEvents(new QuickDrop(), getInstance());
-        getServer().getPluginManager().registerEvents(new QuickMove(), getInstance());
-        getServer().getPluginManager().registerEvents(new ReplaceBroken(), getInstance());
+    public void registerListeners() {
+        registerListener(new AutoFarmer());
+        registerListener(new CraftDrop());
+        registerListener(new HandleEvent());
+        registerListener(new QuickDrop());
+        registerListener(new QuickMove());
+        registerListener(new ReplaceBroken());
         try {
             @SuppressWarnings("unused")
             ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //1.16+
-            getServer().getPluginManager().registerEvents(new InventoryF(), getInstance());
+            registerListener(new InventoryF());
         } catch (Throwable ignored) {
             getLogger().warning("您的服务器不支持在玩家背包内按F整理，该功能已被禁用");
         }
 
         try {
             Block.class.getMethod("getBreakSpeed", Player.class);  //1.17+
-            getServer().getPluginManager().registerEvents(new AutoTool(), getInstance());
+            registerListener(new AutoTool());
         } catch (NoSuchMethodError | NoSuchMethodException ignored) {
             getLogger().warning("您的服务器不支持自动切换玩家工具，该功能已禁用");
         }
