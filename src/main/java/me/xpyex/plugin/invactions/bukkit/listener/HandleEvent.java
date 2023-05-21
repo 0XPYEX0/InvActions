@@ -58,6 +58,9 @@ public class HandleEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPressFWithoutInv(PlayerSwapHandItemsEvent event) {
+        InvActions.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(InvActions.getInstance(), () -> {
+            event.getPlayer().updateInventory();  //修复物品暂时不可见(实际还存在)的Bug
+        }, 2L);
         Block target = event.getPlayer().getTargetBlock(IGNORES, 10);
         if (target.getState() instanceof Container && event.getPlayer().isSneaking()) {  //看向容器了, Shift+F
             event.setCancelled(true);
@@ -73,7 +76,6 @@ public class HandleEvent implements Listener {
         SortUtil.sortInv(event.getPlayer().getInventory());
         MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你的背包");
         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
-        event.getPlayer().updateInventory();  //修复物品暂时不可见(实际还存在)的Bug
     }
 
     @EventHandler
