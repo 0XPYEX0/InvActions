@@ -30,7 +30,7 @@ import org.bukkit.event.inventory.ClickType;
 
 public final class InvActions extends XPPlugin {
     public static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "ShroomLight", "FrogLight", "END_ROD", "CampFire", "LAVA"};
-    private static final String XPLIB_VER = "1.0.8";
+    private static final String XPLIB_VER = "1.1.0";
     private static final HashMap<UUID, Location> PLAYER_DYNAMIC_LIGHT = new HashMap<>();
     private static InvActions INSTANCE;
 
