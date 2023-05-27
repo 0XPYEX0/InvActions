@@ -1,6 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
@@ -53,13 +54,12 @@ public class ReplaceBroken implements Listener {
             EquipmentSlot finalSlot = slot;
             ItemStack brokenItem = new ItemStack(event.getBrokenItem());
             Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
-                for (ItemStack content : event.getPlayer().getInventory().getContents()) {
+                for (int i = 0; i < event.getPlayer().getInventory().getContents().length; i++) {
+                    ItemStack content = event.getPlayer().getInventory().getItem(i);
                     if (content == null) continue;
 
                     if (content.getType() == brokenItem.getType()) {  //同一种类型的道具
-                        ItemStack out = new ItemStack(content);
-                        content.setAmount(0);
-                        event.getPlayer().getInventory().setItem(finalSlot, out);
+                        InvUtil.swapSlot(event.getPlayer(), finalSlot, i);
                         MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. " + SettingsUtil.SETTING_HELP);
                         return;
                     }

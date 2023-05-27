@@ -4,13 +4,14 @@ import com.google.gson.JsonPrimitive;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
-import me.xpyex.plugin.xplib.bukkit.util.Util;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
+import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,18 +29,17 @@ public class InvUtil {
         return className.startsWith("org.bukkit.");
     }
 
-    public static void swapSlotToMainHand(Player player, int slot) {
-        Util.checkNull("Player为空，请联系开发者修复", player);
+    public static void swapSlot(Player player, EquipmentSlot equipmentSlot, int slot) {
+        ValueUtil.checkNull("参数为空，请联系开发者修复", player, equipmentSlot);
 
         if (player.getInventory().getHeldItemSlot() == slot) {
             return;
         }
 
-        ItemStack copiedTool = new ItemStack(player.getInventory().getItemInMainHand());
-        ItemStack copiedSlot = new ItemStack(Util.getOrDefault(player.getInventory().getItem(slot), new ItemStack(Material.AIR)));
+        ItemStack copiedTool = new ItemStack(player.getInventory().getItem(equipmentSlot));
+        ItemStack copiedSlot = new ItemStack(ValueUtil.getOrDefault(player.getInventory().getItem(slot), new ItemStack(Material.AIR)));
         player.getInventory().setItem(slot, copiedTool);
         player.getInventory().setItemInMainHand(copiedSlot);
-        MsgUtil.sendActionBar(player, "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);
     }
 
     public static int getFastestToolSlot(Player player, Block block, ItemType.ToolType type) {

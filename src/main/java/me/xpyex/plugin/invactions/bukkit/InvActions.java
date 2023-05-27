@@ -59,7 +59,7 @@ public final class InvActions extends XPPlugin {
         registerListeners();
         getLogger().info("已注册监听器");
 
-        getCommand("InvActions").setExecutor(new HandleCmd());
+        registerCmd("InvActions", new HandleCmd());
         getLogger().info("已注册命令");
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {

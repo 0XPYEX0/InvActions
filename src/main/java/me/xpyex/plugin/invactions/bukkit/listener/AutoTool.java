@@ -5,6 +5,7 @@ import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
+import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -12,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class AutoTool implements Listener {
@@ -40,7 +42,8 @@ public class AutoTool implements Listener {
                 if (StrUtil.containsIgnoreCaseOr(event.getClickedBlock().getType().toString(), "GRASS_BLOCK", "DIRT")) {
                     if (StrUtil.containsIgnoreCaseOr(event.getPlayer().getInventory().getItemInMainHand().getType().toString(), "_SHOVEL", "_HOE"))
                         return;  //玩家已经拿着对应道具了，就不要换
-                    InvUtil.swapSlotToMainHand(event.getPlayer(), InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), ItemType.ToolType.HOE));
+                    InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), ItemType.ToolType.HOE));
+                    MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);
                 }
             }
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
@@ -58,7 +61,8 @@ public class AutoTool implements Listener {
                 if (fastest.getValue() == ItemType.ToolType.UNKNOWN) {  //时间都一样，或者根本没算成，无需更换道具
                     return;
                 }
-                InvUtil.swapSlotToMainHand(event.getPlayer(), InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), fastest.getValue()));  //更换这个类别中最快速度的工具
+                InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), fastest.getValue()));  //更换这个类别中最快速度的工具
+                MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);
             }
         }
     }
