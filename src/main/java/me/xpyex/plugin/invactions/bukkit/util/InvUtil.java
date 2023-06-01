@@ -39,7 +39,7 @@ public class InvUtil {
         ItemStack copiedTool = new ItemStack(player.getInventory().getItem(equipmentSlot));
         ItemStack copiedSlot = new ItemStack(ValueUtil.getOrDefault(player.getInventory().getItem(slot), new ItemStack(Material.AIR)));
         player.getInventory().setItem(slot, copiedTool);
-        player.getInventory().setItemInMainHand(copiedSlot);
+        player.getInventory().setItem(equipmentSlot, copiedSlot);
     }
 
     public static int getFastestToolSlot(Player player, Block block, ItemType.ToolType type) {
