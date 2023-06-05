@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.inventory.InvSetter;
 import me.xpyex.plugin.xplib.bukkit.inventory.Menu;
@@ -212,7 +213,7 @@ public class HandleCmd implements CommandExecutor {
                             return player.hasPermission("InvActions.admin") ? 1 : 0;
                         }))
                                       .addMode(1, ItemUtil.getItemStack(Material.ORANGE_WOOL, "&6重载所有配置文件", "&f包括服务端和玩家"))
-                                      .addMode(0, new ItemStack(Material.AIR))
+                                      .addMode(0, InvUtil.AIR_STACK)
                                       .setClickEffect(((player, clickType, itemStack) -> {
                                           if (itemStack.getAmount() == 0) {  //玩家没权限的时候
                                               return;

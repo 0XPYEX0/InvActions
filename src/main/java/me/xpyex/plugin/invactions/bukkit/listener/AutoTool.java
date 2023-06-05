@@ -7,6 +7,7 @@ import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
+import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -39,8 +40,11 @@ public class AutoTool implements Listener {
 
         if (event.getClickedBlock() != null) {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                if (StrUtil.containsIgnoreCaseOr(ValueUtil.getOrDefault(event.getItem(), InvUtil.AIR_STACK).getType().toString(), "BOW")) {
+                    return;
+                }
                 if (StrUtil.containsIgnoreCaseOr(event.getClickedBlock().getType().toString(), "GRASS_BLOCK", "DIRT")) {
-                    if (StrUtil.containsIgnoreCaseOr(event.getPlayer().getInventory().getItemInMainHand().getType().toString(), "_SHOVEL", "_HOE"))
+                    if (StrUtil.containsIgnoreCaseOr(ValueUtil.getOrDefault(event.getItem(), InvUtil.AIR_STACK).getType().toString(), "_SHOVEL", "_HOE"))
                         return;  //玩家已经拿着对应道具了，就不要换
                     InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), ItemType.ToolType.HOE));
                     MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);

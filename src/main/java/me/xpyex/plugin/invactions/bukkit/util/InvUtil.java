@@ -16,6 +16,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InvUtil {
+
+    public static final ItemStack AIR_STACK = new ItemStack(Material.AIR);
+
     public static boolean isNotMenu(Inventory inv) {
         String className = inv.getHolder() != null ? inv.getHolder().getClass().getName() : "null";
         String simpleName = inv.getHolder() != null ? inv.getHolder().getClass().getSimpleName() : "null";
@@ -37,7 +40,7 @@ public class InvUtil {
         }
 
         ItemStack copiedTool = new ItemStack(player.getInventory().getItem(equipmentSlot));
-        ItemStack copiedSlot = new ItemStack(ValueUtil.getOrDefault(player.getInventory().getItem(slot), new ItemStack(Material.AIR)));
+        ItemStack copiedSlot = new ItemStack(ValueUtil.getOrDefault(player.getInventory().getItem(slot), AIR_STACK));
         player.getInventory().setItem(slot, copiedTool);
         player.getInventory().setItem(equipmentSlot, copiedSlot);
     }
