@@ -65,7 +65,11 @@ public class AutoTool implements Listener {
                 if (fastest.getValue() == ItemType.ToolType.UNKNOWN) {  //时间都一样，或者根本没算成，无需更换道具
                     return;
                 }
-                InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), fastest.getValue()));  //更换这个类别中最快速度的工具
+                int fastestToolSlot = InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), fastest.getValue());
+                if (fastestToolSlot == event.getPlayer().getInventory().getHeldItemSlot()) {
+                    return;
+                }
+                InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, fastestToolSlot);  //更换这个类别中最快速度的工具
                 MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);
             }
         }

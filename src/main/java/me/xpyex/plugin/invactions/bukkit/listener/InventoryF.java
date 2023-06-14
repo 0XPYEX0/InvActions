@@ -1,5 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
+import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import org.bukkit.Sound;
@@ -23,6 +24,7 @@ public class InventoryF implements Listener {
                 if (event.getWhoClicked() instanceof Player) {
                     ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
                 }
+                event.getWhoClicked().getInventory().setItemInOffHand(event.getWhoClicked().getInventory().getItemInOffHand());  //刷新副手
             }
         }
     }
