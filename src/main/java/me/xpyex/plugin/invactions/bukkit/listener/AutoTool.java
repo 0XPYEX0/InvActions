@@ -46,7 +46,11 @@ public class AutoTool implements Listener {
                 if (StrUtil.containsIgnoreCaseOr(event.getClickedBlock().getType().toString(), "GRASS_BLOCK", "DIRT")) {
                     if (StrUtil.containsIgnoreCaseOr(ValueUtil.getOrDefault(event.getItem(), InvUtil.AIR_STACK).getType().toString(), "_SHOVEL", "_HOE"))
                         return;  //玩家已经拿着对应道具了，就不要换
-                    InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), ItemType.ToolType.HOE));
+                    int fastestSlot = InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), ItemType.ToolType.HOE);
+                    if (fastestSlot == event.getPlayer().getInventory().getHeldItemSlot()) {
+                        return;
+                    }
+                    InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, fastestSlot);
                     MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);
                 }
             }
