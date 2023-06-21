@@ -76,6 +76,7 @@ public class QuickMove implements Listener {
                 Bukkit.getPluginManager().callEvent(clickEvent);
                 if (clickEvent.isCancelled()) {
                     event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
+                    event.getWhoClicked().removeMetadata("InvActions_QuickDropping", InvActions.getInstance());
                     return;
                 }
                 event.getCursor().setAmount(0);
