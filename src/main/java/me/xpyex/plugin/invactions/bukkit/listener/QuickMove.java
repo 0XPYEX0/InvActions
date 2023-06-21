@@ -31,12 +31,16 @@ public class QuickMove implements Listener {
             }
             ItemStack item = new ItemStack(event.getCursor());
             if (event.getClickedInventory() == null) {  //这就是丢出
+                if (event.getWhoClicked().hasMetadata("InvActions_QuickDropping")) {
+                    return;
+                }
                 ItemStack tool;
                 if (!ItemUtil.equals(item, event.getWhoClicked().getInventory().getItemInMainHand())) {
                     tool = new ItemStack(event.getWhoClicked().getInventory().getItemInMainHand());  //保存手上道具，待会set回去，下面丢出会覆盖主手道具
                 } else {
                     tool = null;
                 }
+                event.getWhoClicked().setMetadata("InvActions_QuickDropping", new FixedMetadataValue(InvActions.getInstance(), true));
                 for (ItemStack content : event.getWhoClicked().getInventory().getStorageContents()) {
                     if (content == null) continue;
 
@@ -78,10 +82,11 @@ public class QuickMove implements Listener {
                 event.getWhoClicked().getInventory().setItemInMainHand(item);
                 event.getWhoClicked().dropItem(true);  //丢出光标道具
 
-                event.getWhoClicked().getInventory().setItemInMainHand(tool);
+                event.getWhoClicked().getInventory().setItemInMainHand(tool);  //复原主手
                 ((Player) event.getWhoClicked()).updateInventory();
                 MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已丢出所有相同道具. " + SettingsUtil.SETTING_HELP);
                 event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
+                event.getWhoClicked().removeMetadata("InvActions_QuickDropping", InvActions.getInstance());
             } else if (event.getClickedInventory() == event.getWhoClicked().getInventory()) {
                 if (event.getWhoClicked().getOpenInventory().getTopInventory() == event.getWhoClicked().getInventory()) {
                     return;
