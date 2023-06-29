@@ -33,7 +33,7 @@ public class DynamicLight implements Listener {
                         if (SettingsUtil.getSetting(player, "DynamicLight")) {
                             player.sendBlockChange(loc, loc.getBlock().getBlockData());
                             loc = projectile.getLocation().clone();
-                            if (loc.getBlock().getType().toString().contains("AIR")) {
+                            if (loc.getBlock().getType().toString().endsWith("AIR")) {
                                 player.sendBlockChange(loc, Bukkit.createBlockData(Material.LIGHT));
                             }
                         }
@@ -61,7 +61,7 @@ public class DynamicLight implements Listener {
 
                         if (StrUtil.containsIgnoreCaseOr(toolType.toString(), LIGHTS) || StrUtil.containsIgnoreCaseOr(offhandType.toString(), LIGHTS)) {  //玩家手里的东西是光源的情况
                             Location location = player.getEyeLocation();
-                            if (!location.getBlock().getType().toString().contains("AIR")) {  //不在有方块的地方模拟光源了，观感不好且影响游泳
+                            if (!location.getBlock().getType().toString().endsWith("AIR")) {  //不在有方块的地方模拟光源了，观感不好且影响游泳
                                 //保持动态光源在上一次的位置，直到玩家走回空气
                                 continue;
                             }
