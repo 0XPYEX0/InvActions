@@ -1,6 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
@@ -83,7 +84,7 @@ public class AutoFarmer implements Listener {
                     return;  //防止收割被保护的地方
                 }
                 event.setCancelled(true);
-                ArrayList<ItemStack> result = new ArrayList<>(event.getClickedBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand()));
+                Collection<ItemStack> result = event.getClickedBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand());
                 for (ItemStack drop : result) {
                     if (ItemUtil.typeIsOr(drop, Material.WHEAT, Material.BEETROOT, Material.POISONOUS_POTATO)) continue;
 

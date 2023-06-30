@@ -31,8 +31,6 @@ public class AutoTool implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if (!SettingsUtil.getServerSetting("AutoTool")) return;
-
         if (!SettingsUtil.getSetting(event.getPlayer(), "AutoTool")) return;
 
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE || event.getPlayer().getGameMode() == GameMode.SPECTATOR)
