@@ -29,7 +29,7 @@ public class AutoTool implements Listener {
         TOOLS.put(ItemType.ToolType.SHEARS, new ItemStack(Material.SHEARS));  //剪刀: 羊毛 蜘蛛丝 树叶
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {
         if (!SettingsUtil.getSetting(event.getPlayer(), "AutoTool")) return;
 
@@ -54,13 +54,13 @@ public class AutoTool implements Listener {
             }
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 ItemStack before = new ItemStack(event.getPlayer().getInventory().getItemInMainHand());  //保存主手
-                Pair<Float, ItemType.ToolType> fastest = new Pair<>(event.getClickedBlock().getBreakSpeed(event.getPlayer()), ItemType.ToolType.UNKNOWN);
+                Pair<Float, ItemType.ToolType> fastest = Pair.of(event.getClickedBlock().getBreakSpeed(event.getPlayer()), ItemType.ToolType.UNKNOWN);
                 for (ItemType.ToolType toolType : TOOLS.keySet()) {
                     ItemStack item = TOOLS.get(toolType);
                     event.getPlayer().getInventory().setItemInMainHand(item);  //手中设为模板
                     float breakSpeed = event.getClickedBlock().getBreakSpeed(event.getPlayer());
                     if (breakSpeed > fastest.getKey()) {
-                        fastest = new Pair<>(breakSpeed, toolType);  //计算并排序
+                        fastest = Pair.of(breakSpeed, toolType);  //计算并排序
                     }
                 }
                 event.getPlayer().getInventory().setItemInMainHand(before);  //恢复手中道具

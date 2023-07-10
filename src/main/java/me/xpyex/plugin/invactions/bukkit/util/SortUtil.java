@@ -48,9 +48,9 @@ public class SortUtil {
             int amount = is.getAmount();
             is.setAmount(1);
             if (items.containsKey(is.toString())) {
-                items.put(is.toString(), new Pair<>(is, items.get(is.toString()).getValue() + amount));
+                items.put(is.toString(), Pair.of(is, items.get(is.toString()).getValue() + amount));
             } else {
-                items.put(is.toString(), new Pair<>(is, amount));
+                items.put(is.toString(), Pair.of(is, amount));
             }
         }
 

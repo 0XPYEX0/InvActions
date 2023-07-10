@@ -48,7 +48,7 @@ public class InvUtil {
     public static int getFastestToolSlot(Player player, Block block, ItemType.ToolType type) {
         if (player.getInventory().getItemInMainHand().getType().toString().contains("_" + type))
             return player.getInventory().getHeldItemSlot();
-        Pair<Float, Integer> fastest = new Pair<>(block.getBreakSpeed(player), player.getInventory().getHeldItemSlot());  //速度, Slot
+        Pair<Float, Integer> fastest = Pair.of(block.getBreakSpeed(player), player.getInventory().getHeldItemSlot());  //速度, Slot
         ItemStack before = new ItemStack(player.getInventory().getItemInMainHand());
         int slot;
         for (slot = 0; slot < player.getInventory().getStorageContents().length; slot++) {
@@ -67,7 +67,7 @@ public class InvUtil {
                 player.getInventory().setItemInMainHand(content);
                 float breakSpeed = block.getBreakSpeed(player);
                 if (fastest.getKey() < breakSpeed) {
-                    fastest = new Pair<>(breakSpeed, slot);
+                    fastest = Pair.of(breakSpeed, slot);
                 }
             }
         }
