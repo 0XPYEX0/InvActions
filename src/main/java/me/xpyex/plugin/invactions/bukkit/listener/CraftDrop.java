@@ -42,9 +42,12 @@ public class CraftDrop implements Listener {
 
         event.setCancelled(true);
         ItemStack tool = new ItemStack(event.getWhoClicked().getInventory().getItemInMainHand());
-        event.getWhoClicked().getInventory().setItemInMainHand(event.getRecipe().getResult());
-        event.getWhoClicked().getInventory().getItemInMainHand().setAmount(least.getAmount());
+
+        ItemStack toDrop = new ItemStack(event.getRecipe().getResult());
+        toDrop.setAmount(toDrop.getAmount() * least.getAmount());
+        event.getWhoClicked().getInventory().setItemInMainHand(toDrop);
         event.getWhoClicked().dropItem(true);
+
         for (ItemStack matrix : event.getInventory().getMatrix()) {
             if (matrix == null || matrix.getAmount() == 0) continue;
 

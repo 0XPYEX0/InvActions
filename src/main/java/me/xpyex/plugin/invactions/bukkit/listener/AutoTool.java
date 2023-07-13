@@ -36,6 +36,9 @@ public class AutoTool implements Listener {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE || event.getPlayer().getGameMode() == GameMode.SPECTATOR)
             return;
 
+        if (StrUtil.endsWithIgnoreCaseOr(event.getPlayer().getInventory().getItemInMainHand().getType().toString(), "_SWORDS", "BOW", "TRIDENT")) {
+            return;  //弓、剑、弩、三叉戟  不处理
+        }
         if (event.getClickedBlock() != null) {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (StrUtil.containsIgnoreCaseOr(ValueUtil.getOrDefault(event.getItem(), InvUtil.AIR_STACK).getType().toString(), "BOW")) {
