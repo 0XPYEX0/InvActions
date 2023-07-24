@@ -1,6 +1,5 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
-import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import org.bukkit.Sound;

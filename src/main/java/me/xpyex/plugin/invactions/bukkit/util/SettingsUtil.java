@@ -48,13 +48,6 @@ public class SettingsUtil {
         return o.has(setting) && o.get(setting).getAsBoolean();
     }
 
-    public static void turnSeverSetting(String setting) {
-        JsonObject o = ConfigUtil.getConfig(InvActions.getInstance());
-        boolean futureMode = !o.get(setting).getAsBoolean();
-        o.addProperty(setting, futureMode);
-        ConfigUtil.saveConfig(InvActions.getInstance(), "config", GsonUtil.parseStr(o), true);
-    }
-
     public static int getMenuShow(Player player, String setting) {
         if (!getServerSetting(setting)) return -1;
 

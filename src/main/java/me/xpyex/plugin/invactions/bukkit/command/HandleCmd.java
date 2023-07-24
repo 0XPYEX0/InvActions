@@ -19,7 +19,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class HandleCmd implements CommandExecutor {
@@ -68,9 +67,7 @@ public class HandleCmd implements CommandExecutor {
                 Menu menu = new Menu((Player) sender);
                 menu.setPage(1, setter)
                     .setSign("1", new UnmodifiableButton(menu, (player -> {
-                            if (!SettingsUtil.getServerSetting("ReplaceBrokenTool")) return -1;
-
-                            return SettingsUtil.getSetting(player, "ReplaceBrokenTool") ? 1 : 0;
+                            return SettingsUtil.getMenuShow(player, "ReplaceBrokenTool");
                         }))
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动补充道具", "&f当手中物品损坏/用尽时", "&f自动从背包补充", "", "&f当前状态: &4服务端禁用"))
                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动补充道具", "&f当手中物品损坏/用尽时", "&f自动从背包补充", "", "&f当前状态: &c禁用"))
@@ -81,9 +78,7 @@ public class HandleCmd implements CommandExecutor {
                         , 1)
 
                     .setSign("2", new UnmodifiableButton(menu, (player -> {
-                            if (!SettingsUtil.getServerSetting("ReplaceBrokenArmor")) return -1;
-
-                            return SettingsUtil.getSetting(player, "ReplaceBrokenArmor") ? 1 : 0;
+                            return SettingsUtil.getMenuShow(player, "ReplaceBrokenArmor");
                         }))
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动穿戴盔甲", "&f当穿戴盔甲损坏时", "&f自动从背包补充", "", "&f当前状态: &4服务端禁用"))
                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动穿戴盔甲", "&f当穿戴盔甲损坏时", "&f自动从背包补充", "", "&f当前状态: &c禁用"))
@@ -94,9 +89,7 @@ public class HandleCmd implements CommandExecutor {
                         , 1)
 
                     .setSign("3", new UnmodifiableButton(menu, (player -> {
-                            if (!SettingsUtil.getServerSetting("AutoFarmer")) return -1;
-
-                            return SettingsUtil.getSetting(player, "AutoFarmer") ? 1 : 0;
+                            return SettingsUtil.getMenuShow(player, "AutoFarmer");
                         }))
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动收割", "&f当右键农作物时", "&f若成熟则自动收割", "", "&f当前状态: &4服务端禁用"))
                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动收割", "&f当右键农作物时", "&f若成熟则自动收割", "", "&f当前状态: &c禁用"))
@@ -106,9 +99,7 @@ public class HandleCmd implements CommandExecutor {
                                       }))
                         , 1)
                     .setSign("4", new UnmodifiableButton(menu, (player -> {
-                            if (!SettingsUtil.getServerSetting("DefaultF")) return -1;
-
-                            return SettingsUtil.getSetting(player, "DefaultF") ? 1 : 0;
+                            return SettingsUtil.getMenuShow(player, "DefaultF");
                         }))
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a按下 &e&lF &a整理", "&f当没有打开任何界面时", "&f不论是否潜行且低头", "&f按下 &e&lF &f就整理自身背包", "&5&o该设定不影响 &e&lShift+F &5&o整理容器", "", "&f当前状态: &4服务端禁用"))
                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a按下 &e&lF &a整理", "&f当没有打开任何界面时", "&f不论是否潜行且低头", "&f按下 &e&lF &f就整理自身背包", "&5&o该设定不影响 &e&lShift+F &5&o整理容器", "", "&f当前状态: &c禁用"))
@@ -118,9 +109,7 @@ public class HandleCmd implements CommandExecutor {
                                       }))
                         , 1)
                     .setSign("5", new UnmodifiableButton(menu, (player -> {
-                            if (!SettingsUtil.getServerSetting("QuickDrop")) return -1;
-
-                            return SettingsUtil.getSetting(player, "QuickDrop") ? 1 : 0;
+                            return SettingsUtil.getMenuShow(player, "QuickDrop");
                         }))
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a丢出同类道具", "&f当没有打开任何界面时", "&f按下 &e&lShift+Q", "&f扔出背包中所有同类道具", "", "&f当前状态: &4服务端禁用"))
                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a丢出同类道具", "&f当没有打开任何界面时", "&f按下 &e&lShift+Q", "&f扔出背包中所有同类道具", "", "&f当前状态: &c禁用"))
@@ -130,9 +119,7 @@ public class HandleCmd implements CommandExecutor {
                                       }))
                         , 1)
                     .setSign("6", new UnmodifiableButton(menu, (player -> {
-                            if (!SettingsUtil.getServerSetting("QuickMove")) return -1;
-
-                            return SettingsUtil.getSetting(player, "QuickMove") ? 1 : 0;
+                            return SettingsUtil.getMenuShow(player, "QuickMove");
                         }))
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a快速移动道具",
                                           "&f当打开容器或背包时",
@@ -178,9 +165,7 @@ public class HandleCmd implements CommandExecutor {
                                       }))
                         , 1)
                     .setSign("7", new UnmodifiableButton(menu, (player -> {
-                            if (!SettingsUtil.getServerSetting("CraftDrop")) return -1;
-
-                            return SettingsUtil.getSetting(player, "CraftDrop") ? 1 : 0;
+                            return SettingsUtil.getMenuShow(player, "CraftDrop");
                         }))
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a一键丢出合成结果", "&f当合成时，对着合成结果", "&f按下 &e&lCtrl+Q", "&f丢出所有合成结果", "", "&f当前状态: &4服务端禁用"))
                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a一键丢出合成结果", "&f当合成时，对着合成结果", "&f按下 &e&lCtrl+Q", "&f丢出所有合成结果", "", "&f当前状态: &c禁用"))
@@ -189,11 +174,7 @@ public class HandleCmd implements CommandExecutor {
                                           SettingsUtil.turnSetting(player, "CraftDrop");
                                       }))
                         , 1)
-                    .setSign("8", new UnmodifiableButton(menu, (player -> {
-                            if (!SettingsUtil.getServerSetting("DynamicLight")) return -1;
-
-                            return SettingsUtil.getSetting(player, "DynamicLight") ? 1 : 0;
-                        }))
+                    .setSign("8", new UnmodifiableButton(menu, (player -> SettingsUtil.getMenuShow(player, "DynamicLight")))
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a动态光源", "&f当手持光源道具时", "&f在玩家位置模拟光源", "", "&f当前状态: &4服务端禁用"))
                                       .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a动态光源", "&f当手持光源道具时", "&f在玩家位置模拟光源", "", "&f当前状态: &c禁用"))
                                       .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a动态光源", "&f当手持光源道具时", "&f在玩家位置模拟光源", "", "&f当前状态: &a启用"))

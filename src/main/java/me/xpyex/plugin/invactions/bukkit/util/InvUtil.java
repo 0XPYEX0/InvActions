@@ -2,7 +2,7 @@ package me.xpyex.plugin.invactions.bukkit.util;
 
 import com.google.gson.JsonPrimitive;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
+import me.xpyex.plugin.invactions.bukkit.enums.ToolType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
@@ -45,7 +45,7 @@ public class InvUtil {
         player.getInventory().setItem(equipmentSlot, copiedSlot);
     }
 
-    public static int getFastestToolSlot(Player player, Block block, ItemType.ToolType type) {
+    public static int getFastestToolSlot(Player player, Block block, ToolType type) {
         if (player.getInventory().getItemInMainHand().getType().toString().contains("_" + type))
             return player.getInventory().getHeldItemSlot();
         Pair<Float, Integer> fastest = Pair.of(block.getBreakSpeed(player), player.getInventory().getHeldItemSlot());  //速度, Slot
@@ -57,7 +57,7 @@ public class InvUtil {
 
             boolean shouldCompute = false;
 
-            if (type == ItemType.ToolType.SHEARS && content.getType() == Material.SHEARS) {
+            if (type == ToolType.SHEARS && content.getType() == Material.SHEARS) {
                 shouldCompute = true;
             } else if (StrUtil.endsWithIgnoreCaseOr(content.getType().toString(), "_" + type)) {
                 shouldCompute = true;

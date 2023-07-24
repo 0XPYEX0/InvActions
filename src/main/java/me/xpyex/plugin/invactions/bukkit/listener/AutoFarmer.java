@@ -1,6 +1,5 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;

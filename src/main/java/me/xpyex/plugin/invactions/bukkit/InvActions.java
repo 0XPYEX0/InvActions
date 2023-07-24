@@ -11,6 +11,7 @@ import me.xpyex.plugin.invactions.bukkit.listener.InventoryF;
 import me.xpyex.plugin.invactions.bukkit.listener.QuickDrop;
 import me.xpyex.plugin.invactions.bukkit.listener.QuickMove;
 import me.xpyex.plugin.invactions.bukkit.listener.ReplaceBroken;
+import me.xpyex.plugin.invactions.bukkit.listener.SortContainer;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
@@ -134,6 +135,7 @@ public final class InvActions extends XPPlugin {
         registerListener(new QuickDrop());
         registerListener(new QuickMove());
         registerListener(new ReplaceBroken());
+        registerListener(new SortContainer());
         try {
             @SuppressWarnings("unused")
             ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //1.16+

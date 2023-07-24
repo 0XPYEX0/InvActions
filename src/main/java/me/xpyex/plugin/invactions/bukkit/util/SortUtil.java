@@ -7,7 +7,6 @@ import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -61,97 +60,7 @@ public class SortUtil {
         }
 
         items.values().forEach((pair) -> {
-            ItemType sortType;
-
-            if (pair.getKey().getType().isRecord())  //唱片
-                sortType = ItemType.RECORD;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "RAIL"))  //铁轨
-                sortType = ItemType.RAIL;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_WOOL"))
-                sortType = ItemType.WOOL;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_CARPET"))
-                sortType = ItemType.CARPET;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_SLAB"))  //半砖
-                sortType = ItemType.SLAB;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_STAIRS"))  //楼梯
-                sortType = ItemType.STAIR;
-
-            else if (pair.getKey().getType() == Material.LADDER)  //梯子
-                sortType = ItemType.LADDER;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "BOAT"))  //船
-                sortType = ItemType.BOAT;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "MINECART"))  //矿车
-                sortType = ItemType.MINE_CART;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_LOG", "_WOOD"))  //半砖
-                sortType = ItemType.LOG;
-
-            else if (StrUtil.containsIgnoreCaseOr(pair.getKey().getType().toString(), "_FENCE"))  //栅栏、栅栏门
-                sortType = ItemType.FENCE;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_SWORD", "BOW", "TRIDENT"))  //剑、弓、弩、三叉戟
-                sortType = ItemType.WEAPON;
-
-            else if (pair.getKey().getType() == Material.ENCHANTED_BOOK)  //附魔书
-                sortType = ItemType.ENCHANTED_BOOK;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_HELMET", "_CHESTPLATE", "_LEGGINGS", "_BOOTS"))  //防具
-                sortType = ItemType.ARMOR;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_AXE", "_PICKAXE", "_SHOVEL", "_HOE", "FISHING_ROD"))  //工具
-                sortType = ItemType.TOOL;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_HEAD", "_SKULL"))  //头颅
-                sortType = ItemType.HEAD;
-
-            else if (pair.getKey().getType().isEdible())  //食物
-                sortType = ItemType.FOOD;
-
-            else if (StrUtil.containsIgnoreCaseOr(pair.getKey().getType().toString(), "ARROW"))
-                sortType = ItemType.ARROW;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_PLANKS"))
-                sortType = ItemType.PLANKS;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "COD", "SALMON", "FISH"))  //鱼
-                sortType = ItemType.FISH;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_INGOT"))  //锭
-                sortType = ItemType.INGOT;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_NUGGET"))  //粒
-                sortType = ItemType.NUGGET;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_ORE"))  //矿石
-                sortType = ItemType.ORE_BLOCK;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "_TERRACOTTA", "_CONCRETE"))  //陶瓦、混凝土
-                sortType = ItemType.CRAY;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "POTION"))  //药水
-                sortType = ItemType.POTION;
-
-            else if (StrUtil.startsWithIgnoreCaseOr(pair.getKey().getType().toString(), "RAW_"))
-                sortType = ItemType.RAW_ORE;
-
-            else if (StrUtil.endsWithIgnoreCaseOr(pair.getKey().getType().toString(), "BUCKET"))
-                sortType = ItemType.BUCKET;
-
-            else if (pair.getKey().getType().isBlock())  //其余方块
-                sortType = ItemType.BLOCK;
-
-            else
-                sortType = ItemType.OTHER;
-
-
-            computed.get(sortType).add(pair);
+            computed.get(ItemType.getType(pair.getKey())).add(pair);
             //分类过程
         });
 

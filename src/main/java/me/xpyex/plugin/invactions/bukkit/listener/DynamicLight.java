@@ -3,6 +3,7 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 import java.util.HashMap;
 import java.util.UUID;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
@@ -21,34 +22,6 @@ public class DynamicLight implements Listener {
     private static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "ShroomLight", "FrogLight", "END_ROD", "CampFire", "LAVA"};
     private static final HashMap<UUID, Location> PLAYER_DYNAMIC_LIGHT = new HashMap<>();
 
-    @EventHandler
-    public void onShoot(ProjectileLaunchEvent event) {
-        Projectile projectile = event.getEntity();
-        new BukkitRunnable() {
-            Location loc = projectile.getLocation().clone();
-            @Override
-            public void run() {
-                if (projectile.isValid() && projectile.getFireTicks() > 0) {
-                    Bukkit.getOnlinePlayers().forEach(player -> {
-                        if (SettingsUtil.getSetting(player, "DynamicLight")) {
-                            player.sendBlockChange(loc, loc.getBlock().getBlockData());
-                            loc = projectile.getLocation().clone();
-                            if (loc.getBlock().getType().toString().endsWith("AIR")) {
-                                player.sendBlockChange(loc, Bukkit.createBlockData(Material.LIGHT));
-                            }
-                        }
-                    });
-                    return;
-                }
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    //给所有人复原
-                    player.sendBlockChange(loc, loc.getBlock().getBlockData());
-                });
-                cancel();
-            }
-        }.runTaskTimerAsynchronously(InvActions.getInstance(), 5L, 5L);
-    }
-
     public static void registerTask() {
         Material light = Material.getMaterial("LIGHT");  //1.17的光源方块. 除了火把外的大部分光源都有碰撞箱，所以选火把
         BlockData lightData = Bukkit.createBlockData(light != null ? light : Material.TORCH);  //对于lambda来说的常量
@@ -61,7 +34,7 @@ public class DynamicLight implements Listener {
 
                         if (StrUtil.containsIgnoreCaseOr(toolType.toString(), LIGHTS) || StrUtil.containsIgnoreCaseOr(offhandType.toString(), LIGHTS)) {  //玩家手里的东西是光源的情况
                             Location location = player.getEyeLocation();
-                            if (!location.getBlock().getType().toString().endsWith("AIR")) {  //不在有方块的地方模拟光源了，观感不好且影响游泳
+                            if (!ItemType.isAir(location.getBlock().getType())) {  //不在有方块的地方模拟光源了，观感不好且影响游泳
                                 //保持动态光源在上一次的位置，直到玩家走回空气
                                 continue;
                             }
@@ -86,5 +59,34 @@ public class DynamicLight implements Listener {
                 }
             }
         }, 0L, 5L);
+    }
+
+    @EventHandler
+    public void onShoot(ProjectileLaunchEvent event) {
+        Projectile projectile = event.getEntity();
+        new BukkitRunnable() {
+            Location loc = projectile.getLocation().clone();
+
+            @Override
+            public void run() {
+                if (projectile.isValid() && projectile.getFireTicks() > 0) {
+                    Bukkit.getOnlinePlayers().forEach(player -> {
+                        if (SettingsUtil.getSetting(player, "DynamicLight")) {
+                            player.sendBlockChange(loc, loc.getBlock().getBlockData());
+                            loc = projectile.getLocation().clone();
+                            if (ItemType.isAir(loc.getBlock().getType())) {
+                                player.sendBlockChange(loc, Bukkit.createBlockData(Material.LIGHT));
+                            }
+                        }
+                    });
+                    return;
+                }
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    //给所有人复原
+                    player.sendBlockChange(loc, loc.getBlock().getBlockData());
+                });
+                cancel();
+            }
+        }.runTaskTimerAsynchronously(InvActions.getInstance(), 5L, 5L);
     }
 }
