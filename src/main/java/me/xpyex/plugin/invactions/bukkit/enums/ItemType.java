@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public enum ItemType {
+    CUSTOM_ITEM,
     TOOL,  //工具
     WEAPON,  //武器
     ARROW,
@@ -129,6 +130,9 @@ public enum ItemType {
 
         else if (stack.getType().isBlock())  //其余方块
             return ItemType.BLOCK;
+
+        else if (stack.hasItemMeta() && stack.getItemMeta().hasDisplayName())
+            return ItemType.CUSTOM_ITEM;
 
         else
             return ItemType.OTHER;
