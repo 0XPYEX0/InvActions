@@ -17,6 +17,7 @@ import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.config.GsonUtil;
+import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.block.Block;
@@ -24,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
 public final class InvActions extends XPPlugin {
-    private static final String XPLIB_VER = "1.1.1";
+    private static final String XPLIB_VER = "1.1.3";
     private static InvActions INSTANCE;
 
     public static InvActions getInstance() {
@@ -62,13 +63,12 @@ public final class InvActions extends XPPlugin {
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
             getLogger().info("开始检查更新");
-            String ver = UpdateUtil.getUpdateFromGitee(getInstance());
-            if (ver != null) {
+            ValueUtil.optional(UpdateUtil.getUpdateFromGitee(getInstance()), (ver) -> {
                 getLogger().info("当前插件版本: " + getInstance().getDescription().getVersion() + " ,有一个更新的版本: " + ver);
                 getLogger().info("前往 https://gitee.com/XPYEX/InvActions/releases 下载吧！");
-            } else {
+            }, () -> {
                 getLogger().info("当前版本已是最新！");
-            }
+            });
         });
 
         getLogger().info("已加载");

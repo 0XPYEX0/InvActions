@@ -39,15 +39,15 @@ public class AutoTool implements Listener {
         if (StrUtil.endsWithIgnoreCaseOr(event.getPlayer().getInventory().getItemInMainHand().getType().toString(), "_SWORDS", "BOW", "TRIDENT")) {
             return;  //弓、剑、弩、三叉戟  不处理
         }
-        if (event.getClickedBlock() != null) {
+        ValueUtil.ifPresent(event.getClickedBlock(), (block) -> {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (StrUtil.containsIgnoreCaseOr(ValueUtil.getOrDefault(event.getItem(), InvUtil.AIR_STACK).getType().toString(), "BOW")) {
                     return;
                 }
-                if (StrUtil.containsIgnoreCaseOr(event.getClickedBlock().getType().toString(), "GRASS_BLOCK", "DIRT")) {
+                if (StrUtil.containsIgnoreCaseOr(block.getType().toString(), "GRASS_BLOCK", "DIRT")) {
                     if (StrUtil.containsIgnoreCaseOr(ValueUtil.getOrDefault(event.getItem(), InvUtil.AIR_STACK).getType().toString(), "_SHOVEL", "_HOE"))
                         return;  //玩家已经拿着对应道具了，就不要换
-                    int fastestSlot = InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), ToolType.HOE);
+                    int fastestSlot = InvUtil.getFastestToolSlot(event.getPlayer(), block, ToolType.HOE);
                     if (fastestSlot == event.getPlayer().getInventory().getHeldItemSlot()) {
                         return;
                     }
@@ -57,11 +57,11 @@ public class AutoTool implements Listener {
             }
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 ItemStack before = new ItemStack(event.getPlayer().getInventory().getItemInMainHand());  //保存主手
-                Pair<Float, ToolType> fastest = Pair.of(event.getClickedBlock().getBreakSpeed(event.getPlayer()), ToolType.UNKNOWN);
+                Pair<Float, ToolType> fastest = Pair.of(block.getBreakSpeed(event.getPlayer()), ToolType.UNKNOWN);
                 for (ToolType toolType : TOOLS.keySet()) {
                     ItemStack item = TOOLS.get(toolType);
                     event.getPlayer().getInventory().setItemInMainHand(item);  //手中设为模板
-                    float breakSpeed = event.getClickedBlock().getBreakSpeed(event.getPlayer());
+                    float breakSpeed = block.getBreakSpeed(event.getPlayer());
                     if (breakSpeed > fastest.getKey()) {
                         fastest = Pair.of(breakSpeed, toolType);  //计算并排序
                     }
@@ -70,13 +70,13 @@ public class AutoTool implements Listener {
                 if (fastest.getValue() == ToolType.UNKNOWN) {  //时间都一样，或者根本没算成，无需更换道具
                     return;
                 }
-                int fastestToolSlot = InvUtil.getFastestToolSlot(event.getPlayer(), event.getClickedBlock(), fastest.getValue());
+                int fastestToolSlot = InvUtil.getFastestToolSlot(event.getPlayer(), block, fastest.getValue());
                 if (fastestToolSlot == event.getPlayer().getInventory().getHeldItemSlot()) {
                     return;
                 }
                 InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, fastestToolSlot);  //更换这个类别中最快速度的工具
                 MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);
             }
-        }
+        });
     }
 }
