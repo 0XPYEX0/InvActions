@@ -19,7 +19,6 @@ import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
-import me.xpyex.plugin.xplib.bukkit.util.config.GsonUtil;
 import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;

@@ -6,35 +6,36 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public enum ItemType {
-    CUSTOM_ITEM,
-    TOOL,  //工具
-    WEAPON,  //武器
-    ARROW,
     ARMOR,  //装备
-    FOOD,  //食物
-    FISH,  //鱼
-    RECORD,  //唱片
+    ARROW,
+    BLOCK,  //方块
+    BOAT,  //船
+    BUCKET,  //桶
+    CARPET,
+    CRAY,  //黏土
+    CUSTOM_ITEM,
     ENCHANTED_BOOK,  //附魔书
-    RAIL,  //铁轨
-    MINE_CART,  //矿车
-    LOG,  //原木
-    PLANKS,  //木板
     FENCE,  //栅栏
+    FISH,  //鱼
+    FOOD,  //食物
+    HEAD,  //头颅
+    ICE, //冰相关
+    INGOT,  //锭
+    LADDER,  //梯子
+    LOG,  //原木
+    MINE_CART,  //矿车
+    NUGGET,  //金粒铁粒等
+    ORE_BLOCK,  //矿石
+    PLANKS,  //木板
+    POTION,  //药水
+    RAIL,  //铁轨
+    RAW_ORE,  //粗矿
+    RECORD,  //唱片
     SLAB,  //半砖
     STAIR,  //楼梯
-    LADDER,  //梯子
-    BOAT,  //船
-    CRAY,  //黏土
+    TOOL,  //工具
+    WEAPON,  //武器
     WOOL,
-    CARPET,
-    ORE_BLOCK,  //矿石
-    RAW_ORE,  //粗矿
-    INGOT,  //锭
-    NUGGET,  //金粒铁粒等
-    BLOCK,  //方块
-    HEAD,  //头颅
-    POTION,  //药水
-    BUCKET,  //桶
     OTHER;
 
     public static boolean isAir(Material material) {
@@ -48,93 +49,96 @@ public enum ItemType {
     @NotNull
     public static ItemType getType(ItemStack stack) {
         if (stack.getType().isRecord())  //唱片
-            return ItemType.RECORD;
+            return RECORD;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "RAIL"))  //铁轨
-            return ItemType.RAIL;
+            return RAIL;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_WOOL"))
-            return ItemType.WOOL;
+            return WOOL;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_CARPET"))
-            return ItemType.CARPET;
+            return CARPET;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_SLAB"))  //半砖
-            return ItemType.SLAB;
+            return SLAB;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_STAIRS"))  //楼梯
-            return ItemType.STAIR;
+            return STAIR;
 
         else if (stack.getType() == Material.LADDER)  //梯子
-            return ItemType.LADDER;
+            return LADDER;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "BOAT"))  //船
-            return ItemType.BOAT;
+            return BOAT;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "MINECART"))  //矿车
-            return ItemType.MINE_CART;
+            return MINE_CART;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_LOG", "_WOOD"))  //原木
-            return ItemType.LOG;
+            return LOG;
 
         else if (StrUtil.containsIgnoreCaseOr(stack.getType().toString(), "_FENCE"))  //栅栏、栅栏门
-            return ItemType.FENCE;
+            return FENCE;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_SWORD", "BOW", "TRIDENT"))  //剑、弓、弩、三叉戟
-            return ItemType.WEAPON;
+            return WEAPON;
 
         else if (stack.getType() == Material.ENCHANTED_BOOK)  //附魔书
-            return ItemType.ENCHANTED_BOOK;
+            return ENCHANTED_BOOK;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_HELMET", "_CHESTPLATE", "_LEGGINGS", "_BOOTS"))  //防具
-            return ItemType.ARMOR;
+            return ARMOR;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_AXE", "_PICKAXE", "_SHOVEL", "_HOE", "FISHING_ROD"))  //工具
-            return ItemType.TOOL;
+            return TOOL;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_HEAD", "_SKULL"))  //头颅
-            return ItemType.HEAD;
+            return HEAD;
 
         else if (stack.getType().isEdible())  //食物
-            return ItemType.FOOD;
+            return FOOD;
 
         else if (StrUtil.containsIgnoreCaseOr(stack.getType().toString(), "ARROW"))
-            return ItemType.ARROW;
+            return ARROW;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_PLANKS"))
-            return ItemType.PLANKS;
+            return PLANKS;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "COD", "SALMON", "FISH"))  //鱼
-            return ItemType.FISH;
+            return FISH;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_INGOT"))  //锭
-            return ItemType.INGOT;
+            return INGOT;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_NUGGET"))  //粒
-            return ItemType.NUGGET;
+            return NUGGET;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_ORE"))  //矿石
-            return ItemType.ORE_BLOCK;
+            return ORE_BLOCK;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_TERRACOTTA", "_CONCRETE"))  //陶瓦、混凝土
-            return ItemType.CRAY;
+            return CRAY;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "POTION"))  //药水
-            return ItemType.POTION;
+            return POTION;
 
         else if (StrUtil.startsWithIgnoreCaseOr(stack.getType().toString(), "RAW_"))
-            return ItemType.RAW_ORE;
+            return RAW_ORE;
 
         else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "BUCKET"))
-            return ItemType.BUCKET;
+            return BUCKET;
+
+        else if (StrUtil.endsWithIgnoreCaseOr(stack.getType().toString(), "_ICE") || stack.getType() == Material.ICE)
+            return ICE;
 
         else if (stack.getType().isBlock())  //其余方块
-            return ItemType.BLOCK;
+            return BLOCK;
 
         else if (stack.hasItemMeta() && stack.getItemMeta().hasDisplayName())
-            return ItemType.CUSTOM_ITEM;
+            return CUSTOM_ITEM;
 
         else
-            return ItemType.OTHER;
+            return OTHER;
     }
 }
