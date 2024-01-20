@@ -1,6 +1,8 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
 import java.util.HashMap;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
+import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.enums.ToolType;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
@@ -31,12 +33,13 @@ public class AutoTool implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {
-        if (!SettingsUtil.getSetting(event.getPlayer(), "AutoTool")) return;
+        if (!InvActionsServerConfig.getConfig().AutoTool || !SettingsUtil.getConfig(event.getPlayer()).AutoTool)
+            return;
 
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE || event.getPlayer().getGameMode() == GameMode.SPECTATOR)
             return;
 
-        if (StrUtil.endsWithIgnoreCaseOr(event.getPlayer().getInventory().getItemInMainHand().getType().toString(), "_SWORDS", "BOW", "TRIDENT")) {
+        if (ItemType.getType(event.getPlayer().getInventory().getItemInMainHand()) == ItemType.WEAPON) {
             return;  //弓、剑、弩、三叉戟  不处理
         }
         ValueUtil.ifPresent(event.getClickedBlock(), (block) -> {
@@ -52,7 +55,7 @@ public class AutoTool implements Listener {
                         return;
                     }
                     InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, fastestSlot);
-                    MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);
+                    MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + InvActionsServerConfig.SETTING_HELP);
                 }
             }
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
@@ -75,7 +78,7 @@ public class AutoTool implements Listener {
                     return;
                 }
                 InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, fastestToolSlot);  //更换这个类别中最快速度的工具
-                MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + SettingsUtil.SETTING_HELP);
+                MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + InvActionsServerConfig.SETTING_HELP);
             }
         });
     }

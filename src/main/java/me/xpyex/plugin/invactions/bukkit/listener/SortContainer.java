@@ -2,6 +2,7 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 
 import java.util.HashSet;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
@@ -54,6 +55,9 @@ public class SortContainer implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPressFWithoutInv(PlayerSwapHandItemsEvent event) {
+        if (!InvActionsServerConfig.getConfig().DefaultF) {
+            return;
+        }
         Bukkit.getScheduler().runTaskLaterAsynchronously(InvActions.getInstance(), () -> {
             event.getPlayer().updateInventory();  //修复物品暂时不可见(实际还存在)的Bug
         }, 2L);
@@ -65,7 +69,7 @@ public class SortContainer implements Listener {
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
             return;
         }
-        if (SettingsUtil.getSetting(event.getPlayer(), "DefaultF") || (event.getPlayer().isSneaking() && event.getPlayer().getLocation().getPitch() == 90)) {
+        if (SettingsUtil.getConfig(event.getPlayer()).DefaultF || (event.getPlayer().isSneaking() && event.getPlayer().getLocation().getPitch() == 90)) {
             event.setCancelled(true);
             SortUtil.sortInv(event.getPlayer().getInventory());
             MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你的背包");

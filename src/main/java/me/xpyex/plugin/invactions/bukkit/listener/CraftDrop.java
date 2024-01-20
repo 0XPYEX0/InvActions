@@ -1,5 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
@@ -15,7 +16,8 @@ public class CraftDrop implements Listener {
     public void onCraft(CraftItemEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
 
-        if (!SettingsUtil.getSetting((Player) event.getWhoClicked(), "CraftDrop")) return;
+        if (!InvActionsServerConfig.getConfig().CraftDrop || !SettingsUtil.getConfig((Player) event.getWhoClicked()).CraftDrop)
+            return;
 
         if (event.getClick() != ClickType.CONTROL_DROP) {
             return;
@@ -54,6 +56,6 @@ public class CraftDrop implements Listener {
         }
         event.getInventory().setResult(InvUtil.AIR_STACK);
         event.getWhoClicked().getInventory().setItemInMainHand(tool);
-        MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已自动合成所有物品，并自动丢出. " + SettingsUtil.SETTING_HELP);
+        MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已自动合成所有物品，并自动丢出. " + InvActionsServerConfig.SETTING_HELP);
     }
 }

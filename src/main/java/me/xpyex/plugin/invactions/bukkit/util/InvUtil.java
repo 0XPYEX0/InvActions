@@ -1,10 +1,9 @@
 package me.xpyex.plugin.invactions.bukkit.util;
 
-import com.google.gson.JsonPrimitive;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.enums.ToolType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
-import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
 import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
@@ -16,14 +15,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InvUtil {
-
     public static final ItemStack AIR_STACK = new ItemStack(Material.AIR);
 
     public static boolean isNotMenu(Inventory inv) {
         String className = inv.getHolder() != null ? inv.getHolder().getClass().getName() : "null";
         String simpleName = inv.getHolder() != null ? inv.getHolder().getClass().getSimpleName() : "null";
         MsgUtil.debugLog(InvActions.getInstance(), "InvUtil.isNotMenu(): " + className);
-        if (ConfigUtil.getConfig(InvActions.getInstance()).get("AllowInvs").getAsJsonArray().contains(new JsonPrimitive(simpleName))) {
+        if (InvActionsServerConfig.getConfig().AllowInvs.contains(simpleName)) {
             return true;
         }
         if (inv.getHolder() == null || inv.getHolder() instanceof Player) {
@@ -33,7 +31,7 @@ public class InvUtil {
     }
 
     public static void swapSlot(Player player, EquipmentSlot equipmentSlot, int slot) {
-        ValueUtil.checkNull("参数为空，请联系开发者修复", player, equipmentSlot);
+        ValueUtil.notNull("参数为空，请联系开发者修复", player, equipmentSlot);
 
         if (player.getInventory().getHeldItemSlot() == slot) {
             return;
@@ -50,8 +48,7 @@ public class InvUtil {
             return player.getInventory().getHeldItemSlot();
         Pair<Float, Integer> fastest = Pair.of(block.getBreakSpeed(player), player.getInventory().getHeldItemSlot());  //速度, Slot
         ItemStack before = new ItemStack(player.getInventory().getItemInMainHand());
-        int slot;
-        for (slot = 0; slot < player.getInventory().getStorageContents().length; slot++) {
+        for (int slot = 0; slot < player.getInventory().getStorageContents().length; slot++) {
             ItemStack content = player.getInventory().getStorageContents()[slot];
             if (content == null) continue;
 
@@ -75,4 +72,13 @@ public class InvUtil {
         return fastest.getValue() == -1 ? player.getInventory().getHeldItemSlot() : fastest.getValue();
     }
 
+    public static boolean hasItemType(Inventory inv, Material type) {
+        for (ItemStack stack : inv) {
+            if (stack == null) continue;
+
+            if (type == stack.getType())
+                return true;
+        }
+        return false;
+    }
 }

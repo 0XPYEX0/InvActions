@@ -1,8 +1,8 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
@@ -25,15 +25,15 @@ public class QuickMove implements Listener {
         if (event.getWhoClicked().hasMetadata("InvActions_CallingClick")) {  //正在广播事件给插件处理，自己无需处理
             return;
         }
+        if (event.getWhoClicked().hasMetadata("InvActions_QuickDropping")) {
+            return;
+        }
         if (event.getClick() == ClickType.MIDDLE) {  //鼠标中键
             if (event.getCursor() == null) {  //光标拿着的物品
                 return;
             }
             ItemStack item = new ItemStack(event.getCursor());
             if (event.getClickedInventory() == null) {  //这就是丢出
-                if (event.getWhoClicked().hasMetadata("InvActions_QuickDropping")) {
-                    return;
-                }
                 ItemStack tool;
                 if (!ItemUtil.equals(item, event.getWhoClicked().getInventory().getItemInMainHand())) {
                     tool = new ItemStack(event.getWhoClicked().getInventory().getItemInMainHand());  //保存手上道具，待会set回去，下面丢出会覆盖主手道具
@@ -85,7 +85,7 @@ public class QuickMove implements Listener {
 
                 event.getWhoClicked().getInventory().setItemInMainHand(tool);  //复原主手
                 ((Player) event.getWhoClicked()).updateInventory();
-                MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已丢出所有相同道具. " + SettingsUtil.SETTING_HELP);
+                MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已丢出所有相同道具. " + InvActionsServerConfig.SETTING_HELP);
                 event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
                 event.getWhoClicked().removeMetadata("InvActions_QuickDropping", InvActions.getInstance());
             } else if (event.getClickedInventory() == event.getWhoClicked().getInventory()) {
@@ -112,7 +112,7 @@ public class QuickMove implements Listener {
                             content.setAmount(0);
                         }
                     }
-                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至你背包. " + SettingsUtil.SETTING_HELP);
+                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至你背包. " + InvActionsServerConfig.SETTING_HELP);
                     event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
                 }
             } else if (event.getClickedInventory() == event.getWhoClicked().getOpenInventory().getTopInventory()) {
@@ -136,7 +136,7 @@ public class QuickMove implements Listener {
                             content.setAmount(0);
                         }
                     }
-                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至容器内. " + SettingsUtil.SETTING_HELP);
+                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至容器内. " + InvActionsServerConfig.SETTING_HELP);
                     event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
                 }
             }

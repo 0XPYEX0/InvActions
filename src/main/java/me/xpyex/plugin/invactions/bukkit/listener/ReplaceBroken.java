@@ -1,6 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
@@ -43,11 +44,11 @@ public class ReplaceBroken implements Listener {
             switch (slot) {
                 case HAND:
                 case OFF_HAND:
-                    if (!SettingsUtil.getSetting(event.getPlayer(), "ReplaceBrokenTool")) {  //如果玩家未开启替换手中道具
+                    if (!InvActionsServerConfig.getConfig().ReplaceBrokenTool || !SettingsUtil.getConfig(event.getPlayer()).ReplaceBrokenTool) {  //如果玩家未开启替换手中道具
                         return;
                     }
                 default:
-                    if (!SettingsUtil.getSetting(event.getPlayer(), "ReplaceBrokenArmor")) {  //如果玩家未开启替换盔甲
+                    if (!InvActionsServerConfig.getConfig().ReplaceBrokenArmor || !SettingsUtil.getConfig(event.getPlayer()).ReplaceBrokenArmor) {  //如果玩家未开启替换盔甲
                         return;
                     }
             }
@@ -60,7 +61,7 @@ public class ReplaceBroken implements Listener {
 
                     if (content.getType() == brokenItem.getType()) {  //同一种类型的道具
                         InvUtil.swapSlot(event.getPlayer(), finalSlot, i);
-                        MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. " + SettingsUtil.SETTING_HELP);
+                        MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. " + InvActionsServerConfig.SETTING_HELP);
                         return;
                     }
                 }

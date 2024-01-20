@@ -1,15 +1,18 @@
 package me.xpyex.plugin.invactions.bukkit;
 
-import com.google.gson.JsonObject;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.listener.AutoFarmer;
 import me.xpyex.plugin.invactions.bukkit.listener.AutoTool;
+import me.xpyex.plugin.invactions.bukkit.listener.BetterInfinity;
 import me.xpyex.plugin.invactions.bukkit.listener.CraftDrop;
 import me.xpyex.plugin.invactions.bukkit.listener.DynamicLight;
 import me.xpyex.plugin.invactions.bukkit.listener.HandleEvent;
 import me.xpyex.plugin.invactions.bukkit.listener.InventoryF;
 import me.xpyex.plugin.invactions.bukkit.listener.QuickDrop;
 import me.xpyex.plugin.invactions.bukkit.listener.QuickMove;
+import me.xpyex.plugin.invactions.bukkit.listener.QuickShulkerBox;
 import me.xpyex.plugin.invactions.bukkit.listener.ReplaceBroken;
 import me.xpyex.plugin.invactions.bukkit.listener.SortContainer;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
@@ -25,7 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
 public final class InvActions extends XPPlugin {
-    private static final String XPLIB_VER = "1.1.3";
+    private static final String XPLIB_VER = "1.1.4";
     private static InvActions INSTANCE;
 
     public static InvActions getInstance() {
@@ -35,8 +38,8 @@ public final class InvActions extends XPPlugin {
 
     @Override
     public void onDisable() {
+        ConfigUtil.reload(getInstance());
         getLogger().info("已卸载");
-        //
     }
 
     @Override
@@ -90,7 +93,7 @@ public final class InvActions extends XPPlugin {
             return false;
         }
 
-        if (!VersionUtil.requireXPLib(new Version(XPLIB_VER))) {
+        if (!VersionUtil.isUpperXPLib(new Version(XPLIB_VER))) {
             getLogger().severe("请更新您服务器内的XPLib！");
             getLogger().severe("当前XPLib无法支持本插件");
             getLogger().severe("需要: " + XPLIB_VER + " , 当前: " + VersionUtil.getXPLibVersion().getVersion());
@@ -104,36 +107,29 @@ public final class InvActions extends XPPlugin {
     }
 
     public void updateServerConfig() {
-        ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(SettingsUtil.DEFAULT_SERVER_SETTINGS), false);
-        JsonObject o = GsonUtil.copy(SettingsUtil.DEFAULT_SERVER_SETTINGS);
-        JsonObject config = ConfigUtil.getConfig(getInstance());
-        for (String key : GsonUtil.getKeysOfJsonObject(config)) {
-            o.add(key, config.get(key));
-        }
-        ConfigUtil.saveConfig(getInstance(), "config", GsonUtil.parseStr(o), true);
-    }  //更新服务端config.json
+        ConfigUtil.saveConfig(getInstance(), "config", InvActionsServerConfig.getDefault(), false, false);
+        //如果原先没有文件，先新建一份
+        ConfigUtil.saveConfig(getInstance(), "config", getJsonConfig(InvActionsServerConfig.class), true);
+        //更新服务端config.json
+    }
 
     public void updatePlayersConfig() {
         getServer().getOnlinePlayers().forEach((player -> {
-            ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(SettingsUtil.DEFAULT_SETTINGS), false);
+            ConfigUtil.saveConfig(getInstance(), "players/" + player.getUniqueId(), InvActionsConfig.getDefault(), false, false);
             //如果文件还不存在，则新建一份
-            JsonObject before = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + player.getUniqueId());
-            JsonObject out = GsonUtil.copy(SettingsUtil.DEFAULT_SETTINGS);
-            for (String setting : GsonUtil.getKeysOfJsonObject(SettingsUtil.DEFAULT_SETTINGS)) {
-                if (before.has(setting)) {
-                    out.add(setting, before.get(setting));
-                }
-            }  //更新设定，应对热拔插
-            ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), GsonUtil.parseStr(out), true);
+            ConfigUtil.saveConfig(getInstance(), "players/" + player.getUniqueId(), SettingsUtil.getConfig(player), true);
+            //更新设定，应对热拔插
         }));
     }
 
     public void registerListeners() {
         registerListener(new AutoFarmer());
+        registerListener(new BetterInfinity());
         registerListener(new CraftDrop());
         registerListener(new HandleEvent());
         registerListener(new QuickDrop());
         registerListener(new QuickMove());
+        registerListener(new QuickShulkerBox());
         registerListener(new ReplaceBroken());
         registerListener(new SortContainer());
         try {

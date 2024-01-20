@@ -3,6 +3,7 @@ package me.xpyex.plugin.invactions.bukkit.util;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
@@ -89,7 +90,7 @@ public class SortUtil {
 
     public static void replaceTool(Player p, ItemStack before) {
         EquipmentSlot slot = ItemUtil.equals(before, p.getInventory().getItemInMainHand()) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
-        if (SettingsUtil.getSetting(p, "ReplaceBrokenTool")) {  //如果玩家开启了替换手中道具
+        if (InvActionsServerConfig.getConfig().ReplaceBrokenTool && SettingsUtil.getConfig(p).ReplaceBrokenTool) {  //如果玩家开启了替换手中道具
             Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
                 if (p.getInventory().getItem(slot).getType() == Material.AIR) {
                     for (ItemStack content : p.getInventory().getContents()) {  //不遍历盔甲
@@ -99,7 +100,7 @@ public class SortUtil {
                             ItemStack copied = new ItemStack(content);
                             p.getInventory().setItem(slot, copied);
                             content.setAmount(0);
-                            MsgUtil.sendActionBar(p, "&a您的道具已用尽，从背包补全. " + SettingsUtil.SETTING_HELP);
+                            MsgUtil.sendActionBar(p, "&a您的道具已用尽，从背包补全. " + InvActionsServerConfig.SETTING_HELP);
                             return;
                         }
                     }
