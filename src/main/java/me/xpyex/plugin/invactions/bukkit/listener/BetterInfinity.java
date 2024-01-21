@@ -7,6 +7,7 @@ import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -26,6 +27,7 @@ public class BetterInfinity implements Listener {
                 if (event.getItem().getType() == Material.BOW) {
                     PlayerInventory playerInv = event.getPlayer().getInventory();
                     if (InvUtil.hasItemType(playerInv, Material.ARROW)) return;
+                    if (event.getItem().getEnchantmentLevel(Enchantment.ARROW_INFINITE) <= 0) return;
 
                     EquipmentSlot targetHand = event.getHand() == EquipmentSlot.HAND ? EquipmentSlot.OFF_HAND : EquipmentSlot.HAND;
                     ItemStack stack = playerInv.getItem(targetHand).clone();
