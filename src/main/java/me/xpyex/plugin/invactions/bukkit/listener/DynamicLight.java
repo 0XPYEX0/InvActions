@@ -79,18 +79,22 @@ public class DynamicLight implements Listener {
                 if (projectile.isValid() && projectile.getFireTicks() > 0) {
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         if (SettingsUtil.getConfig(player).DynamicLight) {
-                            player.sendBlockChange(loc, loc.getBlock().getBlockData());
-                            loc = projectile.getLocation().clone();
-                            if (ItemType.isAir(loc.getBlock().getType())) {
-                                player.sendBlockChange(loc, LIGHT_DATA);
+                            if (player.getLocation().getWorld().equals(loc.getWorld())) {
+                                player.sendBlockChange(loc, loc.getBlock().getBlockData());
+                                loc = projectile.getLocation().clone();
+                                if (ItemType.isAir(loc.getBlock().getType())) {
+                                    player.sendBlockChange(loc, LIGHT_DATA);
+                                }
                             }
                         }
                     });
                     return;
                 }
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    //给所有人复原
-                    player.sendBlockChange(loc, loc.getBlock().getBlockData());
+                    if (loc.getWorld().equals(player.getWorld())) {
+                        //给所有人复原
+                        player.sendBlockChange(loc, loc.getBlock().getBlockData());
+                    }
                 });
                 cancel();
             }
