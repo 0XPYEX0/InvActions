@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 public class SettingsUtil {
     public static InvActionsConfig getConfig(Player player) {
-        return ConfigUtil.getConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), InvActionsConfig.class);
+        InvActionsConfig config = ConfigUtil.getConfig(InvActions.getInstance(), "players/" + player.getUniqueId(), InvActionsConfig.class);
+        return config == null ? InvActionsConfig.fuckFakePlayers() : config;
     }
 }
