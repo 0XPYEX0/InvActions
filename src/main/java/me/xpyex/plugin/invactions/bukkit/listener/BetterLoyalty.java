@@ -32,7 +32,7 @@ public class BetterLoyalty implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (!event.getEntity().isValid()) {  //三叉戟跑出视距外了，不再处理，也没办法处理
+                            if (!event.getEntity().isValid()) {  //三叉戟跑出视距外了，或已收回到主人手上，不再处理，也没办法处理
                                 cancel();
                                 return;
                             }
