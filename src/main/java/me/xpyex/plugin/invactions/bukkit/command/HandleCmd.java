@@ -91,8 +91,8 @@ public class HandleCmd implements CommandExecutor {
                         , 1)
                     .setSign("d", new UnmodifiableButton(menu, player -> InvActionsServerConfig.getConfig().BetterLoyalty ? SettingsUtil.getConfig(player).BetterLoyalty ? 1 : 0 : -1)
                                       .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL, "&a更好的&5&l忠诚&a附魔", "&f当扔出附魔了“忠诚”的三叉戟", "&f超出视距自动收回", "", "&f当前状态: &4服务端禁用"))
-                                      .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a自动补充道具", "&f当扔出附魔了“忠诚”的三叉戟", "&f超出视距自动收回", "", "&f当前状态: &c禁用"))
-                                      .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a自动补充道具", "&f当扔出附魔了“忠诚”的三叉戟", "&f超出视距自动收回", "", "&f当前状态: &a启用"))
+                                      .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL, "&a更好的&5&l忠诚&a附魔", "&f当扔出附魔了“忠诚”的三叉戟", "&f超出视距自动收回", "", "&f当前状态: &c禁用"))
+                                      .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL, "&a更好的&5&l忠诚&a附魔", "&f当扔出附魔了“忠诚”的三叉戟", "&f超出视距自动收回", "", "&f当前状态: &a启用"))
                                       .setClickEffect((player, clickType, itemStack) -> {
                                           SettingsUtil.getConfig(player).BetterLoyalty = !SettingsUtil.getConfig(player).BetterLoyalty;
                                           player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);

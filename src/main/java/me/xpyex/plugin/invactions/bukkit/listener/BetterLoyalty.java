@@ -3,6 +3,7 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
+import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -36,13 +37,14 @@ public class BetterLoyalty implements Listener {
                                 return;
                             }
                             if (!shooter.isOnline()) {  //玩家离线，把三叉戟传送到玩家离线位置
-                                event.getEntity().teleport(shooter.getLocation());
+                                event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(shooter.getLocation()).getLocation());
                                 cancel();
                                 return;
                             }
                             double distance = getDistance(event.getEntity(), shooter);
                             if (distance >= serverDis) {  //距离即将过远，把三叉戟传送回来
-                                event.getEntity().teleport(shooter);
+                                event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(shooter.getLocation()).getLocation());
+                                MsgUtil.sendActionBar(shooter, "&a三叉戟即将过远，已强制其开始返航. " + InvActionsServerConfig.SETTING_HELP);
                                 cancel();
                             }
                         }
