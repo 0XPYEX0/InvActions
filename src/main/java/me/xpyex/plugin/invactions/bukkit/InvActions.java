@@ -1,11 +1,13 @@
 package me.xpyex.plugin.invactions.bukkit;
 
+import java.util.NoSuchElementException;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.listener.AutoFarmer;
 import me.xpyex.plugin.invactions.bukkit.listener.AutoTool;
 import me.xpyex.plugin.invactions.bukkit.listener.BetterInfinity;
+import me.xpyex.plugin.invactions.bukkit.listener.BetterLoyalty;
 import me.xpyex.plugin.invactions.bukkit.listener.CraftDrop;
 import me.xpyex.plugin.invactions.bukkit.listener.DynamicLight;
 import me.xpyex.plugin.invactions.bukkit.listener.HandleEvent;
@@ -23,6 +25,7 @@ import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
 import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
@@ -143,7 +146,14 @@ public final class InvActions extends XPPlugin {
             Block.class.getMethod("getBreakSpeed", Player.class);  //1.17+
             registerListener(new AutoTool());
         } catch (NoSuchMethodError | NoSuchMethodException ignored) {
-            getLogger().warning("您的服务器不支持自动切换玩家工具，该功能已禁用");
+            getLogger().warning("您的服务器不支持AutoTool，该功能已禁用");
+        }
+
+        try {
+            Enchantment.LOYALTY.getMaxLevel();
+            registerListener(new BetterLoyalty());
+        } catch (NoSuchFieldError | NoSuchElementException ignored) {
+            getLogger().warning("您的服务器不支持BetterLoyalty");
         }
 
         try {
@@ -151,7 +161,7 @@ public final class InvActions extends XPPlugin {
             DynamicLight.registerTask();
             registerListener(new DynamicLight());
         } catch (NoSuchMethodError | NoSuchMethodException ignored) {
-            getLogger().warning("您的服务器不支持动态光源，该功能已禁用");
+            getLogger().warning("您的服务器不支持DynamicLight，该功能已禁用");
         }
     }
 }

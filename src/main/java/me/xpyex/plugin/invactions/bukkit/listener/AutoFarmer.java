@@ -41,7 +41,9 @@ public class AutoFarmer implements Listener {
 
                 BlockData blockData = event.getClickedBlock().getBlockData();
                 if (blockData instanceof Ageable && ((Ageable) blockData).getAge() >= ((Ageable) blockData).getMaximumAge()) {
-                    ((Ageable) blockData).setAge(0);
+                    if (event.getClickedBlock().getType().toString().contains("_STEM")) {  //西瓜、南瓜的茎
+                        return;
+                    }
                     BlockBreakEvent blockBreakEvent = new BlockBreakEvent(event.getClickedBlock(), event.getPlayer());
                     Bukkit.getPluginManager().callEvent(blockBreakEvent);
                     if (blockBreakEvent.isCancelled()) {
@@ -53,6 +55,7 @@ public class AutoFarmer implements Listener {
                         return;  //防止收割被保护的地方
                     }
                     event.setCancelled(true);
+                    ((Ageable) blockData).setAge(0);  //先判断能不能处理，再收割
                     Collection<ItemStack> result = event.getClickedBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand());
                     for (ItemStack drop : result) {
                         if (ItemUtil.typeIsOr(drop, Material.WHEAT, Material.BEETROOT, Material.POISONOUS_POTATO))

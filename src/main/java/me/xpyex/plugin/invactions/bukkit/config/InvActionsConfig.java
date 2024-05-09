@@ -4,13 +4,13 @@ public class InvActionsConfig {
     private static final InvActionsConfig DEFAULT = new InvActionsConfig();
     private static final InvActionsConfig FUCK_FAKE_PLAYER = new InvActionsConfig();
     public boolean AutoFarmer = true;
-    public boolean AutoTool = true;
+    public boolean AutoTool = false;
     public boolean BetterInfinity = true;
     public boolean BetterLoyalty = true;
     public boolean CraftDrop = true;
     public boolean DefaultF = false;
     public boolean DynamicLight = true;
-    public boolean QuickDrop = false;
+    public boolean QuickDrop = true;
     public boolean QuickMove = true;
     public boolean QuickShulkerBox = false;
     public boolean ReplaceBrokenArmor = true;
