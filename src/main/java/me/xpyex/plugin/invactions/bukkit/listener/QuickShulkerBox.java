@@ -37,6 +37,7 @@ public class QuickShulkerBox implements Listener {
                     if (meta instanceof BlockStateMeta) {  //此处同时判断 != null
                         BlockState state = ((BlockStateMeta) meta).getBlockState();
                         if (state instanceof ShulkerBox) {
+                            event.setCancelled(true);
                             event.getWhoClicked().openInventory(((ShulkerBox) state).getInventory());
                             event.getWhoClicked().setMetadata(METADATA_KEY, new FixedMetadataValue(InvActions.getInstance(), event.getCurrentItem()));
                             ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1f, 1f);
@@ -49,12 +50,16 @@ public class QuickShulkerBox implements Listener {
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
+        if (!InvActionsServerConfig.getConfig().QuickShulkerBox) {
+            return;
+        }
         if (event.getPlayer().isSneaking() && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
             if (event.getItem() != null && event.getItem().hasItemMeta()) {
                 ItemMeta meta = event.getItem().getItemMeta();
                 if (meta instanceof BlockStateMeta) {
                     BlockState state = ((BlockStateMeta) meta).getBlockState();
                     if (state instanceof ShulkerBox) {
+                        event.setCancelled(true);
                         event.getPlayer().openInventory(((ShulkerBox) state).getInventory());
                         event.getPlayer().setMetadata(METADATA_KEY, new FixedMetadataValue(InvActions.getInstance(), event.getItem()));
                         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1f, 1f);

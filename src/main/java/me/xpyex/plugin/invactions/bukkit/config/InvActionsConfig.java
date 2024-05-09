@@ -6,6 +6,7 @@ public class InvActionsConfig {
     public boolean AutoFarmer = true;
     public boolean AutoTool = true;
     public boolean BetterInfinity = true;
+    public boolean BetterLoyalty = true;
     public boolean CraftDrop = true;
     public boolean DefaultF = false;
     public boolean DynamicLight = true;
