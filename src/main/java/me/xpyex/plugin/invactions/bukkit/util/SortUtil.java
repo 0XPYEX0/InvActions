@@ -90,7 +90,7 @@ public class SortUtil {
     public static void replaceTool(Player p, ItemStack before) {
         EquipmentSlot slot = ItemUtil.equals(before, p.getInventory().getItemInMainHand()) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
         if (InvActionsServerConfig.getConfig().ReplaceBrokenTool && SettingsUtil.getConfig(p).ReplaceBrokenTool) {  //如果玩家开启了替换手中道具
-            SchedulerUtil.runTaskLater(() -> {
+            SchedulerUtil.runTaskLater(task -> {
                 if (p.getInventory().getItem(slot).getType() == Material.AIR) {
                     for (ItemStack content : p.getInventory().getContents()) {  //不遍历盔甲
                         if (content == null) continue;

@@ -30,7 +30,7 @@ public class DynamicLight implements Listener {
     }
 
     public static void registerTask() {
-        SchedulerUtil.runTaskTimerAsync(() -> {
+        SchedulerUtil.runTaskTimerAsync(task -> {
             if (InvActionsServerConfig.getConfig().DynamicLight) {  //服务端启用动态光源
                 for (Player player : Bukkit.getOnlinePlayers()) {  //遍历玩家
                     if (SettingsUtil.getConfig(player).DynamicLight) {  //玩家启用动态光源
@@ -71,33 +71,29 @@ public class DynamicLight implements Listener {
         if (!InvActionsServerConfig.getConfig().DynamicLight) return;
 
         Projectile projectile = event.getEntity();
-        SchedulerUtil.runTaskTimer(new BukkitRunnable() {
-            Location loc = projectile.getLocation().clone();
-
-            @Override
-            public void run() {
-                if (projectile.isValid() && projectile.getFireTicks() > 0) {
-                    Bukkit.getOnlinePlayers().forEach(player -> {
-                        if (SettingsUtil.getConfig(player).DynamicLight) {
-                            if (player.getLocation().getWorld().equals(loc.getWorld())) {
-                                player.sendBlockChange(loc, loc.getBlock().getBlockData());
-                                loc = projectile.getLocation().clone();
-                                if (ItemType.isAir(loc.getBlock().getType())) {
-                                    player.sendBlockChange(loc, LIGHT_DATA);
-                                }
+        final Location[] loc = {projectile.getLocation().clone()};
+        SchedulerUtil.runTaskTimerAsync(task -> {
+            if (projectile.isValid() && projectile.getFireTicks() > 0) {
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    if (SettingsUtil.getConfig(player).DynamicLight) {
+                        if (player.getLocation().getWorld().equals(loc[0].getWorld())) {
+                            player.sendBlockChange(loc[0], loc[0].getBlock().getBlockData());
+                            loc[0] = projectile.getLocation().clone();
+                            if (ItemType.isAir(loc[0].getBlock().getType())) {
+                                player.sendBlockChange(loc[0], LIGHT_DATA);
                             }
                         }
-                    });
-                    return;
-                }
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    if (loc.getWorld().equals(player.getWorld())) {
-                        //给所有人复原
-                        player.sendBlockChange(loc, loc.getBlock().getBlockData());
                     }
                 });
-                cancel();
+                return;
             }
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                if (loc[0].getWorld().equals(player.getWorld())) {
+                    //给所有人复原
+                    player.sendBlockChange(loc[0], loc[0].getBlock().getBlockData());
+                }
+            });
+            task.cancel();
         }, 5L, 5L);
     }
 }

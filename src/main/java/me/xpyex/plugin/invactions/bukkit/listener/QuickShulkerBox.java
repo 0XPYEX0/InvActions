@@ -103,7 +103,7 @@ public class QuickShulkerBox implements Listener {
                         stack.setItemMeta(meta);
                         event.getPlayer().removeMetadata(METADATA_KEY, InvActions.getInstance());
                         ((Player) event.getPlayer()).playSound(event.getPlayer().getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 1f, 1f);
-                        SchedulerUtil.runTaskLater(() -> {
+                        SchedulerUtil.runTaskLater(task -> {
                             ((Player) event.getPlayer()).updateInventory();
                         }, 1L);
                     }

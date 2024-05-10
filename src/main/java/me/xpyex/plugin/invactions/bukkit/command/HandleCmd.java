@@ -22,7 +22,7 @@ public class HandleCmd implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        SchedulerUtil.runTaskAsync(() -> {
+        SchedulerUtil.runTaskAsync(task -> {
             if (args.length != 0) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!sender.hasPermission("InvActions.admin")) {
@@ -223,13 +223,13 @@ public class HandleCmd implements CommandExecutor {
                                           if (!player.hasPermission("InvActions.admin")) {  //玩家没权限的时候
                                               return;
                                           }
-                                          SchedulerUtil.runTask(() -> {
+                                          SchedulerUtil.runTask(task1 -> {
                                               Bukkit.dispatchCommand(player, "InvActions reload");
                                               player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
                                           });
                                       }))
                         , 1);
-                SchedulerUtil.runTask(() -> {
+                SchedulerUtil.runTask(task1 -> {
                     menu.open(1);
                 });
             }
