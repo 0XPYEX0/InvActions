@@ -1,14 +1,13 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
 import java.util.HashSet;
-import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
+import me.xpyex.plugin.invactions.bukkit.util.SchedulerUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.NameUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -58,7 +57,7 @@ public class SortContainer implements Listener {
         if (!InvActionsServerConfig.getConfig().DefaultF) {
             return;
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(InvActions.getInstance(), () -> {
+        SchedulerUtil.runTaskLaterAsync(() -> {
             event.getPlayer().updateInventory();  //修复物品暂时不可见(实际还存在)的Bug
         }, 2L);
         Block target = event.getPlayer().getTargetBlock(IGNORES, 10);

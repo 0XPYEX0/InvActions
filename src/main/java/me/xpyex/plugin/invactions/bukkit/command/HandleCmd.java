@@ -2,6 +2,7 @@ package me.xpyex.plugin.invactions.bukkit.command;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
+import me.xpyex.plugin.invactions.bukkit.util.SchedulerUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.inventory.InvBuilder;
 import me.xpyex.plugin.xplib.bukkit.inventory.Menu;
@@ -21,7 +22,7 @@ public class HandleCmd implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Bukkit.getScheduler().runTaskAsynchronously(InvActions.getInstance(), () -> {
+        SchedulerUtil.runTaskAsync(() -> {
             if (args.length != 0) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!sender.hasPermission("InvActions.admin")) {
@@ -222,13 +223,13 @@ public class HandleCmd implements CommandExecutor {
                                           if (!player.hasPermission("InvActions.admin")) {  //玩家没权限的时候
                                               return;
                                           }
-                                          Bukkit.getScheduler().runTask(InvActions.getInstance(), () -> {
+                                          SchedulerUtil.runTask(() -> {
                                               Bukkit.dispatchCommand(player, "InvActions reload");
                                               player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
                                           });
                                       }))
                         , 1);
-                Bukkit.getScheduler().runTask(InvActions.getInstance(), () -> {
+                SchedulerUtil.runTask(() -> {
                     menu.open(1);
                 });
             }

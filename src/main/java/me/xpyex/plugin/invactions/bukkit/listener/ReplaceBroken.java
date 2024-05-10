@@ -1,12 +1,11 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
-import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
+import me.xpyex.plugin.invactions.bukkit.util.SchedulerUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -54,7 +53,7 @@ public class ReplaceBroken implements Listener {
             }
             EquipmentSlot finalSlot = slot;
             ItemStack brokenItem = new ItemStack(event.getBrokenItem());
-            Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
+            SchedulerUtil.runTaskLater(() -> {
                 for (int i = 0; i < event.getPlayer().getInventory().getContents().length; i++) {
                     ItemStack content = event.getPlayer().getInventory().getItem(i);
                     if (content == null) continue;

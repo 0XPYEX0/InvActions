@@ -1,7 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.listener;
 
-import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
+import me.xpyex.plugin.invactions.bukkit.util.SchedulerUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
@@ -29,7 +29,7 @@ public class BetterLoyalty implements Listener {
                 if (((Trident) event.getEntity()).getItem().getEnchantments().containsKey(Enchantment.LOYALTY)) {
                     //附魔忠诚了
                     int serverDis = (Bukkit.getServer().getViewDistance() - 1) * 16;  //不会有人视距设为1吧？不会吧不会吧
-                    new BukkitRunnable() {
+                    SchedulerUtil.runTaskTimerAsync(new BukkitRunnable() {
                         @Override
                         public void run() {
                             if (!event.getEntity().isValid()) {  //三叉戟跑出视距外了，或已收回到主人手上，不再处理，也没办法处理
@@ -48,7 +48,7 @@ public class BetterLoyalty implements Listener {
                                 cancel();
                             }
                         }
-                    }.runTaskTimerAsynchronously(InvActions.getInstance(), 5L, 5L);
+                    }, 5L, 5L);
                 }
             }
         }
