@@ -2,8 +2,8 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
-import me.xpyex.plugin.invactions.bukkit.util.SchedulerUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockState;
@@ -11,6 +11,7 @@ import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -52,7 +53,7 @@ public class QuickShulkerBox implements Listener {
         if (!InvActionsServerConfig.getConfig().QuickShulkerBox) {
             return;
         }
-        if (event.getPlayer().isSneaking() && event.getAction().toString().startsWith("RIGHT_CLICK_")) {
+        if (event.getPlayer().isSneaking() && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
             if (event.getItem() != null && event.getItem().hasItemMeta()) {
                 ItemMeta meta = event.getItem().getItemMeta();
                 if (meta instanceof BlockStateMeta) {
@@ -103,7 +104,7 @@ public class QuickShulkerBox implements Listener {
                         stack.setItemMeta(meta);
                         event.getPlayer().removeMetadata(METADATA_KEY, InvActions.getInstance());
                         ((Player) event.getPlayer()).playSound(event.getPlayer().getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 1f, 1f);
-                        SchedulerUtil.runTaskLater(() -> {
+                        Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
                             ((Player) event.getPlayer()).updateInventory();
                         }, 1L);
                     }

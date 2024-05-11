@@ -2,9 +2,9 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 
 import java.util.UUID;
 import java.util.WeakHashMap;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
-import me.xpyex.plugin.invactions.bukkit.util.SchedulerUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
@@ -30,7 +30,7 @@ public class DynamicLight implements Listener {
     }
 
     public static void registerTask() {
-        SchedulerUtil.runTaskTimerAsync(() -> {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(InvActions.getInstance(), () -> {
             if (InvActionsServerConfig.getConfig().DynamicLight) {  //服务端启用动态光源
                 for (Player player : Bukkit.getOnlinePlayers()) {  //遍历玩家
                     if (SettingsUtil.getConfig(player).DynamicLight) {  //玩家启用动态光源
@@ -71,7 +71,7 @@ public class DynamicLight implements Listener {
         if (!InvActionsServerConfig.getConfig().DynamicLight) return;
 
         Projectile projectile = event.getEntity();
-        SchedulerUtil.runTaskTimer(new BukkitRunnable() {
+        new BukkitRunnable() {
             Location loc = projectile.getLocation().clone();
 
             @Override
@@ -98,6 +98,6 @@ public class DynamicLight implements Listener {
                 });
                 cancel();
             }
-        }, 5L, 5L);
+        }.runTaskTimerAsynchronously(InvActions.getInstance(), 5L, 5L);
     }
 }

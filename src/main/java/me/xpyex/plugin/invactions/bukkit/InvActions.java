@@ -17,7 +17,6 @@ import me.xpyex.plugin.invactions.bukkit.listener.QuickMove;
 import me.xpyex.plugin.invactions.bukkit.listener.QuickShulkerBox;
 import me.xpyex.plugin.invactions.bukkit.listener.ReplaceBroken;
 import me.xpyex.plugin.invactions.bukkit.listener.SortContainer;
-import me.xpyex.plugin.invactions.bukkit.util.SchedulerUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
@@ -31,7 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
 public final class InvActions extends XPPlugin {
-    private static final String XPLIB_VER = "1.1.5";
+    private static final String XPLIB_VER = "1.1.4";
     private static InvActions INSTANCE;
 
     public static InvActions getInstance() {
@@ -54,7 +53,7 @@ public final class InvActions extends XPPlugin {
         }
 
         updateServerConfig();
-        SchedulerUtil.runTaskAsync(this::updatePlayersConfig);
+        getServer().getScheduler().runTaskAsynchronously(getInstance(), this::updatePlayersConfig);
 
         registerListeners();
         getLogger().info("已注册监听器");
@@ -62,12 +61,12 @@ public final class InvActions extends XPPlugin {
         registerCmd("InvActions", new HandleCmd());
         getLogger().info("已注册命令");
 
-        SchedulerUtil.runTaskAsync(() -> {
+        getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
             hookBStats(17118);
             getLogger().info("与bStats挂钩");
         });
 
-        SchedulerUtil.runTaskAsync(() -> {
+        getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
             getLogger().info("开始检查更新");
             ValueUtil.optional(UpdateUtil.getUpdateFromGitee(getInstance()), (ver) -> {
                 getLogger().info("当前插件版本: " + getInstance().getDescription().getVersion() + " ,有一个更新的版本: " + ver);

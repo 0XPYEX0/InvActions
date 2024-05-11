@@ -3,9 +3,9 @@ package me.xpyex.plugin.invactions.bukkit.listener;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SchedulerUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
@@ -34,7 +34,7 @@ public class BetterInfinity implements Listener {
                     playerInv.setItem(targetHand, ItemUtil.getItemStack(Material.ARROW, "&7&o无限附魔辅助箭", "更好的无限附魔"));
                     event.getPlayer().setMetadata("InvActions_BetterInfinity", new FixedMetadataValue(InvActions.getInstance(), true));
 
-                    SchedulerUtil.runTaskLater(() -> {
+                    Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
                         event.getPlayer().getInventory().setItem(targetHand, stack);
                         event.getPlayer().removeMetadata("InvActions_BetterInfinity", InvActions.getInstance());
                         event.getPlayer().updateInventory();

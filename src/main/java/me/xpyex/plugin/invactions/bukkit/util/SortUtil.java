@@ -2,6 +2,7 @@ package me.xpyex.plugin.invactions.bukkit.util;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
@@ -90,7 +91,7 @@ public class SortUtil {
     public static void replaceTool(Player p, ItemStack before) {
         EquipmentSlot slot = ItemUtil.equals(before, p.getInventory().getItemInMainHand()) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
         if (InvActionsServerConfig.getConfig().ReplaceBrokenTool && SettingsUtil.getConfig(p).ReplaceBrokenTool) {  //如果玩家开启了替换手中道具
-            SchedulerUtil.runTaskLater(() -> {
+            Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
                 if (p.getInventory().getItem(slot).getType() == Material.AIR) {
                     for (ItemStack content : p.getInventory().getContents()) {  //不遍历盔甲
                         if (content == null) continue;
