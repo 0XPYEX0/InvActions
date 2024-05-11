@@ -34,7 +34,7 @@ public class BetterInfinity implements Listener {
                     playerInv.setItem(targetHand, ItemUtil.getItemStack(Material.ARROW, "&7&o无限附魔辅助箭", "更好的无限附魔"));
                     event.getPlayer().setMetadata("InvActions_BetterInfinity", new FixedMetadataValue(InvActions.getInstance(), true));
 
-                    SchedulerUtil.runTaskLater(task -> {
+                    SchedulerUtil.runTaskLater(() -> {
                         event.getPlayer().getInventory().setItem(targetHand, stack);
                         event.getPlayer().removeMetadata("InvActions_BetterInfinity", InvActions.getInstance());
                         event.getPlayer().updateInventory();

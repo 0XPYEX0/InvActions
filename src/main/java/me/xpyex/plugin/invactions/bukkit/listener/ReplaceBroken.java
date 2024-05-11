@@ -53,7 +53,7 @@ public class ReplaceBroken implements Listener {
             }
             EquipmentSlot finalSlot = slot;
             ItemStack brokenItem = new ItemStack(event.getBrokenItem());
-            SchedulerUtil.runTaskLater(task -> {
+            SchedulerUtil.runTaskLater(() -> {
                 for (int i = 0; i < event.getPlayer().getInventory().getContents().length; i++) {
                     ItemStack content = event.getPlayer().getInventory().getItem(i);
                     if (content == null) continue;

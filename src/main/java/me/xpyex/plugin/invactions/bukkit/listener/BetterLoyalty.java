@@ -29,21 +29,24 @@ public class BetterLoyalty implements Listener {
                 if (((Trident) event.getEntity()).getItem().getEnchantments().containsKey(Enchantment.LOYALTY)) {
                     //附魔忠诚了
                     int serverDis = (Bukkit.getServer().getViewDistance() - 1) * 16;  //不会有人视距设为1吧？不会吧不会吧
-                    SchedulerUtil.runTaskTimerAsync(task -> {
-                        if (!event.getEntity().isValid()) {  //三叉戟跑出视距外了，或已收回到主人手上，不再处理，也没办法处理
-                            task.cancel();
-                            return;
-                        }
-                        if (!shooter.isOnline()) {  //玩家离线，把三叉戟传送到玩家离线位置
-                            event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(shooter.getLocation()).getLocation());
-                            task.cancel();
-                            return;
-                        }
-                        double distance = getDistance(event.getEntity(), shooter);
-                        if (distance >= serverDis) {  //距离即将过远，把三叉戟传送回来
-                            event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(event.getEntity().getLocation()).getLocation());
-                            MsgUtil.sendActionBar(shooter, "&a三叉戟即将过远，已强制其开始返航. " + InvActionsServerConfig.SETTING_HELP);
-                            task.cancel();
+                    SchedulerUtil.runTaskTimerAsync(new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (!event.getEntity().isValid()) {  //三叉戟跑出视距外了，或已收回到主人手上，不再处理，也没办法处理
+                                cancel();
+                                return;
+                            }
+                            if (!shooter.isOnline()) {  //玩家离线，把三叉戟传送到玩家离线位置
+                                event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(shooter.getLocation()).getLocation());
+                                cancel();
+                                return;
+                            }
+                            double distance = getDistance(event.getEntity(), shooter);
+                            if (distance >= serverDis) {  //距离即将过远，把三叉戟传送回来
+                                event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(shooter.getLocation()).getLocation());
+                                MsgUtil.sendActionBar(shooter, "&a三叉戟即将过远，已强制其开始返航. " + InvActionsServerConfig.SETTING_HELP);
+                                cancel();
+                            }
                         }
                     }, 5L, 5L);
                 }

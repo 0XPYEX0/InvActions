@@ -57,7 +57,7 @@ public class SortContainer implements Listener {
         if (!InvActionsServerConfig.getConfig().DefaultF) {
             return;
         }
-        SchedulerUtil.runTaskLaterAsync(task -> {
+        SchedulerUtil.runTaskLaterAsync(() -> {
             event.getPlayer().updateInventory();  //修复物品暂时不可见(实际还存在)的Bug
         }, 2L);
         Block target = event.getPlayer().getTargetBlock(IGNORES, 10);

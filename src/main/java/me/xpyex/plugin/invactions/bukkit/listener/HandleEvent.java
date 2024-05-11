@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class HandleEvent implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        SchedulerUtil.runTaskAsync(task -> {  //异步操作文件
+        SchedulerUtil.runTaskAsync(() -> {  //异步操作文件
             ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId(), InvActionsConfig.getDefault(), false, false);
             //修复没打开过GUI设定的玩家使用道具会抛错
             ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId(), SettingsUtil.getConfig(event.getPlayer()), true);
@@ -23,7 +23,7 @@ public class HandleEvent implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        SchedulerUtil.runTaskAsync(task -> {
+        SchedulerUtil.runTaskAsync(() -> {
             ConfigUtil.saveConfig(InvActions.getInstance(), "players/" + event.getPlayer().getUniqueId(), SettingsUtil.getConfig(event.getPlayer()), true);
         });
     }
