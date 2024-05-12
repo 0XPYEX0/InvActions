@@ -32,7 +32,7 @@ public class HandleCmd implements CommandExecutor {
                     }
                     ConfigUtil.reload(InvActions.getInstance());
                     InvActions.getInstance().updateServerConfig();
-                    sender.sendMessage("重载完成");
+                    sender.sendMessage(LangUtil.getMessage(InvActions.getInstance(), "Reload.reload"));
                     return;
                 }
                 if (args[0].equalsIgnoreCase("addInvs")) {
