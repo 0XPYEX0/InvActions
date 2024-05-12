@@ -1,4 +1,4 @@
-package me.xpyex.plugin.invactions.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.module;
 
 import java.util.UUID;
 import java.util.WeakHashMap;
@@ -15,11 +15,10 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class DynamicLight implements Listener {
+public class DynamicLight extends RootModule {
     private static final WeakHashMap<UUID, Location> PLAYER_DYNAMIC_LIGHT = new WeakHashMap<>();
     private static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "ShroomLight", "FrogLight", "END_ROD", "CampFire", "LAVA"};
     private static final BlockData LIGHT_DATA;
@@ -29,7 +28,7 @@ public class DynamicLight implements Listener {
         LIGHT_DATA = Bukkit.createBlockData(light != null ? light : Material.TORCH);
     }
 
-    public static void registerTask() {
+    public void registerTask() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(InvActions.getInstance(), () -> {
             if (InvActionsServerConfig.getConfig().DynamicLight) {  //服务端启用动态光源
                 for (Player player : Bukkit.getOnlinePlayers()) {  //遍历玩家
@@ -44,7 +43,7 @@ public class DynamicLight implements Listener {
                                 continue;
                             }
                             if (!PLAYER_DYNAMIC_LIGHT.containsKey(player.getUniqueId())) {
-                                MsgUtil.sendActionBar(player, "&a你目前手持光源，动态光源启用. " + InvActionsServerConfig.SETTING_HELP);
+                                MsgUtil.sendActionBar(player, getMessageWithSuffix("light"));
                                 PLAYER_DYNAMIC_LIGHT.put(player.getUniqueId(), location);
                             }
                             Location loc = PLAYER_DYNAMIC_LIGHT.get(player.getUniqueId());  //上一次模拟的方块

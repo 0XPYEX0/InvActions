@@ -1,4 +1,4 @@
-package me.xpyex.plugin.invactions.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;

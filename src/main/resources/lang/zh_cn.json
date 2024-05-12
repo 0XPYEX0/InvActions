@@ -1,0 +1,157 @@
+{
+    "ActionBarSuffix": "&e该功能在 &f/InvActions &e中调整",
+    "AutoFarmer": {
+        "harvest": "&a已为您自动收获 &f{0} &a.",
+        "harvest_and_plant": "&a已为您自动收获并种植 &f{0} &a.",
+        "menu": {
+            "name": "&a自动收割",
+            "lore": [
+                "&f当右键农作物时",
+                "&f若成熟则自动收割"
+            ]
+        }
+    },
+    "AutoTool": {
+        "changed": "&a已自动切换为合适的工具.",
+        "menu": {
+            "name": "&a自动更换工具",
+            "lore": [
+                "&f当尝试破坏方块",
+                "&f或尝试耕地时",
+                "&f自动从背包内换出适合的工具"
+            ]
+        }
+    },
+    "BetterInfinity": {
+        "menu": {
+            "name": "&a优化弓的&5&l无限&a附魔",
+            "lore": [
+                "&f当使用附魔了“无限”的弓",
+                "&f无需携带箭矢",
+                "&f也可以射箭"
+            ]
+        }
+    },
+    "BetterLoyalty": {
+        "return": "&a三叉戟即将超出距离，已强制其开始返航.",
+        "menu": {
+            "name": "&a更好的&5&l忠诚&a附魔",
+            "lore": [
+                "&f当扔出附魔了“忠诚”的三叉戟",
+                "&f超出视距自动收回"
+            ]
+        }
+    },
+    "CraftDrop": {
+        "drop": "&a已自动合成所有物品，并自动丢出.",
+        "menu": {
+            "name": "&a一键丢出合成结果",
+            "lore": [
+                "&f当合成时，对着合成结果",
+                "&f按下 &e&lCtrl+Q",
+                "&f丢出所有合成结果"
+            ]
+        }
+    },
+    "DynamicLight": {
+        "light": "&a你目前手持光源，动态光源启用.",
+        "menu": {
+            "name": "&a动态光源",
+            "lore": [
+                "&f当手持光源道具时",
+                "&f在玩家位置模拟光源"
+            ]
+        }
+    },
+    "DefaultF": {
+        "player": "&a已整理你的背包",
+        "target": "&a已整理你看向的 &f{0} &a.",
+        "menu": {
+            "name": "&a按下 &e&lF &a整理",
+            "lore": [
+                "&f当没有打开任何界面时",
+                "&f不论是否潜行且低头",
+                "&f按下 &e&lF &f就整理自身背包",
+                "&5&o该设定不影响 &e&lShift+F &5&o整理容器"
+            ]
+        }
+    },
+    "QuickDrop": {
+        "drop": "&a已丢出背包所有相同道具.",
+        "menu": {
+            "name": "&a丢出同类道具",
+            "lore": [
+                "&f当没有打开任何界面时",
+                "&f按下 &e&lShift+Q",
+                "&f扔出背包中所有同类道具"
+            ]
+        }
+    },
+    "QuickMove": {
+        "drop": "&a已丢出所有相同道具.",
+        "move_to_container": "&a已将所有相同道具移至容器内.",
+        "move_to_player": "&a已将所有相同道具移至你背包.",
+        "menu": {
+            "name": "&a快速移动道具",
+            "lore": [
+                "&f当打开容器或背包时",
+                "&f1. 拿起任意道具",
+                "&f2.1到容器内按下鼠标中键",
+                "&f  将背包内所有相同道具移入容器",
+                "",
+                "&f2.2.到背包内按下鼠标中键",
+                "&f   将容器内所有相同道具移入背包",
+                "",
+                "&f2.3.到界面外按下鼠标中键",
+                "&f   扔出所有同种道具"
+            ]
+        }
+    },
+    "QuickShulkerBox": {
+        "menu": {
+            "name": "&a快捷编辑潜影盒",
+            "lore": [
+                "&f在背包中 &e&lShift+右键 &f潜影盒",
+                "&f或",
+                "&f手持潜影盒 &e&lShift+右键",
+                "&f直接打开该潜影盒"
+            ]
+        }
+    },
+    "ReplaceBrokenArmor": {
+        "broken": "&a您的道具已损毁，从背包补全.",
+        "menu": {
+            "name": "&a自动穿戴盔甲",
+            "lore": [
+                "&f当穿戴盔甲损坏时",
+                "&f自动从背包补充"
+            ]
+        }
+    },
+    "ReplaceBrokenTool": {
+        "broken": "&a您的道具已损毁，从背包补全.",
+        "run_out": "&a您的道具已用尽，从背包补全.",
+        "menu": {
+            "name": "&a自动补充道具",
+            "lore": [
+                "&f当手中物品损坏/用尽时",
+                "&f自动从背包补充"
+            ]
+        }
+    },
+    "Reload": {
+        "menu": {
+            "name": "&6重载所有配置文件",
+            "lore": [
+                "&f包括服务端和玩家"
+            ]
+        },
+        "reload": "&aInvActions重载完成"
+    },
+    "State": {
+        "current": "&f当前状态",
+        "server_disabled": "&4服务端禁用",
+        "player_disabled": "&c禁用",
+        "player_enabled": "&a启用"
+    }
+}

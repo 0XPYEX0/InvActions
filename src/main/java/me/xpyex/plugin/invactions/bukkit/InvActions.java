@@ -4,19 +4,19 @@ import java.util.NoSuchElementException;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
-import me.xpyex.plugin.invactions.bukkit.listener.AutoFarmer;
-import me.xpyex.plugin.invactions.bukkit.listener.AutoTool;
-import me.xpyex.plugin.invactions.bukkit.listener.BetterInfinity;
-import me.xpyex.plugin.invactions.bukkit.listener.BetterLoyalty;
-import me.xpyex.plugin.invactions.bukkit.listener.CraftDrop;
-import me.xpyex.plugin.invactions.bukkit.listener.DynamicLight;
-import me.xpyex.plugin.invactions.bukkit.listener.HandleEvent;
-import me.xpyex.plugin.invactions.bukkit.listener.InventoryF;
-import me.xpyex.plugin.invactions.bukkit.listener.QuickDrop;
-import me.xpyex.plugin.invactions.bukkit.listener.QuickMove;
-import me.xpyex.plugin.invactions.bukkit.listener.QuickShulkerBox;
-import me.xpyex.plugin.invactions.bukkit.listener.ReplaceBroken;
-import me.xpyex.plugin.invactions.bukkit.listener.SortContainer;
+import me.xpyex.plugin.invactions.bukkit.module.AutoFarmer;
+import me.xpyex.plugin.invactions.bukkit.module.AutoTool;
+import me.xpyex.plugin.invactions.bukkit.module.BetterInfinity;
+import me.xpyex.plugin.invactions.bukkit.module.BetterLoyalty;
+import me.xpyex.plugin.invactions.bukkit.module.CraftDrop;
+import me.xpyex.plugin.invactions.bukkit.module.DynamicLight;
+import me.xpyex.plugin.invactions.bukkit.module.HandleEvent;
+import me.xpyex.plugin.invactions.bukkit.module.InventoryF;
+import me.xpyex.plugin.invactions.bukkit.module.QuickDrop;
+import me.xpyex.plugin.invactions.bukkit.module.QuickMove;
+import me.xpyex.plugin.invactions.bukkit.module.QuickShulkerBox;
+import me.xpyex.plugin.invactions.bukkit.module.ReplaceBrokenArmor;
+import me.xpyex.plugin.invactions.bukkit.module.SortContainer;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.api.Version;
 import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
@@ -125,15 +125,15 @@ public final class InvActions extends XPPlugin {
     }
 
     public void registerListeners() {
-        registerListener(new AutoFarmer());
-        registerListener(new BetterInfinity());
-        registerListener(new CraftDrop());
+        new AutoFarmer();
+        new BetterInfinity();
+        new CraftDrop();
         registerListener(new HandleEvent());
-        registerListener(new QuickDrop());
-        registerListener(new QuickMove());
-        registerListener(new QuickShulkerBox());
-        registerListener(new ReplaceBroken());
-        registerListener(new SortContainer());
+        new QuickDrop();
+        new QuickMove();
+        new QuickShulkerBox();
+        new ReplaceBrokenArmor();
+        new SortContainer();
         try {
             @SuppressWarnings("unused")
             ClickType swapOffhand = ClickType.SWAP_OFFHAND;  //1.16+
@@ -144,22 +144,21 @@ public final class InvActions extends XPPlugin {
 
         try {
             Block.class.getMethod("getBreakSpeed", Player.class);  //1.17+
-            registerListener(new AutoTool());
+            new AutoTool();
         } catch (NoSuchMethodError | NoSuchMethodException ignored) {
             getLogger().warning("您的服务器不支持AutoTool，该功能已禁用");
         }
 
         try {
             Enchantment.LOYALTY.getMaxLevel();
-            registerListener(new BetterLoyalty());
+            new BetterLoyalty();
         } catch (NoSuchFieldError | NoSuchElementException ignored) {
             getLogger().warning("您的服务器不支持BetterLoyalty");
         }
 
         try {
             Block.class.getMethod("getBlockData");  //1.13+
-            DynamicLight.registerTask();
-            registerListener(new DynamicLight());
+            new DynamicLight().registerTask();
         } catch (NoSuchMethodError | NoSuchMethodException ignored) {
             getLogger().warning("您的服务器不支持DynamicLight，该功能已禁用");
         }

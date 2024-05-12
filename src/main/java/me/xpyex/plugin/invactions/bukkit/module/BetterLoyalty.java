@@ -1,4 +1,4 @@
-package me.xpyex.plugin.invactions.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
@@ -10,11 +10,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class BetterLoyalty implements Listener {
+public class BetterLoyalty extends RootModule {
+    //不会有人视距设为1吧？不会吧不会吧
+    private static final int SERVER_DIS = (Math.max(Bukkit.getServer().getViewDistance() - 1, 1) * 16) + 10;
+
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         if (!InvActionsServerConfig.getConfig().BetterLoyalty) {  //服务器未启用
@@ -28,11 +30,14 @@ public class BetterLoyalty implements Listener {
                 }
                 if (((Trident) event.getEntity()).getItem().getEnchantments().containsKey(Enchantment.LOYALTY)) {
                     //附魔忠诚了
-                    int serverDis = (Bukkit.getServer().getViewDistance() - 1) * 16;  //不会有人视距设为1吧？不会吧不会吧
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             if (!event.getEntity().isValid()) {  //三叉戟跑出视距外了，或已收回到主人手上，不再处理，也没办法处理
+                                cancel();
+                                return;
+                            }
+                            if (event.getEntity().isOnGround() || ((Trident) event.getEntity()).isInBlock()) {
                                 cancel();
                                 return;
                             }
@@ -42,9 +47,9 @@ public class BetterLoyalty implements Listener {
                                 return;
                             }
                             double distance = getDistance(event.getEntity(), shooter);
-                            if (distance >= serverDis) {  //距离即将过远，把三叉戟传送回来
-                                event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(shooter.getLocation()).getLocation());
-                                MsgUtil.sendActionBar(shooter, "&a三叉戟即将过远，已强制其开始返航. " + InvActionsServerConfig.SETTING_HELP);
+                            if (distance >= SERVER_DIS) {  //距离即将过远，把三叉戟传送回来
+                                event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(event.getEntity().getLocation()).getLocation());
+                                MsgUtil.sendActionBar(shooter, getMessageWithSuffix("return"));
                                 cancel();
                             }
                         }

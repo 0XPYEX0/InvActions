@@ -1,14 +1,15 @@
 package me.xpyex.plugin.invactions.bukkit.config;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InvActionsServerConfig extends InvActionsConfig {
-    public static final String SETTING_HELP = "&e该功能在 &f/InvActions &e中调整";
     private static final InvActionsServerConfig DEFAULT = new InvActionsServerConfig();
     private static InvActionsServerConfig config;
     public boolean AutoFarmer_AllowPumpkinAndMelon = false;
     public boolean Debug = false;
-    public ArrayList<String> AllowInvs = new ArrayList<>();
+    public String lang = "zh_cn";
+    public Set<String> AllowInvs = new HashSet<>();
 
     public InvActionsServerConfig() {
         setConfig(this);

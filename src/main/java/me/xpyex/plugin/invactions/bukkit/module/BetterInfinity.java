@@ -1,4 +1,4 @@
-package me.xpyex.plugin.invactions.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -19,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class BetterInfinity implements Listener {
+public class BetterInfinity extends RootModule {
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
         if (InvActionsServerConfig.getConfig().BetterInfinity && SettingsUtil.getConfig(event.getPlayer()).BetterInfinity) {

@@ -1,4 +1,4 @@
-package me.xpyex.plugin.invactions.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.module;
 
 import java.util.HashMap;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
@@ -13,13 +13,12 @@ import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-public class AutoTool implements Listener {
+public class AutoTool extends RootModule {
     private static final HashMap<ToolType, ItemStack> TOOLS = new HashMap<>();
 
     static {
@@ -55,7 +54,7 @@ public class AutoTool implements Listener {
                         return;
                     }
                     InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, fastestSlot);
-                    MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + InvActionsServerConfig.SETTING_HELP);
+                    MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("changed"));
                 }
             }
             if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
@@ -78,7 +77,7 @@ public class AutoTool implements Listener {
                     return;
                 }
                 InvUtil.swapSlot(event.getPlayer(), EquipmentSlot.HAND, fastestToolSlot);  //更换这个类别中最快速度的工具
-                MsgUtil.sendActionBar(event.getPlayer(), "&a已自动切换为合适的工具. " + InvActionsServerConfig.SETTING_HELP);
+                MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("changed"));
             }
         });
     }

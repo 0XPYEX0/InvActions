@@ -1,4 +1,4 @@
-package me.xpyex.plugin.invactions.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.module;
 
 import java.util.HashSet;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
@@ -6,18 +6,17 @@ import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
+import me.xpyex.plugin.xplib.bukkit.util.language.LangUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.NameUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
-public class SortContainer implements Listener {
+public class SortContainer extends RootModule {
     private static final HashSet<Material> IGNORES = new HashSet<>();
 
     static {
@@ -65,15 +64,20 @@ public class SortContainer implements Listener {
         if (target.getState() instanceof Container && event.getPlayer().isSneaking()) {  //看向容器了, Shift+F
             event.setCancelled(true);
             SortUtil.sortInv(((Container) target.getState()).getInventory());
-            MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你看向的 &f" + NameUtil.getTranslationName(target.getType()));
+            MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("target", LangUtil.getItemName(InvActions.getInstance(), target.getType())));
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
             return;
         }
         if (SettingsUtil.getConfig(event.getPlayer()).DefaultF || (event.getPlayer().isSneaking() && event.getPlayer().getLocation().getPitch() == 90)) {
             event.setCancelled(true);
             SortUtil.sortInv(event.getPlayer().getInventory());
-            MsgUtil.sendActionBar(event.getPlayer(), "&a已整理你的背包");
+            MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("player"));
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
         }
+    }
+
+    @Override
+    public String getName() {
+        return "DefaultF";
     }
 }

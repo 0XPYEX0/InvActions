@@ -1,0 +1,156 @@
+{
+    "ActionBarSuffix": "&eChange it by using &f/InvActions",
+    "AutoFarmer": {
+        "harvest": "&aAutomatically harvested &f{0}&a for you.",
+        "harvest_and_plant": "&aAutomatically harvested and planted &f{0}&a for you.",
+        "menu": {
+            "name": "&aAuto Farmer",
+            "lore": [
+                "&fWhen right-clicking on crops",
+                "&fIf the crops are ripe",
+                "&fThey will be harvested automatically"
+            ]
+        }
+    },
+    "AutoTool": {
+        "changed": "&aChanged to the most suitable tool.",
+        "menu": {
+            "name": "&aAuto Tool",
+            "lore": [
+                "&fWhen trying to break a block",
+                "&fOr trying to till the land",
+                "&fChange to the most suitable tool from your inventory"
+            ]
+        }
+    },
+    "BetterInfinity": {
+        "menu": {
+            "name": "&aBetter Infinity",
+            "lore": [
+                "&fDon't need to have any arrows",
+                "&fIf you are shooting with an Infinity Bow"
+            ]
+        }
+    },
+    "BetterLoyalty": {
+        "return": "&aThe trident has been missing, called it back now.",
+        "menu": {
+            "name": "&aBetter Loyalty",
+            "lore": [
+                "&fIt will come back automatically",
+                "&fIf it has been missing"
+            ]
+        }
+    },
+    "CraftDrop": {
+        "drop": "&aCrafted all items and dropped them out.",
+        "menu": {
+            "name": "&aCraft Drop",
+            "lore": [
+                "&fWhen you have opened the Crafting Inventory",
+                "&fPress &e&lCtrl+Q &fto drop all result items"
+            ]
+        }
+    },
+    "DynamicLight": {
+        "light": "&aYou are holding a light source, light bless you.",
+        "menu": {
+            "name": "&aDynamic Light",
+            "lore": [
+                "&fWhen holding a light source",
+                "&fSimulate light sources at the player's location"
+            ]
+        }
+    },
+    "DefaultF": {
+        "player": "&aSorted your inventory",
+        "target": "&aSorted the &f{0}&a you are looking at.",
+        "menu": {
+            "name": "&aPress &e&lF &ato sort",
+            "lore": [
+                "&fWhen no interface is open",
+                "&fWhether sneaking or looking down",
+                "&fPress &e&lF &fto sort your own inventory",
+                "&7&oThis setting does not affect &e&lShift+F &7&ofor sorting containers"
+            ]
+        }
+    },
+    "QuickDrop": {
+        "drop": "&aDropped all identical items from your inventory.",
+        "menu": {
+            "name": "&aDrop Identical Items",
+            "lore": [
+                "&fWhen no interface is open",
+                "&fPress &e&lShift+Q",
+                "&fTo drop all identical items from your inventory"
+            ]
+        }
+    },
+    "QuickMove": {
+        "drop": "&aDropped all identical items.",
+        "move_to_container": "&aMoved all identical items to the container.",
+        "move_to_player": "&aMoved all identical items to your inventory.",
+        "menu": {
+            "name": "&aQuick Move Items",
+            "lore": [
+                "&fWhen a container or inventory is open",
+                "&f1. Pick up any item",
+                "&f2.1 Press the middle mouse button inside the container",
+                "&f   To move all identical items from the inventory to the container",
+                "",
+                "&f2.2 Press the middle mouse button inside the inventory",
+                "&f   To move all identical items from the container to the inventory",
+                "",
+                "&f2.3 Press the middle mouse button outside the interface",
+                "&f   To throw out all identical items"
+            ]
+        }
+    },
+    "QuickShulkerBox": {
+        "menu": {
+            "name": "&aQuick Edit Shulker Box",
+            "lore": [
+                "&fIn the inventory, &e&lShift+Right Click &fon a Shulker Box",
+                "&fOr",
+                "&fHolding a Shulker Box, &e&lShift+Right Click",
+                "&fTo directly open the Shulker Box"
+            ]
+        }
+    },
+    "ReplaceBrokenArmor": {
+        "broken": "&aYour item has been damaged, replenished from the inventory.",
+        "menu": {
+            "name": "&aAuto Equip Armor",
+            "lore": [
+                "&fWhen worn armor is damaged",
+                "&fAutomatically replenish from the inventory"
+            ]
+        }
+    },
+    "ReplaceBrokenTool": {
+        "broken": "&aYour tool has been damaged, replenished from the inventory.",
+        "run_out": "&aYour tool has run out, replenished from the inventory.",
+        "menu": {
+            "name": "&aAuto Replenish Tools",
+            "lore": [
+                "&fWhen the item in hand is damaged/runs out",
+                "&fAutomatically replenish from the inventory"
+            ]
+        }
+    },
+    "Reload": {
+        "menu": {
+            "name": "&6Reload all configuration files",
+            "lore": [
+                "&fIncluding server and player"
+            ]
+        },
+        "reload": "&aInvActions Reload completed"
+    },
+    "State": {
+        "current": "&fCurrent state:",
+        "server_disabled": "&4Server disabled",
+        "player_disabled": "&cDisabled",
+        "player_enabled": "&aEnabled"
+    }
+}

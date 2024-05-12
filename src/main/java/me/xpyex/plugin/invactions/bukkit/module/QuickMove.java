@@ -1,14 +1,12 @@
-package me.xpyex.plugin.invactions.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -16,7 +14,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class QuickMove implements Listener {
+public class QuickMove extends RootModule {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) {
@@ -85,7 +83,7 @@ public class QuickMove implements Listener {
 
                 event.getWhoClicked().getInventory().setItemInMainHand(tool);  //复原主手
                 ((Player) event.getWhoClicked()).updateInventory();
-                MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已丢出所有相同道具. " + InvActionsServerConfig.SETTING_HELP);
+                MsgUtil.sendActionBar((Player) event.getWhoClicked(), getMessageWithSuffix("drop"));
                 event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
                 event.getWhoClicked().removeMetadata("InvActions_QuickDropping", InvActions.getInstance());
             } else if (event.getClickedInventory() == event.getWhoClicked().getInventory()) {
@@ -112,7 +110,7 @@ public class QuickMove implements Listener {
                             content.setAmount(0);
                         }
                     }
-                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至你背包. " + InvActionsServerConfig.SETTING_HELP);
+                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), getMessageWithSuffix("move_to_player"));
                     event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
                 }
             } else if (event.getClickedInventory() == event.getWhoClicked().getOpenInventory().getTopInventory()) {
@@ -136,7 +134,7 @@ public class QuickMove implements Listener {
                             content.setAmount(0);
                         }
                     }
-                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), "&a已将所有相同道具移至容器内. " + InvActionsServerConfig.SETTING_HELP);
+                    MsgUtil.sendActionBar((Player) event.getWhoClicked(), getMessageWithSuffix("move_to_container"));
                     event.getWhoClicked().removeMetadata("InvActions_CallingClick", InvActions.getInstance());
                 }
             }

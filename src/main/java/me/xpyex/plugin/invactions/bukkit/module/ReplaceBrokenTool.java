@@ -1,10 +1,8 @@
-package me.xpyex.plugin.invactions.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SortUtil;
+import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +10,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrowableProjectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -22,12 +19,31 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 
-public class ReplaceBroken implements Listener {
+public class ReplaceBrokenTool extends RootModule {
+    public void replaceTool(Player p, ItemStack before) {
+        EquipmentSlot slot = ItemUtil.equals(before, p.getInventory().getItemInMainHand()) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
+        if (serverEnabled() && playerEnabled(p)) {  //如果玩家开启了替换手中道具
+            Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
+                if (p.getInventory().getItem(slot).getType() == Material.AIR) {
+                    for (ItemStack content : p.getInventory().getContents()) {  //不遍历盔甲
+                        if (content == null) continue;
 
+                        if (ItemUtil.equals(content, before)) {
+                            ItemStack copied = new ItemStack(content);
+                            p.getInventory().setItem(slot, copied);
+                            content.setAmount(0);
+                            MsgUtil.sendActionBar(p, getMessageWithSuffix("run_out"));
+                            return;
+                        }
+                    }
+                }
+            }, 1L);
+        }
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onEat(PlayerItemConsumeEvent event) {
-        SortUtil.replaceTool(event.getPlayer(), new ItemStack(event.getItem()));
+        replaceTool(event.getPlayer(), new ItemStack(event.getItem()));
         //
     }
 
@@ -44,13 +60,12 @@ public class ReplaceBroken implements Listener {
             switch (slot) {
                 case HAND:
                 case OFF_HAND:
-                    if (!InvActionsServerConfig.getConfig().ReplaceBrokenTool || !SettingsUtil.getConfig(event.getPlayer()).ReplaceBrokenTool) {  //如果玩家未开启替换手中道具
+                    if (!serverEnabled() || !playerEnabled(event.getPlayer())) {  //如果玩家未开启替换手中道具
                         return;
                     }
+                    break;
                 default:
-                    if (!InvActionsServerConfig.getConfig().ReplaceBrokenArmor || !SettingsUtil.getConfig(event.getPlayer()).ReplaceBrokenArmor) {  //如果玩家未开启替换盔甲
-                        return;
-                    }
+                    return;
             }
             EquipmentSlot finalSlot = slot;
             ItemStack brokenItem = new ItemStack(event.getBrokenItem());
@@ -61,7 +76,7 @@ public class ReplaceBroken implements Listener {
 
                     if (content.getType() == brokenItem.getType()) {  //同一种类型的道具
                         InvUtil.swapSlot(event.getPlayer(), finalSlot, i);
-                        MsgUtil.sendActionBar(event.getPlayer(), "&a您的道具已损毁，从背包补全. " + InvActionsServerConfig.SETTING_HELP);
+                        MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("broken"));
                         return;
                     }
                 }
@@ -75,7 +90,7 @@ public class ReplaceBroken implements Listener {
             if (event.getEntity() instanceof ThrowableProjectile && event.getEntity().getType() != EntityType.TRIDENT) {  //扔的还是投掷物
                 ItemStack before = new ItemStack(((ThrowableProjectile) event.getEntity()).getItem());
                 Player p = (Player) event.getEntity().getShooter();
-                SortUtil.replaceTool(p, before);
+                replaceTool(p, before);
             }
         }
     }
@@ -96,6 +111,6 @@ public class ReplaceBroken implements Listener {
         }
 
         ItemStack before = new ItemStack(event.getItem());
-        SortUtil.replaceTool(event.getPlayer(), before);
+        replaceTool(event.getPlayer(), before);
     }
 }

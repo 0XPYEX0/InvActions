@@ -1,15 +1,14 @@
-package me.xpyex.plugin.invactions.bukkit.listener;
+package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class QuickDrop implements Listener {
+public class QuickDrop extends RootModule {
     @EventHandler(ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent event) {
         if (!InvActionsServerConfig.getConfig().QuickDrop || !SettingsUtil.getConfig(event.getPlayer()).QuickDrop) {
@@ -26,7 +25,7 @@ public class QuickDrop implements Listener {
                             event.getPlayer().dropItem(true);
                         }
                     }
-                    MsgUtil.sendActionBar(event.getPlayer(), "&a已丢出背包所有相同道具. " + InvActionsServerConfig.SETTING_HELP);
+                    MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("drop"));
                     event.getPlayer().updateInventory();
                 }
             }
