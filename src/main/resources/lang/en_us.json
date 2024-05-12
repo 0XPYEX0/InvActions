@@ -63,7 +63,7 @@
         }
     },
     "DefaultF": {
-        "player": "&aSorted your inventory",
+        "player": "&aSorted your inventory.",
         "target": "&aSorted the &f{0}&a you are looking at.",
         "menu": {
             "name": "&aPress &e&lF &ato sort",
