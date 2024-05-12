@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
 public final class InvActions extends XPPlugin {
-    private static final String XPLIB_VER = "1.1.4";
+    private static final String XPLIB_VER = "1.1.5";
     private static InvActions INSTANCE;
 
     public static InvActions getInstance() {
