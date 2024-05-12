@@ -77,7 +77,8 @@ public final class InvActions extends XPPlugin {
         });
 
         getLogger().info("已加载");
-        getLogger().info("感谢使用InvActions. 本插件在GitHub与Gitee开源，谨防受骗. 作者QQ1723275529");
+        getLogger().info("感谢使用InvActions. 本插件在GitHub开源，谨防受骗. 作者QQ1723275529");
+        getLogger().info("GitHub: https://github.com/0XPYEX0/InvActions");
     }
 
     public boolean initCheck() {
