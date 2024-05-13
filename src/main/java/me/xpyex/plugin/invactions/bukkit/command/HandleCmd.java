@@ -9,6 +9,7 @@ import me.xpyex.plugin.xplib.bukkit.inventory.button.UnmodifiableButton;
 import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.language.LangUtil;
+import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,7 +33,7 @@ public class HandleCmd implements CommandExecutor {
                     }
                     ConfigUtil.reload(InvActions.getInstance());
                     InvActions.getInstance().updateServerConfig();
-                    sender.sendMessage(LangUtil.getMessage(InvActions.getInstance(), "Reload.reload"));
+                    sender.sendMessage(MsgUtil.getColorMsg(LangUtil.getMessage(InvActions.getInstance(), "Reload.reload")));
                     return;
                 }
                 if (args[0].equalsIgnoreCase("addInvs")) {
