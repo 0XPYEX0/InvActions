@@ -1,6 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
@@ -27,7 +28,7 @@ public class QuickMove extends RootModule {
             return;
         }
         if (event.getClick() == ClickType.MIDDLE) {  //鼠标中键
-            if (event.getCursor() == null) {  //光标拿着的物品
+            if (event.getCursor() == null || ItemType.isAir(event.getCursor().getType())) {  //光标拿着的物品
                 return;
             }
             ItemStack item = new ItemStack(event.getCursor());
@@ -40,7 +41,7 @@ public class QuickMove extends RootModule {
                 }
                 event.getWhoClicked().setMetadata("InvActions_QuickDropping", new FixedMetadataValue(InvActions.getInstance(), true));
                 for (ItemStack content : event.getWhoClicked().getInventory().getStorageContents()) {
-                    if (content == null) continue;
+                    if (content == null || ItemType.isAir(content.getType())) continue;
 
                     if (ItemUtil.equals(content, item)) {
                         ItemStack copied = new ItemStack(content);
@@ -54,7 +55,7 @@ public class QuickMove extends RootModule {
                     event.getWhoClicked().setMetadata("InvActions_CallingClick", new FixedMetadataValue(InvActions.getInstance(), true));
                     for (int i = 0; i < event.getWhoClicked().getOpenInventory().getTopInventory().getStorageContents().length; i++) {
                         ItemStack content = event.getWhoClicked().getOpenInventory().getTopInventory().getItem(i);
-                        if (content == null) continue;
+                        if (content == null || ItemType.isAir(content.getType())) continue;
 
                         if (ItemUtil.equals(content, item)) {
                             InventoryClickEvent clickEvent = new InventoryClickEvent(event.getView(), InventoryType.SlotType.OUTSIDE, i, ClickType.DROP, InventoryAction.DROP_ALL_SLOT);
@@ -97,7 +98,7 @@ public class QuickMove extends RootModule {
                         int firstEmpty = event.getWhoClicked().getInventory().firstEmpty();
                         if (firstEmpty == -1) break;
 
-                        if (content == null) continue;
+                        if (content == null || ItemType.isAir(content.getType())) continue;
 
                         if (ItemUtil.equals(content, item)) {
                             InventoryClickEvent clickEvent = new InventoryClickEvent(event.getView(), InventoryType.SlotType.CONTAINER, i, ClickType.SHIFT_LEFT, InventoryAction.MOVE_TO_OTHER_INVENTORY);
@@ -122,7 +123,7 @@ public class QuickMove extends RootModule {
                         int firstEmpty = event.getWhoClicked().getOpenInventory().getTopInventory().firstEmpty();
                         if (firstEmpty == -1) break;
 
-                        if (content == null) continue;
+                        if (content == null || ItemType.isAir(content.getType())) continue;
 
                         if (ItemUtil.equals(content, item)) {
                             InventoryClickEvent clickEvent = new InventoryClickEvent(event.getView(), InventoryType.SlotType.CONTAINER, i, ClickType.SHIFT_LEFT, InventoryAction.MOVE_TO_OTHER_INVENTORY);

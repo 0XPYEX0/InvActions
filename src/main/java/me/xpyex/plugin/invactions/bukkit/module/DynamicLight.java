@@ -24,8 +24,8 @@ public class DynamicLight extends RootModule {
     private static final BlockData LIGHT_DATA;
 
     static {
-        Material light = Material.getMaterial("LIGHT");  //1.17的光源方块. 除了火把外的大部分光源都有碰撞箱，所以选火把
-        LIGHT_DATA = Bukkit.createBlockData(light != null ? light : Material.TORCH);
+        Material light = Material.getMaterial("LIGHT");  //1.17的光源方块.
+        LIGHT_DATA = Bukkit.createBlockData(light != null ? light : Material.TORCH);  //除了火把外的大部分光源都有碰撞箱，所以选火把
     }
 
     public void registerTask() {
