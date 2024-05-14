@@ -71,18 +71,18 @@ public class DynamicLight extends RootModule {
 
         Projectile projectile = event.getEntity();
         new BukkitRunnable() {
-            Location loc = projectile.getLocation().clone();
+            Location lastLoc = projectile.getLocation().clone();
 
             @Override
             public void run() {
                 if (projectile.isValid() && projectile.getFireTicks() > 0) {
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         if (SettingsUtil.getConfig(player).DynamicLight) {
-                            if (player.getLocation().getWorld().equals(loc.getWorld())) {
-                                player.sendBlockChange(loc, loc.getBlock().getBlockData());
-                                loc = projectile.getLocation().clone();
-                                if (ItemType.isAir(loc.getBlock().getType())) {
-                                    player.sendBlockChange(loc, LIGHT_DATA);
+                            if (player.getLocation().getWorld().equals(lastLoc.getWorld())) {
+                                player.sendBlockChange(lastLoc, lastLoc.getBlock().getBlockData());
+                                lastLoc = projectile.getLocation().clone();
+                                if (ItemType.isAir(lastLoc.getBlock().getType())) {
+                                    player.sendBlockChange(lastLoc, LIGHT_DATA);
                                 }
                             }
                         }
@@ -90,9 +90,9 @@ public class DynamicLight extends RootModule {
                     return;
                 }
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    if (loc.getWorld().equals(player.getWorld())) {
+                    if (lastLoc.getWorld().equals(player.getWorld())) {
                         //给所有人复原
-                        player.sendBlockChange(loc, loc.getBlock().getBlockData());
+                        player.sendBlockChange(lastLoc, lastLoc.getBlock().getBlockData());
                     }
                 });
                 cancel();
