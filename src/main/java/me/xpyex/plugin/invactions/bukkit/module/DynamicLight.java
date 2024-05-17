@@ -78,7 +78,7 @@ public class DynamicLight extends RootModule {
                 if (projectile.isValid() && projectile.getFireTicks() > 0) {
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         if (SettingsUtil.getConfig(player).DynamicLight) {
-                            if (player.getLocation().getWorld().equals(lastLoc.getWorld())) {
+                            if (player.getWorld().equals(lastLoc.getWorld())) {
                                 player.sendBlockChange(lastLoc, lastLoc.getBlock().getBlockData());
                                 lastLoc = projectile.getLocation().clone();
                                 if (ItemType.isAir(lastLoc.getBlock().getType())) {

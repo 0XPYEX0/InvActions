@@ -7,6 +7,7 @@ import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.language.LangUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
+import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.Ageable;
@@ -41,7 +42,7 @@ public class AutoFarmer extends RootModule {
 
                 BlockData blockData = event.getClickedBlock().getBlockData();
                 if (blockData instanceof Ageable && ((Ageable) blockData).getAge() >= ((Ageable) blockData).getMaximumAge()) {
-                    if (event.getClickedBlock().getType().toString().contains("_STEM")) {  //西瓜、南瓜的茎
+                    if (StrUtil.endsWithIgnoreCaseOr(event.getClickedBlock().getType().toString(), "_STEM", "FIRE")) {  //西瓜、南瓜的茎; 火
                         return;
                     }
                     BlockBreakEvent blockBreakEvent = new BlockBreakEvent(event.getClickedBlock(), event.getPlayer());
