@@ -71,8 +71,10 @@ public class QuickShulkerBox extends RootModule {
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
         if (event.getPlayer().hasMetadata(METADATA_KEY)) {
-            event.setCancelled(true);
-            Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> event.getPlayer().updateInventory(), 2L);
+            if (event.getItemDrop().getItemStack().getType().toString().endsWith("SHULKER_BOX")) {
+                event.setCancelled(true);
+                Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> event.getPlayer().updateInventory(), 2L);
+            }
         }
     }
 
