@@ -54,6 +54,7 @@ public class RootModule implements Listener {
 
     public String getName() {
         return this.getClass().getSimpleName();
+        //
     }
 
     public Button getMenuButton(Menu menu) {

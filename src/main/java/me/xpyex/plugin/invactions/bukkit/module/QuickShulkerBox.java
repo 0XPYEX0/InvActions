@@ -52,6 +52,9 @@ public class QuickShulkerBox extends RootModule {
         if (!InvActionsServerConfig.getConfig().QuickShulkerBox) {
             return;
         }
+        if (!SettingsUtil.getConfig(event.getPlayer()).QuickShulkerBox) {
+            return;
+        }
         if (event.getPlayer().isSneaking() && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
             if (event.getItem() != null && event.getItem().hasItemMeta()) {
                 ItemMeta meta = event.getItem().getItemMeta();

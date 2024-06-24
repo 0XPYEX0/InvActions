@@ -1,6 +1,5 @@
 package me.xpyex.plugin.invactions.bukkit;
 
-import java.util.NoSuchElementException;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
@@ -68,12 +67,34 @@ public final class InvActions extends XPPlugin {
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
             getLogger().info("开始检查更新");
-            ValueUtil.optional(UpdateUtil.getUpdateFromGitee(getInstance()), (ver) -> {
+            ValueUtil.optional(UpdateUtil.getUpdateFromGitee(getInstance()), ver -> {
                 getLogger().info("当前插件版本: " + getInstance().getDescription().getVersion() + " ,有一个更新的版本: " + ver);
                 getLogger().info("前往 https://gitee.com/XPYEX/InvActions/releases 下载吧！");
-            }, () -> {
-                getLogger().info("当前版本已是最新！");
-            });
+            }, () -> getLogger().info("当前版本已是最新！"));
+        });
+
+        getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
+            String type = null;
+            try {
+                Class.forName("net.minecraftforge.common.MinecraftForge");
+                type = "Forge";
+            } catch (ClassNotFoundException ignored) {
+            }
+
+            try {
+                Class.forName("net.neoforged.neoforge.common.NeoForge");
+                type = "NeoForge";
+            } catch (ClassNotFoundException ignored) {
+            }
+
+            if (Package.getPackage("net.fabricmc.fabric") != null) {
+                type = "Fabric";
+            }
+
+            if (type != null) {
+                getLogger().warning("你目前运行在具有 " + type + " 的Hybrid服务端.");
+                getLogger().warning("由于Mod功能的实现方式影响，插件可能不会那么“正常”地运行，包括但不限于功能失效");
+            }
         });
 
         getLogger().info("已加载");
@@ -153,7 +174,7 @@ public final class InvActions extends XPPlugin {
         try {
             Enchantment.LOYALTY.getMaxLevel();
             new BetterLoyalty();
-        } catch (NoSuchFieldError | NoSuchElementException ignored) {
+        } catch (NoSuchFieldError ignored) {
             getLogger().warning("您的服务器不支持BetterLoyalty");
         }
 
