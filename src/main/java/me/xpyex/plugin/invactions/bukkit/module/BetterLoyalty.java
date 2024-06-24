@@ -1,8 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
@@ -19,13 +17,13 @@ public class BetterLoyalty extends RootModule {
 
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
-        if (!InvActionsServerConfig.getConfig().BetterLoyalty) {  //服务器未启用
+        if (!serverEnabled()) {  //服务器未启用
             return;
         }
         if (event.getEntity() instanceof Trident) {
             if (event.getEntity().getShooter() instanceof Player) {
                 Player shooter = (Player) event.getEntity().getShooter();
-                if (!SettingsUtil.getConfig(shooter).BetterLoyalty) {  //玩家未启用
+                if (!playerEnabled(shooter)) {  //玩家未启用
                     return;
                 }
                 if (((Trident) event.getEntity()).getItem().getEnchantments().containsKey(Enchantment.LOYALTY)) {

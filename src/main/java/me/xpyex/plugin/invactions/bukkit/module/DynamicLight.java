@@ -3,9 +3,7 @@ package me.xpyex.plugin.invactions.bukkit.module;
 import java.util.UUID;
 import java.util.WeakHashMap;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
 import org.bukkit.Bukkit;
@@ -30,9 +28,9 @@ public class DynamicLight extends RootModule {
 
     public void registerTask() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(InvActions.getInstance(), () -> {
-            if (InvActionsServerConfig.getConfig().DynamicLight) {  //服务端启用动态光源
+            if (serverEnabled()) {  //服务端启用动态光源
                 for (Player player : Bukkit.getOnlinePlayers()) {  //遍历玩家
-                    if (SettingsUtil.getConfig(player).DynamicLight) {  //玩家启用动态光源
+                    if (playerEnabled(player)) {  //玩家启用动态光源
                         Material toolType = player.getInventory().getItemInMainHand().getType();
                         Material offhandType = player.getInventory().getItemInOffHand().getType();
 
@@ -67,7 +65,7 @@ public class DynamicLight extends RootModule {
 
     @EventHandler
     public void onShoot(ProjectileLaunchEvent event) {
-        if (!InvActionsServerConfig.getConfig().DynamicLight) return;
+        if (!serverEnabled()) return;
 
         Projectile projectile = event.getEntity();
         new BukkitRunnable() {
@@ -77,7 +75,7 @@ public class DynamicLight extends RootModule {
             public void run() {
                 if (projectile.isValid() && projectile.getFireTicks() > 0) {
                     Bukkit.getOnlinePlayers().forEach(player -> {
-                        if (SettingsUtil.getConfig(player).DynamicLight) {
+                        if (playerEnabled(player)) {
                             if (player.getWorld().equals(lastLoc.getWorld())) {
                                 player.sendBlockChange(lastLoc, lastLoc.getBlock().getBlockData());
                                 lastLoc = projectile.getLocation().clone();

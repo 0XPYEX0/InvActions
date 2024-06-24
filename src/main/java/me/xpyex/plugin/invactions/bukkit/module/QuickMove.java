@@ -18,9 +18,11 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class QuickMove extends RootModule {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
+        if (!serverEnabled()) return;
         if (!(event.getWhoClicked() instanceof Player)) {
             return;
         }
+        if (!playerEnabled(((Player) event.getWhoClicked()))) return;
         if (event.getWhoClicked().hasMetadata("InvActions_CallingClick")) {  //正在广播事件给插件处理，自己无需处理
             return;
         }

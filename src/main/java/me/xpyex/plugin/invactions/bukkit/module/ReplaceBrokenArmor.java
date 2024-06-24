@@ -1,9 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -27,7 +25,7 @@ public class ReplaceBrokenArmor extends RootModule {
                 case OFF_HAND:
                     return;
                 default:
-                    if (!InvActionsServerConfig.getConfig().ReplaceBrokenArmor || !SettingsUtil.getConfig(event.getPlayer()).ReplaceBrokenArmor) {  //如果玩家未开启替换盔甲
+                    if (!serverEnabled() || !playerEnabled(event.getPlayer())) {  //如果玩家未开启替换盔甲
                         return;
                     }
             }

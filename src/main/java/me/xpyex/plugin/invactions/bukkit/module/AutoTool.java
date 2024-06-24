@@ -1,11 +1,9 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import java.util.HashMap;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.enums.ToolType;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.api.Pair;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
@@ -32,7 +30,7 @@ public class AutoTool extends RootModule {
 
     @EventHandler(ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {
-        if (!InvActionsServerConfig.getConfig().AutoTool || !SettingsUtil.getConfig(event.getPlayer()).AutoTool)
+        if (!serverEnabled() || !playerEnabled(event.getPlayer()))
             return;
 
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE || event.getPlayer().getGameMode() == GameMode.SPECTATOR)

@@ -1,8 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,10 +11,10 @@ import org.bukkit.inventory.ItemStack;
 public class CraftDrop extends RootModule {
     @EventHandler(ignoreCancelled = true)
     public void onCraft(CraftItemEvent event) {
-        if (!(event.getWhoClicked() instanceof Player)) return;
+        if (!serverEnabled()) return;
 
-        if (!InvActionsServerConfig.getConfig().CraftDrop || !SettingsUtil.getConfig((Player) event.getWhoClicked()).CraftDrop)
-            return;
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        if (!playerEnabled(((Player) event.getWhoClicked()))) return;
 
         if (event.getClick() != ClickType.CONTROL_DROP) {
             return;

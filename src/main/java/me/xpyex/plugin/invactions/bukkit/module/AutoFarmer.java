@@ -3,7 +3,6 @@ package me.xpyex.plugin.invactions.bukkit.module;
 import java.util.Collection;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.language.LangUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
@@ -22,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 public class AutoFarmer extends RootModule {
     @EventHandler(ignoreCancelled = true)
     public void onRightClick(PlayerInteractEvent event) {
-        if (InvActionsServerConfig.getConfig().AutoFarmer && SettingsUtil.getConfig(event.getPlayer()).AutoFarmer) {  //如果玩家开启自动收割
+        if (serverEnabled() && playerEnabled(event.getPlayer())) {  //如果玩家开启自动收割
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (ItemUtil.typeIsOr(event.getClickedBlock(), Material.MELON, Material.PUMPKIN)) {
                     if (InvActionsServerConfig.getConfig().AutoFarmer_AllowPumpkinAndMelon) return;

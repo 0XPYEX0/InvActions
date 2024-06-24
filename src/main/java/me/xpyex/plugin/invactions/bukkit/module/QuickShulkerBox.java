@@ -1,8 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -10,7 +8,6 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -26,8 +23,8 @@ public class QuickShulkerBox extends RootModule {
     @EventHandler
     public void onInvClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
-        if (InvActionsServerConfig.getConfig().QuickShulkerBox) {
-            if (SettingsUtil.getConfig((Player) event.getWhoClicked()).QuickShulkerBox) {
+        if (serverEnabled()) {
+            if (playerEnabled((Player) event.getWhoClicked())) {
                 if (event.isShiftClick() && event.isRightClick()) {
                     if (event.getCursor() != null && event.getCursor().getType() != Material.AIR)
                         return;
@@ -49,13 +46,13 @@ public class QuickShulkerBox extends RootModule {
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
-        if (!InvActionsServerConfig.getConfig().QuickShulkerBox) {
+        if (!serverEnabled()) {
             return;
         }
-        if (!SettingsUtil.getConfig(event.getPlayer()).QuickShulkerBox) {
+        if (!playerEnabled(event.getPlayer())) {
             return;
         }
-        if (event.getPlayer().isSneaking() && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+        if (event.getPlayer().isSneaking() && event.getAction().toString().startsWith("RIGHT_")) {
             if (event.getItem() != null && event.getItem().hasItemMeta()) {
                 ItemMeta meta = event.getItem().getItemMeta();
                 if (meta instanceof BlockStateMeta) {
@@ -75,7 +72,7 @@ public class QuickShulkerBox extends RootModule {
     public void onDrop(PlayerDropItemEvent event) {
         if (event.getPlayer().hasMetadata(METADATA_KEY)) {
             event.setCancelled(true);
-            event.getPlayer().updateInventory();
+            Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> event.getPlayer().updateInventory(), 2L);
         }
     }
 
@@ -108,7 +105,7 @@ public class QuickShulkerBox extends RootModule {
                         ((Player) event.getPlayer()).playSound(event.getPlayer().getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 1f, 1f);
                         Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
                             ((Player) event.getPlayer()).updateInventory();
-                        }, 1L);
+                        }, 2L);
                     }
                 }
             }

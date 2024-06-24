@@ -94,8 +94,9 @@ public class RootModule implements Listener {
     private String[] getMenuLore(int state) {
         ArrayList<String> list = new ArrayList<>(getNationalMessages("menu.lore"));  //不确定List具体类型，copy一份
         list.add("");
-        list.add(LangUtil.getMessage(InvActions.getInstance(),
-            "State.current") + " " + LangUtil.getMessage(InvActions.getInstance(), "State." + (state == 1 ? "player_enabled" : (state == 0 ? "player_disabled" : "server_disabled")))
+        list.add(LangUtil.getMessage(InvActions.getInstance(), "State.current")
+                     + ": "
+                     + LangUtil.getMessage(InvActions.getInstance(), "State." + (state == 1 ? "player_enabled" : (state == 0 ? "player_disabled" : "server_disabled")))
         );
         return list.toArray(new String[0]);
     }

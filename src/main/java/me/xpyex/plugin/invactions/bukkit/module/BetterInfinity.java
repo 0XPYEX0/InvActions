@@ -1,9 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,7 +19,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class BetterInfinity extends RootModule {
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
-        if (InvActionsServerConfig.getConfig().BetterInfinity && SettingsUtil.getConfig(event.getPlayer()).BetterInfinity) {
+        if (serverEnabled() && playerEnabled(event.getPlayer())) {
             if (event.getAction().toString().startsWith("RIGHT_") && event.getItem() != null && event.getHand() != null) {
                 if (event.getItem().getType() == Material.BOW) {
                     PlayerInventory playerInv = event.getPlayer().getInventory();
