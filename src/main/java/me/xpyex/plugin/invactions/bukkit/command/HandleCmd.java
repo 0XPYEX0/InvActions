@@ -1,5 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.command;
 
+import java.util.WeakHashMap;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.module.RootModule;
@@ -10,6 +11,7 @@ import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.util.language.LangUtil;
 import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
+import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -17,10 +19,29 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class HandleCmd implements CommandExecutor {
     private static final String[] menuID = "abcdefghijklmnopqrstuvwxyz".split("");
+    private static final WeakHashMap<Player, Menu> MENU_CACHE = new WeakHashMap<>();
+    private static final ItemStack MENU_GLASS_PANE;
+    private static final ItemStack MENU_WOOL_ORANGE;
+    public static final ItemStack MENU_WOOL_RED;
+    public static final ItemStack MENU_WOOL_GREEN;
+
+    static {
+        MENU_WOOL_ORANGE = ItemUtil.getItemStack(Material.getMaterial((VersionUtil.getMainVersion() >= 13 ? "ORANGE_" : "") + "WOOL"), " ");
+        MENU_WOOL_RED = ItemUtil.getItemStack(Material.getMaterial((VersionUtil.getMainVersion() >= 13 ? "RED_" : "") + "WOOL"), " ");
+        MENU_WOOL_GREEN = ItemUtil.getItemStack(Material.getMaterial((VersionUtil.getMainVersion() >= 13 ? "GREEN_" : "") + "WOOL"), " ");
+        MENU_GLASS_PANE = ItemUtil.getItemStack(Material.getMaterial((VersionUtil.getMainVersion() >= 13 ? "BLACK_" : "") + "STAINED_GLASS_PANE"), " ");
+        if (VersionUtil.getMainVersion() >= 13) {
+            MENU_WOOL_ORANGE.setDurability((short) 1);
+            MENU_WOOL_GREEN.setDurability((short) 5);
+            MENU_WOOL_RED.setDurability((short) 14);
+            MENU_GLASS_PANE.setDurability((short) 7);
+        }
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -56,17 +77,22 @@ public class HandleCmd implements CommandExecutor {
                 }
             }
             if (sender instanceof Player) {
-                InvBuilder setter = new InvBuilder("InvActions-设定-" + sender.getName(), "#########", "#abcdefg#", "#hijk   #", "########A");
-                setter.setSign("#", ItemUtil.getItemStack(Material.BLACK_STAINED_GLASS_PANE, " "));
-                setter.setSign(" ", Material.AIR);
+                if (MENU_CACHE.containsKey(sender)) {
+                    Bukkit.getScheduler().runTask(InvActions.getInstance(), () -> {
+                        MENU_CACHE.get(sender).open(1);
+                    });
+                    return;
+                }
 
                 Menu menu = new Menu((Player) sender);
-                menu.setPage(1, setter)
+                menu.setPage(1, new InvBuilder("InvActions-设定-" + sender.getName(), "#########", "#abcdefg#", "#hijk   #", "########A")
+                                        .setSign("#", MENU_GLASS_PANE)
+                                        .setSign(" ", Material.AIR))
                     .setSign("A", new UnmodifiableButton(menu, (player -> player.hasPermission("InvActions.admin") ? 1 : 0))
-                                      .addMode(1, ItemUtil.getItemStack(Material.ORANGE_WOOL,
+                                      .addMode(1, ItemUtil.getItemStack(MENU_WOOL_ORANGE,
                                           LangUtil.getMessage(InvActions.getInstance(), "Reload.menu.name"),
                                           LangUtil.getMessages(InvActions.getInstance(), "Reload.menu.lore").toArray(new String[0])))
-                                      .addMode(0, ItemUtil.getItemStack(Material.BLACK_STAINED_GLASS_PANE, " "))
+                                      .addMode(0, MENU_GLASS_PANE)
                                       .setClickEffect(((player, clickType, itemStack) -> {
                                           if (!player.hasPermission("InvActions.admin")) {  //玩家没权限的时候
                                               return;
@@ -84,6 +110,7 @@ public class HandleCmd implements CommandExecutor {
                 Bukkit.getScheduler().runTask(InvActions.getInstance(), () -> {
                     menu.open(1);
                 });
+                MENU_CACHE.put((Player) sender, menu);
             }
         });
         return true;

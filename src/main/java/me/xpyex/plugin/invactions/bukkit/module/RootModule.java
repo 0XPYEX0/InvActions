@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.bukkit.inventory.Menu;
@@ -33,6 +34,7 @@ public class RootModule implements Listener {
         } catch (Throwable e) {
             InvActions.getInstance().getLogger().severe("无法为模块 " + getName() + " 注册监听器: " + e);
             e.printStackTrace();
+            return;
         }
 
         modules.add(this);
@@ -68,15 +70,15 @@ public class RootModule implements Listener {
                 }
                 return 1;
             })
-                   .addMode(-1, ItemUtil.getItemStack(Material.RED_WOOL,
+                   .addMode(-1, ItemUtil.getItemStack(HandleCmd.MENU_WOOL_RED,
                        getNationalMessage("menu.name"),
                        getMenuLore(-1)
                    ))
-                   .addMode(0, ItemUtil.getItemStack(Material.RED_WOOL,
+                   .addMode(0, ItemUtil.getItemStack(HandleCmd.MENU_WOOL_RED,
                        getNationalMessage("menu.name"),
                        getMenuLore(0)
                    ))
-                   .addMode(1, ItemUtil.getItemStack(Material.LIME_WOOL,
+                   .addMode(1, ItemUtil.getItemStack(HandleCmd.MENU_WOOL_GREEN,
                        getNationalMessage("menu.name"),
                        getMenuLore(1)
                    ))
