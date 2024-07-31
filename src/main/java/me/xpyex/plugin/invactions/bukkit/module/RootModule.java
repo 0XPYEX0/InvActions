@@ -44,6 +44,7 @@ public class RootModule implements Listener {
 
     protected boolean canLoad() {
         return true;
+        //
     }
 
     public final String getNationalMessage(String key, Object... toFormatObj) {
