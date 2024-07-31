@@ -12,6 +12,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -24,10 +25,11 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Versions (please complete the following information):**
- - OS: [e.g. Windows]
- - Minecraft [e.g. 1.16.5]
- - Server Core [e.g. Paper-git-111]
- - InvActions [e.g. 1.0.7]
+
+- OS: [e.g. Windows]
+- Minecraft [e.g. 1.16.5]
+- Server Core [e.g. Paper-git-111]
+- InvActions [e.g. 1.0.7]
 
 **Additional context**
 Add any other context about the problem here.

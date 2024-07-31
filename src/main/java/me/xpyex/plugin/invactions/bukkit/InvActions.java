@@ -23,9 +23,6 @@ import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
 import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
 import me.xpyex.plugin.xplib.util.value.ValueUtil;
 import me.xpyex.plugin.xplib.util.version.UpdateUtil;
-import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
 public final class InvActions extends XPPlugin {

@@ -1,10 +1,9 @@
 # InvActions
+
 **按F进入坦克(不是)**
 **按F整理各种东西**
 
-
 ***本插件需要XPLib作为前置 https://github.com/0XPYEX0/XPLib/releases ***
-
 
 ```
 按下Shift+F 整理看向的容器
