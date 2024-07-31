@@ -3,12 +3,13 @@ package me.xpyex.plugin.invactions.bukkit.module;
 import java.util.Collection;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
-import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
-import me.xpyex.plugin.xplib.bukkit.util.language.LangUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
+import me.xpyex.plugin.xplib.bukkit.inventory.ItemUtil;
+import me.xpyex.plugin.xplib.bukkit.language.LangUtil;
+import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
+import me.xpyex.plugin.xplib.util.strings.StrUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class AutoFarmer extends RootModule {
+    @Override
+    protected boolean canLoad() {
+        try {
+            Block.class.getMethod("getBlockData");
+            return true;
+        } catch (NoSuchMethodError | NoSuchMethodException e) {
+            return false;
+        }
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onRightClick(PlayerInteractEvent event) {
         if (serverEnabled() && playerEnabled(event.getPlayer())) {  //如果玩家开启自动收割

@@ -4,14 +4,14 @@ import java.util.WeakHashMap;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.module.RootModule;
+import me.xpyex.plugin.xplib.bukkit.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.inventory.InvBuilder;
+import me.xpyex.plugin.xplib.bukkit.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.inventory.Menu;
 import me.xpyex.plugin.xplib.bukkit.inventory.button.UnmodifiableButton;
-import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
-import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
-import me.xpyex.plugin.xplib.bukkit.util.language.LangUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
-import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
+import me.xpyex.plugin.xplib.bukkit.language.LangUtil;
+import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
+import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -23,19 +23,19 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class HandleCmd implements CommandExecutor {
+    public static final ItemStack MENU_WOOL_RED;
+    public static final ItemStack MENU_WOOL_GREEN;
     private static final String[] menuID = "abcdefghijklmnopqrstuvwxyz".split("");
     private static final WeakHashMap<Player, Menu> MENU_CACHE = new WeakHashMap<>();
     private static final ItemStack MENU_GLASS_PANE;
     private static final ItemStack MENU_WOOL_ORANGE;
-    public static final ItemStack MENU_WOOL_RED;
-    public static final ItemStack MENU_WOOL_GREEN;
 
     static {
         MENU_WOOL_ORANGE = ItemUtil.getItemStack(Material.getMaterial((VersionUtil.getMainVersion() >= 13 ? "ORANGE_" : "") + "WOOL"), " ");
         MENU_WOOL_RED = ItemUtil.getItemStack(Material.getMaterial((VersionUtil.getMainVersion() >= 13 ? "RED_" : "") + "WOOL"), " ");
         MENU_WOOL_GREEN = ItemUtil.getItemStack(Material.getMaterial((VersionUtil.getMainVersion() >= 13 ? "GREEN_" : "") + "WOOL"), " ");
         MENU_GLASS_PANE = ItemUtil.getItemStack(Material.getMaterial((VersionUtil.getMainVersion() >= 13 ? "BLACK_" : "") + "STAINED_GLASS_PANE"), " ");
-        if (VersionUtil.getMainVersion() >= 13) {
+        if (VersionUtil.getMainVersion() < 13) {
             MENU_WOOL_ORANGE.setDurability((short) 1);
             MENU_WOOL_GREEN.setDurability((short) 5);
             MENU_WOOL_RED.setDurability((short) 14);
@@ -86,8 +86,8 @@ public class HandleCmd implements CommandExecutor {
 
                 Menu menu = new Menu((Player) sender);
                 menu.setPage(1, new InvBuilder("InvActions-设定-" + sender.getName(), "#########", "#abcdefg#", "#hijk   #", "########A")
-                                        .setSign("#", MENU_GLASS_PANE)
-                                        .setSign(" ", Material.AIR))
+                                    .setSign("#", MENU_GLASS_PANE)
+                                    .setSign(" ", Material.AIR))
                     .setSign("A", new UnmodifiableButton(menu, (player -> player.hasPermission("InvActions.admin") ? 1 : 0))
                                       .addMode(1, ItemUtil.getItemStack(MENU_WOOL_ORANGE,
                                           LangUtil.getMessage(InvActions.getInstance(), "Reload.menu.name"),

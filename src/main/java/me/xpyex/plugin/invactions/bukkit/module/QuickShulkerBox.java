@@ -1,6 +1,8 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
+import me.xpyex.plugin.xplib.util.reflect.FieldUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -8,10 +10,13 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,7 +25,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class QuickShulkerBox extends RootModule {
     private static final String METADATA_KEY = "InvActions_Shulker";
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
         if (serverEnabled()) {
@@ -34,7 +39,9 @@ public class QuickShulkerBox extends RootModule {
                         BlockState state = ((BlockStateMeta) meta).getBlockState();
                         if (state instanceof ShulkerBox) {
                             event.setCancelled(true);
-                            event.getWhoClicked().openInventory(((ShulkerBox) state).getInventory());
+                            Inventory inventory = Bukkit.createInventory(event.getWhoClicked(), 27);
+                            inventory.setContents(((ShulkerBox) state).getInventory().getContents());
+                            event.getWhoClicked().openInventory(inventory);
                             event.getWhoClicked().setMetadata(METADATA_KEY, new FixedMetadataValue(InvActions.getInstance(), event.getCurrentItem()));
                             ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1f, 1f);
                         }
@@ -59,7 +66,9 @@ public class QuickShulkerBox extends RootModule {
                     BlockState state = ((BlockStateMeta) meta).getBlockState();
                     if (state instanceof ShulkerBox) {
                         event.setCancelled(true);
-                        event.getPlayer().openInventory(((ShulkerBox) state).getInventory());
+                        Inventory inventory = Bukkit.createInventory(event.getPlayer(), 27);
+                        inventory.setContents(((ShulkerBox) state).getInventory().getContents());
+                        event.getPlayer().openInventory(inventory);
                         event.getPlayer().setMetadata(METADATA_KEY, new FixedMetadataValue(InvActions.getInstance(), event.getItem()));
                         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1f, 1f);
                     }

@@ -3,7 +3,7 @@ package me.xpyex.plugin.invactions.bukkit.module;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
-import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
+import me.xpyex.plugin.xplib.bukkit.config.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

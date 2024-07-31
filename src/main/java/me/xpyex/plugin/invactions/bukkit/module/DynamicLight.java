@@ -4,11 +4,12 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
-import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
+import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
+import me.xpyex.plugin.xplib.util.strings.StrUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -19,11 +20,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class DynamicLight extends RootModule {
     private static final WeakHashMap<UUID, Location> PLAYER_DYNAMIC_LIGHT = new WeakHashMap<>();
     private static final String[] LIGHTS = {"LANTERN", "TORCH", "GLOW", "ShroomLight", "FrogLight", "END_ROD", "CampFire", "LAVA"};
-    private static final BlockData LIGHT_DATA;
+    private static BlockData LIGHT_DATA;
 
-    static {
-        Material light = Material.getMaterial("LIGHT");  //1.17的光源方块.
-        LIGHT_DATA = Bukkit.createBlockData(light != null ? light : Material.TORCH);  //除了火把外的大部分光源都有碰撞箱，所以选火把
+    @Override
+    protected boolean canLoad() {
+        try {
+            Block.class.getMethod("getBlockData");  //1.13+
+            Material light = Material.getMaterial("LIGHT");  //1.17的光源方块.
+            LIGHT_DATA = Bukkit.createBlockData(light != null ? light : Material.TORCH);  //除了火把外的大部分光源都有碰撞箱，所以选火把
+            registerTask();
+            return true;
+        } catch (NoSuchMethodError | NoSuchMethodException ignored) {
+            return false;
+        }
     }
 
     public void registerTask() {

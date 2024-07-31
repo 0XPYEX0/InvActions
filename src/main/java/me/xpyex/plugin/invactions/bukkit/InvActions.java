@@ -17,12 +17,12 @@ import me.xpyex.plugin.invactions.bukkit.module.QuickShulkerBox;
 import me.xpyex.plugin.invactions.bukkit.module.ReplaceBrokenArmor;
 import me.xpyex.plugin.invactions.bukkit.module.SortContainer;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
-import me.xpyex.plugin.xplib.bukkit.api.Version;
+import me.xpyex.plugin.xplib.api.Version;
+import me.xpyex.plugin.xplib.bukkit.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
-import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
-import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
-import me.xpyex.plugin.xplib.bukkit.util.version.UpdateUtil;
-import me.xpyex.plugin.xplib.bukkit.util.version.VersionUtil;
+import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
+import me.xpyex.plugin.xplib.util.value.ValueUtil;
+import me.xpyex.plugin.xplib.util.version.UpdateUtil;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -148,8 +148,11 @@ public final class InvActions extends XPPlugin {
 
     public void registerListeners() {
         new AutoFarmer();
+        new AutoTool();
         new BetterInfinity();
+        new BetterLoyalty();
         new CraftDrop();
+        new DynamicLight();
         registerListener(new HandleEvent());
         new QuickDrop();
         new QuickMove();
@@ -162,27 +165,6 @@ public final class InvActions extends XPPlugin {
             registerListener(new InventoryF());
         } catch (Throwable ignored) {
             getLogger().warning("您的服务器不支持在玩家背包内按F整理，该功能已被禁用");
-        }
-
-        try {
-            Block.class.getMethod("getBreakSpeed", Player.class);  //1.17+
-            new AutoTool();
-        } catch (NoSuchMethodError | NoSuchMethodException ignored) {
-            getLogger().warning("您的服务器不支持AutoTool，该功能已禁用");
-        }
-
-        try {
-            Enchantment.LOYALTY.getMaxLevel();
-            new BetterLoyalty();
-        } catch (NoSuchFieldError ignored) {
-            getLogger().warning("您的服务器不支持BetterLoyalty");
-        }
-
-        try {
-            Block.class.getMethod("getBlockData");  //1.13+
-            new DynamicLight().registerTask();
-        } catch (NoSuchMethodError | NoSuchMethodException ignored) {
-            getLogger().warning("您的服务器不支持DynamicLight，该功能已禁用");
         }
     }
 }

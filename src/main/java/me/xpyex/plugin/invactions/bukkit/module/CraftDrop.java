@@ -1,7 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
+import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.ClickType;

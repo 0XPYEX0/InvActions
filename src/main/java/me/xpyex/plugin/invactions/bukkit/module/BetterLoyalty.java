@@ -1,7 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
+import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -14,6 +14,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class BetterLoyalty extends RootModule {
     //不会有人视距设为1吧？不会吧不会吧
     private static final int SERVER_DIS = (Math.max(Bukkit.getServer().getViewDistance() - 1, 1) * 16) + 10;
+
+    @Override
+    protected boolean canLoad() {
+        try {
+            Enchantment.LOYALTY.getMaxLevel();
+            return true;
+        } catch (NoSuchFieldError ignored) {
+            return false;
+        }
+    }
 
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {

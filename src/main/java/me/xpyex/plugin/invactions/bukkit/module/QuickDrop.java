@@ -1,7 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
-import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
+import me.xpyex.plugin.xplib.bukkit.inventory.ItemUtil;
+import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;

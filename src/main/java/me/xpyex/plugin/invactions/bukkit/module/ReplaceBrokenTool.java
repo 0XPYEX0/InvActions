@@ -2,8 +2,8 @@ package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
+import me.xpyex.plugin.xplib.bukkit.inventory.ItemUtil;
+import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;

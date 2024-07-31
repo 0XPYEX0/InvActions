@@ -4,12 +4,15 @@ import java.util.HashMap;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.enums.ToolType;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.xplib.bukkit.api.Pair;
-import me.xpyex.plugin.xplib.bukkit.util.strings.MsgUtil;
-import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
-import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
+import me.xpyex.plugin.xplib.api.Pair;
+import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
+import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
+import me.xpyex.plugin.xplib.util.strings.StrUtil;
+import me.xpyex.plugin.xplib.util.value.ValueUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -22,10 +25,20 @@ public class AutoTool extends RootModule {
     static {
         TOOLS.put(ToolType.AXE, new ItemStack(Material.DIAMOND_AXE));
         TOOLS.put(ToolType.PICKAXE, new ItemStack(Material.DIAMOND_PICKAXE));
-        TOOLS.put(ToolType.SHOVEL, new ItemStack(Material.DIAMOND_SHOVEL));
+        TOOLS.put(ToolType.SHOVEL, new ItemStack(Material.getMaterial("DIAMOND_" + (VersionUtil.getMainVersion() >= 13 ? "SHOVEL" : "SPADE"))));
         TOOLS.put(ToolType.HOE, new ItemStack(Material.DIAMOND_HOE));  //割稻草块
         TOOLS.put(ToolType.SWORD, new ItemStack(Material.DIAMOND_SWORD));  //蜘蛛丝、树叶
         TOOLS.put(ToolType.SHEARS, new ItemStack(Material.SHEARS));  //剪刀: 羊毛 蜘蛛丝 树叶
+    }
+
+    @Override
+    protected boolean canLoad() {
+        try {
+            Block.class.getMethod("getBreakSpeed", Player.class);  //1.17+
+            return true;
+        } catch (NoSuchMethodError | NoSuchMethodException ignored) {
+            return false;
+        }
     }
 
     @EventHandler(ignoreCancelled = true)

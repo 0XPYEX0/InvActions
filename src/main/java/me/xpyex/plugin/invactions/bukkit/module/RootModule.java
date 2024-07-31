@@ -7,15 +7,14 @@ import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
+import me.xpyex.plugin.xplib.bukkit.config.ConfigUtil;
+import me.xpyex.plugin.xplib.bukkit.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.inventory.Menu;
 import me.xpyex.plugin.xplib.bukkit.inventory.button.Button;
 import me.xpyex.plugin.xplib.bukkit.inventory.button.UnmodifiableButton;
-import me.xpyex.plugin.xplib.bukkit.util.config.ConfigUtil;
-import me.xpyex.plugin.xplib.bukkit.util.inventory.ItemUtil;
-import me.xpyex.plugin.xplib.bukkit.util.language.LangUtil;
-import me.xpyex.plugin.xplib.bukkit.util.reflect.FieldUtil;
-import me.xpyex.plugin.xplib.bukkit.util.value.ValueUtil;
-import org.bukkit.Material;
+import me.xpyex.plugin.xplib.bukkit.language.LangUtil;
+import me.xpyex.plugin.xplib.util.reflect.FieldUtil;
+import me.xpyex.plugin.xplib.util.value.ValueUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -29,15 +28,22 @@ public class RootModule implements Listener {
     }
 
     public RootModule() {
-        try {
-            InvActions.getInstance().registerListener(this);
-        } catch (Throwable e) {
-            InvActions.getInstance().getLogger().severe("无法为模块 " + getName() + " 注册监听器: " + e);
-            e.printStackTrace();
-            return;
+        if (canLoad()) {
+            try {
+                InvActions.getInstance().registerListener(this);
+            } catch (Throwable e) {
+                InvActions.getInstance().getLogger().severe("无法为模块 " + getName() + " 注册监听器: " + e);
+                e.printStackTrace();
+            }
+        } else {
+            InvActions.getInstance().getLogger().warning("您的服务器不支持使用 " + getName() + " ，已自动禁用");
         }
 
         modules.add(this);
+    }
+
+    protected boolean canLoad() {
+        return true;
     }
 
     public final String getNationalMessage(String key, Object... toFormatObj) {
@@ -104,6 +110,7 @@ public class RootModule implements Listener {
     }
 
     public boolean serverEnabled() {
+        if (!canLoad()) return false;
         try {
             return FieldUtil.<Boolean>getObjectField(InvActionsServerConfig.getConfig(), getName());
         } catch (ReflectiveOperationException ignored) {

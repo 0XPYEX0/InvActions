@@ -1,6 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.enums;
 
-import me.xpyex.plugin.xplib.bukkit.util.strings.StrUtil;
+import me.xpyex.plugin.xplib.util.strings.StrUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
