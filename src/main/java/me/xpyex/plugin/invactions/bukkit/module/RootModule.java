@@ -22,15 +22,15 @@ import org.bukkit.event.Listener;
 public class RootModule implements Listener {
     public static String SETTING_HELP = "&e该功能在 &f/InvActions &e中调整";
     public static ArrayList<RootModule> modules = new ArrayList<>();
+    private final boolean canLoad;
 
     static {
         ValueUtil.ifPresent(LangUtil.getMessage(InvActions.getInstance(), "ActionBarSuffix"), s -> SETTING_HELP = s);
     }
 
-    public void registerCustomListener() {}
-
     public RootModule() {
-        if (canLoad()) {
+        this.canLoad = canLoad();  //只获取一次，避免性能浪费. 在此之后的逻辑都不应再调用canLoad()方法
+        if (canLoad) {
             try {
                 InvActions.getInstance().registerListener(this);
                 registerCustomListener();
@@ -43,6 +43,9 @@ public class RootModule implements Listener {
         }
 
         modules.add(this);
+    }
+
+    public void registerCustomListener() {
     }
 
     protected boolean canLoad() {
@@ -114,7 +117,7 @@ public class RootModule implements Listener {
     }
 
     public boolean serverEnabled() {
-        if (!canLoad()) return false;
+        if (!canLoad) return false;
         try {
             return FieldUtil.<Boolean>getObjectField(InvActionsServerConfig.getConfig(), getName());
         } catch (ReflectiveOperationException ignored) {
@@ -123,6 +126,7 @@ public class RootModule implements Listener {
     }
 
     public boolean playerEnabled(Player player) {
+        if (!canLoad) return false;
         try {
             return FieldUtil.<Boolean>getObjectField(SettingsUtil.getConfig(player), getName());
         } catch (ReflectiveOperationException ignored) {
