@@ -24,24 +24,27 @@ public class QuickShulkerBox extends RootModule {
     @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
-        if (serverEnabled()) {
-            if (playerEnabled((Player) event.getWhoClicked())) {
-                if (event.isShiftClick() && event.isRightClick()) {
-                    if (event.getCursor() != null || event.getCursor().getType() != Material.AIR)
-                        return;
-                    if (event.getCurrentItem() == null) return;
-                    if (event.getCurrentItem().getAmount() != 1) return;
-                    ItemMeta meta = event.getCurrentItem().getItemMeta();
-                    if (meta instanceof BlockStateMeta) {  //此处同时判断 != null
-                        BlockState state = ((BlockStateMeta) meta).getBlockState();
-                        if (state instanceof ShulkerBox) {
-                            event.setCancelled(true);
+        if (serverEnabled() && playerEnabled((Player) event.getWhoClicked())) {
+            if (event.isShiftClick() && event.isRightClick()) {
+                if (event.getCursor() != null || event.getCursor().getType() != Material.AIR)
+                    return;
+                if (event.getCurrentItem() == null) return;
+                if (event.getCurrentItem().getAmount() != 1) return;
+                ItemMeta meta = event.getCurrentItem().getItemMeta();
+                if (meta instanceof BlockStateMeta) {  //此处同时判断 != null
+                    BlockState state = ((BlockStateMeta) meta).getBlockState();
+                    if (state instanceof ShulkerBox) {
+                        event.setCancelled(true);
+                        Inventory boxInv = ((ShulkerBox) state).getInventory();
+                        try {
+                            event.getWhoClicked().openInventory(boxInv);
+                        } catch (Throwable e) {
                             Inventory inventory = Bukkit.createInventory(event.getWhoClicked(), 27);
-                            inventory.setContents(((ShulkerBox) state).getInventory().getContents());
+                            inventory.setContents(boxInv.getContents());
                             event.getWhoClicked().openInventory(inventory);
-                            event.getWhoClicked().setMetadata(METADATA_KEY, new FixedMetadataValue(InvActions.getInstance(), event.getCurrentItem()));
-                            ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1f, 1f);
                         }
+                        event.getWhoClicked().setMetadata(METADATA_KEY, new FixedMetadataValue(InvActions.getInstance(), event.getCurrentItem()));
+                        ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1f, 1f);
                     }
                 }
             }
@@ -50,23 +53,25 @@ public class QuickShulkerBox extends RootModule {
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
-        if (!serverEnabled()) {
-            return;
-        }
-        if (!playerEnabled(event.getPlayer())) {
+        if (!serverEnabled() || !playerEnabled(event.getPlayer())) {
             return;
         }
         if (event.getPlayer().isSneaking() && event.getAction().toString().startsWith("RIGHT_")) {
-            if (event.getItem() != null && event.getItem().hasItemMeta()) {
+            if (event.getItem() != null) {
                 if (event.getItem().getAmount() != 1) return;
                 ItemMeta meta = event.getItem().getItemMeta();
-                if (meta instanceof BlockStateMeta) {
+                if (meta instanceof BlockStateMeta) {  //判断not null
                     BlockState state = ((BlockStateMeta) meta).getBlockState();
                     if (state instanceof ShulkerBox) {
                         event.setCancelled(true);
-                        Inventory inventory = Bukkit.createInventory(event.getPlayer(), 27);
-                        inventory.setContents(((ShulkerBox) state).getInventory().getContents());
-                        event.getPlayer().openInventory(inventory);
+                        Inventory boxInv = ((ShulkerBox) state).getInventory();
+                        try {
+                            event.getPlayer().openInventory(boxInv);
+                        } catch (Throwable e) {
+                            Inventory inventory = Bukkit.createInventory(event.getPlayer(), 27);
+                            inventory.setContents(boxInv.getContents());
+                            event.getPlayer().openInventory(inventory);
+                        }
                         event.getPlayer().setMetadata(METADATA_KEY, new FixedMetadataValue(InvActions.getInstance(), event.getItem()));
                         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1f, 1f);
                     }

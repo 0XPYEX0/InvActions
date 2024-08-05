@@ -23,12 +23,17 @@ public class DynamicLight extends RootModule {
     private static BlockData LIGHT_DATA;
 
     @Override
+    public void registerCustomListener() {
+        registerTask();
+        //
+    }
+
+    @Override
     protected boolean canLoad() {
         try {
             Block.class.getMethod("getBlockData");  //1.13+
             Material light = Material.getMaterial("LIGHT");  //1.17的光源方块.
             LIGHT_DATA = Bukkit.createBlockData(light != null ? light : Material.TORCH);  //除了火把外的大部分光源都有碰撞箱，所以选火把
-            registerTask();
             return true;
         } catch (NoSuchMethodError | NoSuchMethodException ignored) {
             return false;

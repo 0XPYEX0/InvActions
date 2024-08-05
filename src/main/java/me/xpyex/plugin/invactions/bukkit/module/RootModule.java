@@ -27,10 +27,13 @@ public class RootModule implements Listener {
         ValueUtil.ifPresent(LangUtil.getMessage(InvActions.getInstance(), "ActionBarSuffix"), s -> SETTING_HELP = s);
     }
 
+    public void registerCustomListener() {}
+
     public RootModule() {
         if (canLoad()) {
             try {
                 InvActions.getInstance().registerListener(this);
+                registerCustomListener();
             } catch (Throwable e) {
                 InvActions.getInstance().getLogger().severe("无法为模块 " + getName() + " 注册监听器: " + e);
                 e.printStackTrace();
