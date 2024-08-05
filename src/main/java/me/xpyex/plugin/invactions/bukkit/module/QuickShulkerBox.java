@@ -27,9 +27,10 @@ public class QuickShulkerBox extends RootModule {
         if (serverEnabled()) {
             if (playerEnabled((Player) event.getWhoClicked())) {
                 if (event.isShiftClick() && event.isRightClick()) {
-                    if (event.getCursor() != null && event.getCursor().getType() != Material.AIR)
+                    if (event.getCursor() != null || event.getCursor().getType() != Material.AIR)
                         return;
                     if (event.getCurrentItem() == null) return;
+                    if (event.getCurrentItem().getAmount() != 1) return;
                     ItemMeta meta = event.getCurrentItem().getItemMeta();
                     if (meta instanceof BlockStateMeta) {  //此处同时判断 != null
                         BlockState state = ((BlockStateMeta) meta).getBlockState();
@@ -57,6 +58,7 @@ public class QuickShulkerBox extends RootModule {
         }
         if (event.getPlayer().isSneaking() && event.getAction().toString().startsWith("RIGHT_")) {
             if (event.getItem() != null && event.getItem().hasItemMeta()) {
+                if (event.getItem().getAmount() != 1) return;
                 ItemMeta meta = event.getItem().getItemMeta();
                 if (meta instanceof BlockStateMeta) {
                     BlockState state = ((BlockStateMeta) meta).getBlockState();
