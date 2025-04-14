@@ -3,7 +3,6 @@ package me.xpyex.plugin.invactions.bukkit.module;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.xplib.bukkit.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,7 +35,8 @@ public class QuickMove extends RootModule {
             ItemStack item = new ItemStack(event.getCursor());
             if (event.getClickedInventory() == null) {  //这就是丢出
                 ItemStack tool;
-                if (!ItemUtil.equals(item, event.getWhoClicked().getInventory().getItemInMainHand())) {
+                ItemStack i2 = event.getWhoClicked().getInventory().getItemInMainHand();
+                if (!item.isSimilar(i2)) {
                     tool = new ItemStack(event.getWhoClicked().getInventory().getItemInMainHand());  //保存手上道具，待会set回去，下面丢出会覆盖主手道具
                 } else {
                     tool = null;
@@ -45,7 +45,7 @@ public class QuickMove extends RootModule {
                 for (ItemStack content : event.getWhoClicked().getInventory().getStorageContents()) {
                     if (content == null || ItemType.isAir(content.getType())) continue;
 
-                    if (ItemUtil.equals(content, item)) {
+                    if (content.isSimilar(item)) {
                         ItemStack copied = new ItemStack(content);
                         event.getWhoClicked().getInventory().setItemInMainHand(copied);
                         content.setAmount(0);
@@ -59,7 +59,7 @@ public class QuickMove extends RootModule {
                         ItemStack content = event.getWhoClicked().getOpenInventory().getTopInventory().getItem(i);
                         if (content == null || ItemType.isAir(content.getType())) continue;
 
-                        if (ItemUtil.equals(content, item)) {
+                        if (content.isSimilar(item)) {
                             InventoryClickEvent clickEvent = new InventoryClickEvent(event.getView(), InventoryType.SlotType.OUTSIDE, i, ClickType.DROP, InventoryAction.DROP_ALL_SLOT);
                             Bukkit.getPluginManager().callEvent(clickEvent);
                             if (clickEvent.isCancelled()) {
@@ -102,7 +102,7 @@ public class QuickMove extends RootModule {
 
                         if (content == null || ItemType.isAir(content.getType())) continue;
 
-                        if (ItemUtil.equals(content, item)) {
+                        if (content.isSimilar(item)) {
                             InventoryClickEvent clickEvent = new InventoryClickEvent(event.getView(), InventoryType.SlotType.CONTAINER, i, ClickType.SHIFT_LEFT, InventoryAction.MOVE_TO_OTHER_INVENTORY);
                             Bukkit.getPluginManager().callEvent(clickEvent);  //从容器移动到玩家背包
                             if (clickEvent.isCancelled()) {
@@ -127,7 +127,7 @@ public class QuickMove extends RootModule {
 
                         if (content == null || ItemType.isAir(content.getType())) continue;
 
-                        if (ItemUtil.equals(content, item)) {
+                        if (content.isSimilar(item)) {
                             InventoryClickEvent clickEvent = new InventoryClickEvent(event.getView(), InventoryType.SlotType.CONTAINER, i, ClickType.SHIFT_LEFT, InventoryAction.MOVE_TO_OTHER_INVENTORY);
                             if (clickEvent.isCancelled()) {  //从玩家背包移动到容器
                                 continue;

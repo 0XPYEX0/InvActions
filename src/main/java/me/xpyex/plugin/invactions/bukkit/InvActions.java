@@ -1,5 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
@@ -22,14 +23,20 @@ import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.plugin.xplib.api.Version;
 import me.xpyex.plugin.xplib.bukkit.config.ConfigUtil;
 import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
+import me.xpyex.plugin.xplib.bukkit.inventory.HandleMenu;
+import me.xpyex.plugin.xplib.bukkit.inventory.Menu;
 import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
+import me.xpyex.plugin.xplib.util.reflect.MethodUtil;
 import me.xpyex.plugin.xplib.util.value.ValueUtil;
 import me.xpyex.plugin.xplib.util.version.UpdateUtil;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public final class InvActions extends XPPlugin {
-    private static final String XPLIB_VER = "1.1.5";
     private static InvActions INSTANCE;
 
     public static InvActions getInstance() {
@@ -39,6 +46,9 @@ public final class InvActions extends XPPlugin {
 
     @Override
     public void onDisable() {
+        for (Menu menu : Menu.getMenus().values()) {
+            menu.getPlayer().closeInventory();
+        }
         ConfigUtil.reload(getInstance());
         getLogger().info("已卸载");
     }
@@ -67,7 +77,7 @@ public final class InvActions extends XPPlugin {
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
             getLogger().info("开始检查更新");
-            ValueUtil.optional(UpdateUtil.getUpdateFromGitee(getInstance()), ver -> {
+            ValueUtil.optional(UpdateUtil.getUpdateFromGitHub(getInstance()), ver -> {
                 getLogger().info("当前插件版本: " + getInstance().getDescription().getVersion() + " ,有一个更新的版本: " + ver);
                 getLogger().info("前往 https://gitee.com/XPYEX/InvActions/releases 下载吧！");
             }, () -> getLogger().info("当前版本已是最新！"));
@@ -105,27 +115,11 @@ public final class InvActions extends XPPlugin {
     }
 
     public boolean initCheck() {
-        if (!getServer().getPluginManager().isPluginEnabled("XPLib")) {
-            getLogger().severe("本插件需要XPLib作为前置...");
-            getLogger().severe("请在下载后，再加载本插件");
-            getLogger().severe("GitHub: https://github.com/0XPYEX0/XPLib/releases");
-            getLogger().severe("Gitee(国内): https://gitee.com/XPYEX/XPLib/releases");
-            return false;
-        }
+        initXPLib();
 
         if (VersionUtil.getMainVersion() < 9) {
             getLogger().severe("本插件需要Minecraft至少为1.9才可运行");
             getLogger().severe("很遗憾，您的服务器不满足此条件...");
-            return false;
-        }
-
-        if (!VersionUtil.isUpperXPLib(new Version(XPLIB_VER))) {
-            getLogger().severe("请更新您服务器内的XPLib！");
-            getLogger().severe("当前XPLib无法支持本插件");
-            getLogger().severe("需要: " + XPLIB_VER + " , 当前: " + VersionUtil.getXPLibVersion().getVersion());
-            getLogger().severe("GitHub: https://github.com/0XPYEX0/XPLib/releases");
-            getLogger().severe("Gitee(国内): https://gitee.com/XPYEX/XPLib/releases");
-            getServer().getPluginManager().disablePlugin(getInstance());
             return false;
         }
 
@@ -135,7 +129,7 @@ public final class InvActions extends XPPlugin {
     public void updateServerConfig() {
         ConfigUtil.saveConfig(getInstance(), "config", InvActionsServerConfig.getDefault(), false, false);
         //如果原先没有文件，先新建一份
-        ConfigUtil.saveConfig(getInstance(), "config", getJsonConfig(InvActionsServerConfig.class), true);
+        ConfigUtil.saveConfig(getInstance(), "config", ConfigUtil.getConfig(this, InvActionsServerConfig.class), true);
         //更新服务端config.json
     }
 
@@ -168,5 +162,34 @@ public final class InvActions extends XPPlugin {
         } catch (Throwable ignored) {
             getLogger().warning("您的服务器不支持在玩家背包内按F整理，该功能已被禁用");
         }
+    }
+
+    public void initXPLib() {
+        Plugin xpLib = getServer().getPluginManager().getPlugin("XPLib");
+        if (xpLib != null) {  //装了XPLib
+            getLogger().info("XPLib已退出历史舞台，不再需要安装它，已自动删除");
+            if (xpLib.getDescription().getAuthors().contains("XPYEX")) {  //是不是我写的
+                if (xpLib.getClass().getClassLoader() instanceof URLClassLoader) {
+                    try {
+                        File file = MethodUtil.executeInstanceMethod(xpLib, "getFile");
+                        ((URLClassLoader) xpLib.getClass().getClassLoader()).close();  //直接准备删了
+                        file.delete();
+                        getLogger().info("已删除XPLib文件: " + file.getAbsolutePath());
+                    } catch (IOException | ReflectiveOperationException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        getLogger().info("当前服务端核心版本: " + getServer().getBukkitVersion());
+        saveResource("minecraft/zh_cn.json", false);
+        registerListener(new HandleMenu());
+        getServer().getScheduler().runTaskTimerAsynchronously(getInstance(), () -> {
+            for (Menu menu : Menu.getMenus().values()) {
+                menu.updateInventory();
+            }
+        }, 0L, 5L);
+        getLogger().info("已加载");
     }
 }

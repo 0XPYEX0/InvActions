@@ -1,6 +1,5 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
-import me.xpyex.plugin.xplib.bukkit.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -17,7 +16,7 @@ public class QuickDrop extends RootModule {
                 for (ItemStack content : event.getPlayer().getInventory().getStorageContents()) {
                     if (content == null) continue;
 
-                    if (ItemUtil.equals(content, drop)) {
+                    if (content.isSimilar(drop)) {
                         ItemStack copied = new ItemStack(content);
                         event.getPlayer().getInventory().setItemInMainHand(copied);
                         content.setAmount(0);

@@ -2,7 +2,6 @@ package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.xplib.bukkit.inventory.ItemUtil;
 import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,14 +20,15 @@ import org.bukkit.inventory.meta.Damageable;
 
 public class ReplaceBrokenTool extends RootModule {
     public void replaceTool(Player p, ItemStack before) {
-        EquipmentSlot slot = ItemUtil.equals(before, p.getInventory().getItemInMainHand()) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
+        ItemStack i2 = p.getInventory().getItemInMainHand();
+        EquipmentSlot slot = before.isSimilar(i2) ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
         if (serverEnabled() && playerEnabled(p)) {  //如果玩家开启了替换手中道具
             Bukkit.getScheduler().runTaskLater(InvActions.getInstance(), () -> {
                 if (p.getInventory().getItem(slot).getType() == Material.AIR) {
                     for (ItemStack content : p.getInventory().getContents()) {  //不遍历盔甲
                         if (content == null) continue;
 
-                        if (ItemUtil.equals(content, before)) {
+                        if (content.isSimilar(before)) {
                             ItemStack copied = new ItemStack(content);
                             p.getInventory().setItem(slot, copied);
                             content.setAmount(0);
