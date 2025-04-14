@@ -51,7 +51,7 @@ public class QuickShulkerBox extends RootModule {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onRightClick(PlayerInteractEvent event) {
         if (!serverEnabled() || !playerEnabled(event.getPlayer())) {
             return;
@@ -80,7 +80,7 @@ public class QuickShulkerBox extends RootModule {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent event) {
         if (event.getPlayer().hasMetadata(METADATA_KEY)) {
             if (event.getItemDrop().getItemStack().getType().toString().endsWith("SHULKER_BOX")) {
@@ -90,7 +90,7 @@ public class QuickShulkerBox extends RootModule {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onClick(InventoryClickEvent event) {
         if (event.getWhoClicked().hasMetadata(METADATA_KEY)) {
             if (event.getCurrentItem() != null && event.getCurrentItem().getType().toString().endsWith("SHULKER_BOX")) {
@@ -102,7 +102,7 @@ public class QuickShulkerBox extends RootModule {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInvClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
         if (event.getPlayer().hasMetadata(METADATA_KEY)) {

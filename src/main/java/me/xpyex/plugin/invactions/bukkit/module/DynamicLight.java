@@ -77,7 +77,7 @@ public class DynamicLight extends RootModule {
         }, 0L, 5L);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onShoot(ProjectileLaunchEvent event) {
         if (!serverEnabled()) return;
 

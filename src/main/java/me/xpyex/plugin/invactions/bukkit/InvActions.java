@@ -1,5 +1,7 @@
 package me.xpyex.plugin.invactions.bukkit;
 
+import java.io.IOException;
+import java.net.URLClassLoader;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
@@ -24,6 +26,7 @@ import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
 import me.xpyex.plugin.xplib.util.value.ValueUtil;
 import me.xpyex.plugin.xplib.util.version.UpdateUtil;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.plugin.Plugin;
 
 public final class InvActions extends XPPlugin {
     private static final String XPLIB_VER = "1.1.5";
@@ -70,33 +73,35 @@ public final class InvActions extends XPPlugin {
             }, () -> getLogger().info("当前版本已是最新！"));
         });
 
-        getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
-            String type = null;
-            try {
-                Class.forName("net.minecraftforge.common.MinecraftForge");
-                type = "Forge";
-            } catch (ClassNotFoundException ignored) {
-            }
-
-            try {
-                Class.forName("net.neoforged.neoforge.common.NeoForge");
-                type = "NeoForge";
-            } catch (ClassNotFoundException ignored) {
-            }
-
-            if (Package.getPackage("net.fabricmc.fabric") != null) {
-                type = "Fabric";
-            }
-
-            if (type != null) {
-                getLogger().warning("你目前运行在具有 " + type + " 的Hybrid服务端.");
-                getLogger().warning("由于Mod功能的实现方式影响，插件可能不会那么“正常”地运行，包括但不限于功能失效");
-            }
-        });
+        getServer().getScheduler().runTaskAsynchronously(getInstance(), this::checkHybrid);
 
         getLogger().info("已加载");
         getLogger().info("感谢使用InvActions. 本插件在GitHub开源，谨防受骗. 作者QQ1723275529");
         getLogger().info("GitHub: https://github.com/0XPYEX0/InvActions");
+    }
+
+    public void checkHybrid() {
+        String type = null;
+        try {
+            Class.forName("net.minecraftforge.common.MinecraftForge");
+            type = "Forge";
+        } catch (ClassNotFoundException ignored) {
+        }
+
+        try {
+            Class.forName("net.neoforged.neoforge.common.NeoForge");
+            type = "NeoForge";
+        } catch (ClassNotFoundException ignored) {
+        }
+
+        if (Package.getPackage("net.fabricmc.fabric") != null) {
+            type = "Fabric";
+        }
+
+        if (type != null) {
+            getLogger().warning("你目前运行在具有 " + type + " 的Hybrid服务端.");
+            getLogger().warning("由于Mod功能的实现方式影响，插件可能不会那么“正常”地运行，包括但不限于功能失效");
+        }
     }
 
     public boolean initCheck() {

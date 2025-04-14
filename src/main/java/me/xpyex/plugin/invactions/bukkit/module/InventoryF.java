@@ -10,8 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class InventoryF implements Listener {
-
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPressFWithInv(InventoryClickEvent event) {
         if (event.getClickedInventory() == null) {
             return;

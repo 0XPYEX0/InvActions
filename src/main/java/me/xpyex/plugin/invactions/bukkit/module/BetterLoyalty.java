@@ -25,7 +25,7 @@ public class BetterLoyalty extends RootModule {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         if (!serverEnabled()) {  //服务器未启用
             return;

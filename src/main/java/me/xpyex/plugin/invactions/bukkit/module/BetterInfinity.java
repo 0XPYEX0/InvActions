@@ -17,7 +17,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class BetterInfinity extends RootModule {
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onRightClick(PlayerInteractEvent event) {
         if (serverEnabled() && playerEnabled(event.getPlayer())) {
             if (event.getAction().toString().startsWith("RIGHT_") && event.getItem() != null && event.getHand() != null) {
@@ -41,14 +41,14 @@ public class BetterInfinity extends RootModule {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onChangeTool(PlayerItemHeldEvent event) {
         if (event.getPlayer().hasMetadata("InvActions_BetterInfinity")) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onSwapHand(PlayerSwapHandItemsEvent event) {
         if (event.getPlayer().hasMetadata("InvActions_BetterInfinity")) {
             event.setCancelled(true);

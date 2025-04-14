@@ -29,8 +29,7 @@ public class RootModule implements Listener {
     }
 
     public RootModule() {
-        this.canLoad = canLoad();  //只获取一次，避免性能浪费. 在此之后的逻辑都不应再调用canLoad()方法
-        if (canLoad) {
+        if (this.canLoad = canLoad()) {  //只获取一次，避免性能浪费. 在此之后的逻辑都不应再调用canLoad()方法
             try {
                 InvActions.getInstance().registerListener(this);
                 registerCustomListener();
