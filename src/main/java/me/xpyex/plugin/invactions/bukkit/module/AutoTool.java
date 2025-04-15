@@ -52,6 +52,7 @@ public class AutoTool extends RootModule {
         if (ItemType.getType(event.getPlayer().getInventory().getItemInMainHand()) == ItemType.WEAPON) {
             return;  //弓、剑、弩、三叉戟  不处理
         }
+        if (!isEndedCooldown(event.getPlayer(), 500)) return;  //每个玩家一秒内只能更换两次
         ValueUtil.ifPresent(event.getClickedBlock(), (block) -> {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (StrUtil.containsIgnoreCaseOr(ValueUtil.getOrDefault(event.getItem(), InvUtil.AIR_STACK).getType().toString(), "BOW")) {

@@ -22,6 +22,8 @@ public class BetterInfinity extends RootModule {
         if (serverEnabled() && playerEnabled(event.getPlayer())) {
             if (event.getAction().toString().startsWith("RIGHT_") && event.getItem() != null && event.getHand() != null) {
                 if (event.getItem().getType() == Material.BOW) {
+                    if (!isEndedCooldown(event.getPlayer(), 200)) return;  //每4tick使用一次
+
                     PlayerInventory playerInv = event.getPlayer().getInventory();
                     if (InvUtil.hasItemType(playerInv, Material.ARROW)) return;
                     if (event.getItem().getEnchantmentLevel(Enchantment.ARROW_INFINITE) <= 0) return;

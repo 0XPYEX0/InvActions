@@ -3,6 +3,7 @@ package me.xpyex.plugin.xplib.bukkit.inventory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import lombok.Getter;
 import me.xpyex.plugin.xplib.api.Pair;
 import me.xpyex.plugin.xplib.bukkit.inventory.button.Button;
 import me.xpyex.plugin.xplib.util.value.ValueUtil;
@@ -19,6 +20,7 @@ public class Menu {
     private final Player player;
     private final HashMap<Integer, InvBuilder> setters = new HashMap<>();
     private final HashMap<Integer, Inventory> pages = new HashMap<>();
+    @Getter
     private int openingPage;
 
     /**
@@ -183,16 +185,6 @@ public class Menu {
                 pages.get(getOpeningPage()).setItem(pair.getValue(), button.getStack());
             }
         });
-    }
-
-    /**
-     * 获取玩家当前打开的Menu页码
-     *
-     * @return Menu页码
-     */
-    public int getOpeningPage() {
-        return openingPage;
-        //
     }
 
     /**

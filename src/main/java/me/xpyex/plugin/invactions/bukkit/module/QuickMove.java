@@ -18,16 +18,12 @@ public class QuickMove extends RootModule {
     @EventHandler(ignoreCancelled = true)
     public void onClick(InventoryClickEvent event) {
         if (!serverEnabled()) return;
-        if (!(event.getWhoClicked() instanceof Player)) {
-            return;
-        }
+        if (!(event.getWhoClicked() instanceof Player)) return;
         if (!playerEnabled(((Player) event.getWhoClicked()))) return;
-        if (event.getWhoClicked().hasMetadata("InvActions_CallingClick")) {  //正在广播事件给插件处理，自己无需处理
-            return;
-        }
-        if (event.getWhoClicked().hasMetadata("InvActions_QuickDropping")) {
-            return;
-        }
+        if (event.getWhoClicked().hasMetadata("InvActions_CallingClick")) return;  //正在广播事件给插件处理，自己无需处理
+        if (event.getWhoClicked().hasMetadata("InvActions_QuickDropping")) return;
+        if (!isEndedCooldown(((Player) event.getWhoClicked()), 500)) return;  //一秒只能触发两次
+
         if (event.getClick() == ClickType.MIDDLE) {  //鼠标中键
             if (event.getCursor() == null || ItemType.isAir(event.getCursor().getType())) {  //光标拿着的物品
                 return;

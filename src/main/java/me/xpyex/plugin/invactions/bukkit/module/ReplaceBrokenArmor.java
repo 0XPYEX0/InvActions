@@ -12,6 +12,8 @@ import org.bukkit.inventory.ItemStack;
 public class ReplaceBrokenArmor extends RootModule {
     @EventHandler(ignoreCancelled = true)
     public void onItemBreak(PlayerItemBreakEvent event) {
+        if (!serverEnabled() || !playerEnabled(event.getPlayer())) return;  //如果玩家未开启替换盔甲
+
         EquipmentSlot slot = null;
         for (EquipmentSlot value : EquipmentSlot.values()) {
             if (event.getBrokenItem().equals(event.getPlayer().getInventory().getItem(value))) {
@@ -24,10 +26,6 @@ public class ReplaceBrokenArmor extends RootModule {
                 case HAND:
                 case OFF_HAND:
                     return;
-                default:
-                    if (!serverEnabled() || !playerEnabled(event.getPlayer())) {  //如果玩家未开启替换盔甲
-                        return;
-                    }
             }
             EquipmentSlot finalSlot = slot;
             ItemStack brokenItem = new ItemStack(event.getBrokenItem());

@@ -21,6 +21,10 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
     compileOnly 'org.jetbrains:annotations:23.1.0'
     compileOnly 'com.google.code.gson:gson:2.10'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 def targetJavaVersion = 8

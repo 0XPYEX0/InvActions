@@ -60,6 +60,7 @@ public class SortContainer extends RootModule {
         Bukkit.getScheduler().runTaskLaterAsynchronously(InvActions.getInstance(), () -> {
             event.getPlayer().updateInventory();  //修复物品暂时不可见(实际还存在)的Bug
         }, 2L);
+        if (!isEndedCooldown(event.getPlayer(), 1000)) return;  //每个玩家一秒内只能整理一次容器
         Block target = event.getPlayer().getTargetBlock(IGNORES, 10);
         if (target.getState() instanceof Container && event.getPlayer().isSneaking()) {  //看向容器了, Shift+F
             event.setCancelled(true);

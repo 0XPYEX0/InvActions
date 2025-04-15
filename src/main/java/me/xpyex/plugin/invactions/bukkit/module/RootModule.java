@@ -3,6 +3,9 @@ package me.xpyex.plugin.invactions.bukkit.module;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.WeakHashMap;
+import lombok.Getter;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
@@ -23,10 +26,14 @@ public class RootModule implements Listener {
     public static String SETTING_HELP = "&e该功能在 &f/InvActions &e中调整";
     public static ArrayList<RootModule> modules = new ArrayList<>();
     private final boolean canLoad;
+    private final WeakHashMap<UUID, Long> cooldown = new WeakHashMap<>();
 
     static {
         ValueUtil.ifPresent(LangUtil.getMessage(InvActions.getInstance(), "ActionBarSuffix"), s -> SETTING_HELP = s);
     }
+
+    @Getter
+    private final String name = getClass().getSimpleName();;
 
     public RootModule() {
         if (this.canLoad = canLoad()) {  //只获取一次，避免性能浪费. 在此之后的逻辑都不应再调用canLoad()方法
@@ -64,11 +71,6 @@ public class RootModule implements Listener {
 
     public final String getMessageWithSuffix(String key, Object... toFormatObj) {
         return getNationalMessage(key, toFormatObj) + " " + SETTING_HELP;
-    }
-
-    public String getName() {
-        return this.getClass().getSimpleName();
-        //
     }
 
     public Button getMenuButton(Menu menu) {
@@ -131,5 +133,21 @@ public class RootModule implements Listener {
         } catch (ReflectiveOperationException ignored) {
             return false;
         }
+    }
+
+    public long getCooldown(Player player) {
+        ValueUtil.mustTrue("玩家自身未启用该模块", playerEnabled(player));
+        if (!cooldown.containsKey(player.getUniqueId())) {
+            cooldown.put(player.getUniqueId(), 0L);
+        }
+        return cooldown.get(player.getUniqueId());
+    }
+
+    public boolean isEndedCooldown(Player player, long cooldown) {
+        if (getCooldown(player) + cooldown < System.currentTimeMillis()) {
+            this.cooldown.put(player.getUniqueId(), System.currentTimeMillis());
+            return true;
+        }
+        return false;
     }
 }

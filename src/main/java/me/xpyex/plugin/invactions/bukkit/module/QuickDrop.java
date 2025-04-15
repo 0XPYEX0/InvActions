@@ -10,6 +10,7 @@ public class QuickDrop extends RootModule {
     public void onDrop(PlayerDropItemEvent event) {
         if (!serverEnabled()) return;  //服务端未启用
         if (!playerEnabled(event.getPlayer())) return;  //玩家未启用
+        if (!isEndedCooldown(event.getPlayer(), 500)) return;  //每一秒只能触发两次
         if (event.getPlayer().isSneaking()) {
             ItemStack drop = event.getItemDrop().getItemStack();
             if (event.getPlayer().getInventory().contains(drop.getType())) {

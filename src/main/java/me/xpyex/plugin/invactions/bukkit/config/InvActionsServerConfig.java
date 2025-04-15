@@ -3,9 +3,13 @@ package me.xpyex.plugin.invactions.bukkit.config;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 public class InvActionsServerConfig extends InvActionsConfig {
     private static final InvActionsServerConfig DEFAULT = new InvActionsServerConfig();
+    @Getter
+    @Setter
     private static InvActionsServerConfig config;
     public boolean AutoFarmer_AllowPumpkinAndMelon = false;
     public boolean Debug = false;
@@ -14,16 +18,6 @@ public class InvActionsServerConfig extends InvActionsConfig {
 
     public InvActionsServerConfig() {
         setConfig(this);
-        //
-    }
-
-    public static InvActionsServerConfig getConfig() {
-        return config;
-        //
-    }
-
-    public static void setConfig(InvActionsServerConfig config) {
-        InvActionsServerConfig.config = config;
         //
     }
 

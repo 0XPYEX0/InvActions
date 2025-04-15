@@ -85,9 +85,12 @@ public class HandleCmd implements CommandExecutor {
                 }
 
                 Menu menu = new Menu((Player) sender);
-                menu.setPage(1, new InvBuilder("InvActions-设定-" + sender.getName(), "#########", "#abcdefg#", "#hijk   #", "########A")
-                                    .setSign("#", MENU_GLASS_PANE)
-                                    .setSign(" ", Material.AIR))
+                menu.setPage(1, new InvBuilder("InvActions-设定-" + sender.getName(),
+                        "#########",
+                        "#abcdefg#",
+                        "#hijk   #",
+                        "########A"
+                    ).setSign("#", MENU_GLASS_PANE))
                     .setSign("A", new UnmodifiableButton(menu, (player -> player.hasPermission("InvActions.admin") ? 1 : 0))
                                       .addMode(1, ItemUtil.getItemStack(MENU_WOOL_ORANGE,
                                           LangUtil.getMessage(InvActions.getInstance(), "Reload.menu.name"),
