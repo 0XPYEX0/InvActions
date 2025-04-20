@@ -34,6 +34,8 @@ public class AutoFarmer extends RootModule {
     public void onRightClick(PlayerInteractEvent event) {
         if (serverEnabled() && playerEnabled(event.getPlayer())) {  //如果玩家开启自动收割
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                if (!isEndedCooldown(event.getPlayer(), 100)) return;  //每2tick一次
+
                 if (ItemUtil.typeIsOr(event.getClickedBlock(), Material.MELON, Material.PUMPKIN)) {
                     if (InvActionsServerConfig.getConfig().AutoFarmer_AllowPumpkinAndMelon) return;
 
