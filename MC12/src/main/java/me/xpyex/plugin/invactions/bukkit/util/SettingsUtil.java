@@ -2,7 +2,7 @@ package me.xpyex.plugin.invactions.bukkit.util;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
-import me.xpyex.plugin.xplib.bukkit.config.ConfigUtil;
+import me.xpyex.lib.xplib.bukkit.config.ConfigUtil;
 import org.bukkit.entity.Player;
 
 public class SettingsUtil {

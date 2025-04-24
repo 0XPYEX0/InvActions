@@ -10,15 +10,15 @@ import me.xpyex.plugin.invactions.bukkit.module.HandleEvent;
 import me.xpyex.plugin.invactions.bukkit.module.InventoryF;
 import me.xpyex.plugin.invactions.bukkit.module.RootModule;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
-import me.xpyex.plugin.xplib.bukkit.config.ConfigUtil;
-import me.xpyex.plugin.xplib.bukkit.core.XPPlugin;
-import me.xpyex.plugin.xplib.bukkit.inventory.HandleMenu;
-import me.xpyex.plugin.xplib.bukkit.inventory.Menu;
-import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
-import me.xpyex.plugin.xplib.util.reflect.ClassUtil;
-import me.xpyex.plugin.xplib.util.reflect.MethodUtil;
-import me.xpyex.plugin.xplib.util.value.ValueUtil;
-import me.xpyex.plugin.xplib.util.version.UpdateUtil;
+import me.xpyex.lib.xplib.bukkit.config.ConfigUtil;
+import me.xpyex.lib.xplib.bukkit.core.XPPlugin;
+import me.xpyex.lib.xplib.bukkit.inventory.HandleMenu;
+import me.xpyex.lib.xplib.bukkit.inventory.Menu;
+import me.xpyex.lib.xplib.bukkit.version.VersionUtil;
+import me.xpyex.lib.xplib.util.reflect.ClassUtil;
+import me.xpyex.lib.xplib.util.reflect.MethodUtil;
+import me.xpyex.lib.xplib.util.value.ValueUtil;
+import me.xpyex.lib.xplib.util.version.UpdateUtil;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.plugin.Plugin;
 
@@ -143,7 +143,7 @@ public final class InvActions extends XPPlugin {
                     try {
                         moduleClass.getConstructor().newInstance();
                     } catch (Throwable e) {
-                        e.printStackTrace();
+                        if (InvActionsServerConfig.getConfig().Debug) e.printStackTrace();
                         InvActions.getInstance().getLogger().warning("加载模块 " + moduleClass.getSimpleName() + " 时出错: " + e);
                     }
                 }
@@ -163,14 +163,19 @@ public final class InvActions extends XPPlugin {
         Plugin xpLib = getServer().getPluginManager().getPlugin("XPLib");
         if (xpLib != null) {  //装了XPLib
             if (xpLib.getDescription().getAuthors().contains("XPYEX")) {  //是不是我写的
-                getLogger().info("XPLib已退出历史舞台，不再需要安装它，即将自动删除");
-                getServer().getPluginManager().disablePlugin(xpLib);
+                getLogger().info("XPLib已退出历史舞台，不再需要安装它");
                 if (xpLib.getClass().getClassLoader() instanceof URLClassLoader) {
+                    URLClassLoader classLoader = (URLClassLoader) xpLib.getClass().getClassLoader();
+                    xpLib.getLogger().info("即将自动删除");
                     try {
                         File file = MethodUtil.executeInstanceMethod(xpLib, "getFile");
-                        ((URLClassLoader) xpLib.getClass().getClassLoader()).close();  //直接准备删了
+                        File folderFile = xpLib.getDataFolder();
+
+                        getServer().getPluginManager().disablePlugin(xpLib);
+                        classLoader.close();
 
                         if (file.delete()) getLogger().info("已删除XPLib文件: " + file.getAbsolutePath());
+                        if (folderFile.delete()) getLogger().info("已删除XPLib目录: " + file.getAbsolutePath());
                     } catch (IOException | ReflectiveOperationException e) {
                         e.printStackTrace();
                     }

@@ -1,22 +1,14 @@
 package me.xpyex.plugin.invactions.bukkit.util;
 
-import lombok.Getter;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
-import me.xpyex.plugin.invactions.bukkit.enums.ToolType;
-import me.xpyex.plugin.xplib.api.Pair;
-import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
-import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
-import me.xpyex.plugin.xplib.util.reflect.MethodUtil;
-import me.xpyex.plugin.xplib.util.strings.StrUtil;
-import me.xpyex.plugin.xplib.util.value.ValueUtil;
+import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
+import me.xpyex.lib.xplib.util.value.ValueUtil;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 public class InvUtil {
     public static final ItemStack AIR_STACK = new ItemStack(Material.AIR);

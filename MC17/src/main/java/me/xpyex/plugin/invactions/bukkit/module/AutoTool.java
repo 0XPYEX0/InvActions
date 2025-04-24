@@ -4,12 +4,11 @@ import java.util.HashMap;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.enums.ToolType;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.plugin.xplib.api.Pair;
-import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
-import me.xpyex.plugin.xplib.bukkit.version.VersionUtil;
-import me.xpyex.plugin.xplib.util.reflect.MethodUtil;
-import me.xpyex.plugin.xplib.util.strings.StrUtil;
-import me.xpyex.plugin.xplib.util.value.ValueUtil;
+import me.xpyex.lib.xplib.api.Pair;
+import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
+import me.xpyex.lib.xplib.util.reflect.MethodUtil;
+import me.xpyex.lib.xplib.util.strings.StrUtil;
+import me.xpyex.lib.xplib.util.value.ValueUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,7 +22,8 @@ import org.bukkit.inventory.ItemStack;
 public class AutoTool extends RootModule {
     private static final HashMap<ToolType, ItemStack> TOOLS = new HashMap<>();
 
-    static {
+    @Override
+    public void registerCustomListener() {
         TOOLS.put(ToolType.AXE, new ItemStack(Material.DIAMOND_AXE));
         TOOLS.put(ToolType.PICKAXE, new ItemStack(Material.DIAMOND_PICKAXE));
         TOOLS.put(ToolType.SHOVEL, new ItemStack(Material.DIAMOND_SHOVEL));

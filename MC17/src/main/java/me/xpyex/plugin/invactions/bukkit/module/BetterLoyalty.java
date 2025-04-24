@@ -1,8 +1,8 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.xplib.bukkit.strings.MsgUtil;
-import me.xpyex.plugin.xplib.util.reflect.MethodUtil;
+import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
+import me.xpyex.lib.xplib.util.reflect.MethodUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
