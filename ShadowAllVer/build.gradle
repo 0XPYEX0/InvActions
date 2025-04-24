@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group = 'me.xpyex.plugin.invactions.bukkit'
+version = '1.3.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project (":MC12")
+    implementation project (":MC13")
+    implementation project (":MC17")
+}
+
+shadowJar {
+    archiveBaseName = "InvActions-" + version + ".jar"
+    archiveFileName = "InvActions-" + version + ".jar"
+}

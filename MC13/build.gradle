@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group = 'me.xpyex.plugin.invactions.bukkit'
+version = '1.3.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":MC12")
+    compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
+}
