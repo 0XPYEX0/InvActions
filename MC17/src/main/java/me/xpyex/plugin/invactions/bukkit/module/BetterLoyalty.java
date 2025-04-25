@@ -4,6 +4,7 @@ import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.util.reflect.MethodUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -50,14 +51,19 @@ public class BetterLoyalty extends RootModule {
                                 cancel();
                                 return;
                             }
+                            if (shooter.getWorld() != event.getEntity().getWorld()) {
+                                syncTeleport(event.getEntity(), shooter.getWorld().getHighestBlockAt(event.getEntity().getLocation()).getLocation());
+                                cancel();
+                                return;
+                            }
                             if (!shooter.isOnline()) {  //玩家离线，把三叉戟传送到玩家离线位置
-                                event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(shooter.getLocation()).getLocation());
+                                syncTeleport(event.getEntity(), shooter.getWorld().getHighestBlockAt(event.getEntity().getLocation()).getLocation());
                                 cancel();
                                 return;
                             }
                             double distance = getDistance(event.getEntity(), shooter);
                             if (distance >= SERVER_DIS) {  //距离即将过远，把三叉戟传送回来
-                                event.getEntity().teleport(shooter.getWorld().getHighestBlockAt(event.getEntity().getLocation()).getLocation());
+                                syncTeleport(event.getEntity(), shooter.getWorld().getHighestBlockAt(event.getEntity().getLocation()).getLocation());
                                 MsgUtil.sendActionBar(shooter, getMessageWithSuffix("return"));
                                 cancel();
                             }
@@ -77,5 +83,9 @@ public class BetterLoyalty extends RootModule {
         double x2 = e2.getLocation().getX();
         double z2 = e2.getLocation().getZ();
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(z2 - z1, 2));  //√[(x2-x1)²+(z2-z1)²] 两点间距离 忽略高度y
+    }
+
+    private void syncTeleport(Entity entity, Location target) {
+        Bukkit.getScheduler().runTask(InvActions.getInstance(), () -> entity.teleport(target));
     }
 }
