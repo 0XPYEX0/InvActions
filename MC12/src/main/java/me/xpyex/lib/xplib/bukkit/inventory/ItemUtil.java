@@ -1,6 +1,8 @@
 package me.xpyex.lib.xplib.bukkit.inventory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.util.RootUtil;
 import me.xpyex.lib.xplib.util.strings.StrUtil;
@@ -20,15 +22,13 @@ public class ItemUtil extends RootUtil {
      * @return 全新的ItemStack
      */
     public static ItemStack getItemStack(ItemStack stack, String name, String... lore) {
-        ValueUtil.notNull("参数不应为null", stack, name, lore);
+        ValueUtil.notNull("参数不应为null", stack, name);
         ItemStack out = new ItemStack(stack);
         ItemMeta meta = out.getItemMeta();
         meta.setDisplayName(MsgUtil.getColorMsg(name));
-        ArrayList<String> list = new ArrayList<>();
-        for (String s : lore) {
-            list.add(MsgUtil.getColorMsg(s));
+        if (lore != null && lore.length > 0) {
+            meta.setLore(Arrays.stream(lore).map(MsgUtil::getColorMsg).collect(Collectors.toList()));
         }
-        meta.setLore(list);
         out.setItemMeta(meta);
         return out;
     }
@@ -42,7 +42,7 @@ public class ItemUtil extends RootUtil {
      * @return 全新的ItemStack
      */
     public static ItemStack getItemStack(Material material, String name, String... lore) {
-        ValueUtil.notNull("参数不应为null", material, name, lore);
+        ValueUtil.notNull("参数不应为null", material, name);
         return getItemStack(new ItemStack(material), name, lore);
         //
     }

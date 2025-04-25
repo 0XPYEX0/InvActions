@@ -12,6 +12,7 @@ import me.xpyex.lib.xplib.bukkit.inventory.button.UnmodifiableButton;
 import me.xpyex.lib.xplib.bukkit.language.LangUtil;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.bukkit.version.VersionUtil;
+import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -90,7 +91,10 @@ public class HandleCmd implements CommandExecutor {
                         "#abcdefg#",
                         "#hijk   #",
                         "########A"
-                    ).setSign("#", MENU_GLASS_PANE))
+                        )
+                                    .setSign("#", MENU_GLASS_PANE)
+                                    .setSign(" ", InvUtil.AIR_STACK)
+                    )
                     .setSign("A", new UnmodifiableButton(menu, (player -> player.hasPermission("InvActions.admin") ? 1 : 0))
                                       .addMode(1, ItemUtil.getItemStack(MENU_WOOL_ORANGE,
                                           LangUtil.getMessage(InvActions.getInstance(), "Reload.menu.name"),

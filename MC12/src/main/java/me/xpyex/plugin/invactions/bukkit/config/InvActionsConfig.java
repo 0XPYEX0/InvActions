@@ -8,6 +8,7 @@ public class InvActionsConfig {
         FUCK_FAKE_PLAYER.AutoFarmer = false;
         FUCK_FAKE_PLAYER.AutoTool = false;
         FUCK_FAKE_PLAYER.BetterInfinity = false;
+        FUCK_FAKE_PLAYER.BetterLoyalty = false;
         FUCK_FAKE_PLAYER.CraftDrop = false;
         FUCK_FAKE_PLAYER.DefaultF = false;
         FUCK_FAKE_PLAYER.DynamicLight = false;

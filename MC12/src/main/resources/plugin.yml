@@ -2,6 +2,7 @@ name: InvActions
 version: '${version}'
 main: me.xpyex.plugin.invactions.bukkit.InvActions
 authors: [ XPYEX ]
+api-version: 1.13
 softdepend:
   - XPLib
 commands:

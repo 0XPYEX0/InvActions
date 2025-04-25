@@ -23,7 +23,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-public class RootModule implements Listener {
+public abstract class RootModule implements Listener {
     public static String SETTING_HELP = "&e该功能在 &f/InvActions &e中调整";
     public static ArrayList<RootModule> modules = new ArrayList<>();
     private final boolean canLoad;

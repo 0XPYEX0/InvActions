@@ -33,6 +33,7 @@ public class FileUtil extends RootUtil {
     public static void writeFile(File target, String content) throws IOException {
         if (content == null || content.isEmpty()) return;
         if (!target.exists()) {
+            target.getParentFile().mkdirs();
             target.createNewFile();
         }
         Files.write(target.toPath(), content.getBytes(StandardCharsets.UTF_8));

@@ -2,6 +2,7 @@ package me.xpyex.plugin.invactions.bukkit;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.net.URLClassLoader;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
@@ -138,6 +139,7 @@ public final class InvActions extends XPPlugin {
                             || moduleClass.isInterface()
                             || moduleClass.isAnnotation()
                             || moduleClass.isEnum()
+                            || (moduleClass.getModifiers() & Modifier.ABSTRACT) > 0
                     ) continue;
 
                     try {
