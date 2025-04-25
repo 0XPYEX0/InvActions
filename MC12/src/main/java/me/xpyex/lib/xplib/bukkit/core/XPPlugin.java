@@ -2,6 +2,7 @@ package me.xpyex.lib.xplib.bukkit.core;
 
 import me.xpyex.lib.xplib.bukkit.bstats.Metrics;
 import me.xpyex.lib.xplib.util.value.ValueUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
@@ -37,5 +38,23 @@ public abstract class XPPlugin extends JavaPlugin {
     public void registerListener(Listener listener) {
         this.getServer().getPluginManager().registerEvents(listener, this);
         //
+    }
+
+    public void info(String... messages) {
+        for (String message : messages) {
+            getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&a[INFO] &b[" + this.getDescription().getName() + "] &r" + message));
+        }
+    }
+
+    public void warn(String... messages) {
+        for (String message : messages) {
+            getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&e[WARN] &b[" + this.getDescription().getName() + "] &r" + message));
+        }
+    }
+
+    public void error(String... messages) {
+        for (String message : messages) {
+            getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[ERROR] &b[" + this.getDescription().getName() + "] &r" + message));
+        }
     }
 }

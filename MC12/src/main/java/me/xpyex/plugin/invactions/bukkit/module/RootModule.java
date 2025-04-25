@@ -52,11 +52,11 @@ public class RootModule implements Listener {
                 InvActions.getInstance().registerListener(this);
                 registerCustomListener();
             } catch (Throwable e) {
-                InvActions.getInstance().getLogger().severe("无法为模块 " + getName() + " 注册监听器: " + e);
+                InvActions.getInstance().error("&4无法为模块&r " + getName() + " &4注册监听器:&r " + e);
                 e.printStackTrace();
             }
         } else {
-            InvActions.getInstance().getLogger().warning("您的服务器不支持使用 " + getName() + " ，已自动禁用");
+            InvActions.getInstance().warn("&c您的服务器不支持使用&r " + getName() + " &c，已自动禁用");
         }
 
         modules.add(this);

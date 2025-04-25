@@ -36,7 +36,7 @@ public final class InvActions extends XPPlugin {
             menu.getPlayer().closeInventory();
         }
         ConfigUtil.reload(getInstance());
-        getLogger().info("已卸载");
+        info("已卸载");
     }
 
     @Override
@@ -51,29 +51,29 @@ public final class InvActions extends XPPlugin {
         getServer().getScheduler().runTaskAsynchronously(getInstance(), this::updatePlayersConfig);
 
         registerListeners();
-        getLogger().info("已注册监听器");
+        info("已注册监听器");
 
         registerCmd("InvActions", new HandleCmd());
-        getLogger().info("已注册命令");
+        info("已注册命令");
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
             hookBStats(17118);
-            getLogger().info("与bStats挂钩");
+            info("与bStats挂钩");
         });
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
-            getLogger().info("开始检查更新");
+            info("&b开始检查更新");
             ValueUtil.optional(UpdateUtil.getUpdateFromGitHub(getInstance()), ver -> {
-                getLogger().info("当前插件版本: " + getInstance().getDescription().getVersion() + " ,有一个更新的版本: " + ver);
-                getLogger().info("前往 https://gitee.com/XPYEX/InvActions/releases 下载吧！");
-            }, () -> getLogger().info("当前版本已是最新！"));
+                info("&a当前插件版本: &r" + getInstance().getDescription().getVersion() + " ,有一个更新的版本: " + ver);
+                info("&e前往&r https://gitee.com/XPYEX/InvActions/releases &e下载吧！");
+            }, () -> info("&a当前版本已是最新！"));
         });
 
         getServer().getScheduler().runTaskAsynchronously(getInstance(), this::checkHybrid);
 
-        getLogger().info("已加载");
-        getLogger().info("感谢使用InvActions. 本插件在GitHub开源，谨防受骗. 作者QQ1723275529");
-        getLogger().info("GitHub: https://github.com/0XPYEX0/InvActions");
+        info("已加载");
+        info("感谢使用InvActions. 本插件在&6&oGitHub开源&r，谨防受骗. 作者QQ1723275529");
+        info("&eGitHub:&r https://github.com/0XPYEX0/InvActions");
     }
 
     public void checkHybrid() {
@@ -95,8 +95,8 @@ public final class InvActions extends XPPlugin {
         }
 
         if (type != null) {
-            getLogger().warning("你目前运行在具有 " + type + " 的Hybrid服务端.");
-            getLogger().warning("由于Mod功能的实现方式影响，插件可能不会那么“正常”地运行，包括但不限于功能失效");
+            warn("&c你目前运行在具有 &r" + type + " &c的Hybrid服务端.");
+            warn("&6由于Mod功能的实现方式影响，插件&e&l可能&r&6不会那么“正常”地运行，包括但不限于功能失效");
         }
     }
 
@@ -104,8 +104,8 @@ public final class InvActions extends XPPlugin {
         initXPLib();
 
         if (VersionUtil.getMainVersion() < 9) {
-            getLogger().severe("本插件需要Minecraft至少为1.9才可运行");
-            getLogger().severe("很遗憾，您的服务器不满足此条件...");
+            error("&c本插件需要Minecraft至少为1.9才可运行");
+            error("&c很遗憾，您的服务器不满足此条件...");
             return false;
         }
 
@@ -144,7 +144,7 @@ public final class InvActions extends XPPlugin {
                         moduleClass.getConstructor().newInstance();
                     } catch (Throwable e) {
                         if (InvActionsServerConfig.getConfig().Debug) e.printStackTrace();
-                        InvActions.getInstance().getLogger().warning("加载模块 " + moduleClass.getSimpleName() + " 时出错: " + e);
+                        warn("&c加载模块 &r" + moduleClass.getSimpleName() + " &c时出错: &e" + e);
                     }
                 }
             }
@@ -155,7 +155,7 @@ public final class InvActions extends XPPlugin {
             ClickType swapOffhand = ClickType.valueOf("SWAP_OFFHAND");  //1.16+
             registerListener(new InventoryF());
         } catch (Throwable ignored) {
-            getLogger().warning("您的服务器不支持在玩家背包内按F整理，该功能已被禁用");
+            warn("&c您的服务器 &4&l不支持 &c在玩家背包内按F整理&r，该功能已被禁用");
         }
     }
 
@@ -163,7 +163,7 @@ public final class InvActions extends XPPlugin {
         Plugin xpLib = getServer().getPluginManager().getPlugin("XPLib");
         if (xpLib != null) {  //装了XPLib
             if (xpLib.getDescription().getAuthors().contains("XPYEX")) {  //是不是我写的
-                getLogger().info("XPLib已退出历史舞台，不再需要安装它");
+                info("&6XPLib已退出历史舞台，不再需要安装它");
                 if (xpLib.getClass().getClassLoader() instanceof URLClassLoader) {
                     URLClassLoader classLoader = (URLClassLoader) xpLib.getClass().getClassLoader();
                     xpLib.getLogger().info("即将自动删除");
@@ -174,8 +174,8 @@ public final class InvActions extends XPPlugin {
                         getServer().getPluginManager().disablePlugin(xpLib);
                         classLoader.close();
 
-                        if (file.delete()) getLogger().info("已删除XPLib文件: " + file.getAbsolutePath());
-                        if (folderFile.delete()) getLogger().info("已删除XPLib目录: " + file.getAbsolutePath());
+                        if (file.delete()) info("&e已删除XPLib文件: &r" + file.getAbsolutePath());
+                        if (folderFile.delete()) info("&e已删除XPLib目录: &r" + file.getAbsolutePath());
                     } catch (IOException | ReflectiveOperationException e) {
                         e.printStackTrace();
                     }
@@ -183,7 +183,7 @@ public final class InvActions extends XPPlugin {
             }
         }
 
-        getLogger().info("当前服务端核心版本: " + getServer().getBukkitVersion());
+        info("&b当前服务端核心版本: &r" + getServer().getBukkitVersion());
         saveResource("minecraft/zh_cn.json", false);
         registerListener(new HandleMenu());
         getServer().getScheduler().runTaskTimerAsynchronously(getInstance(), () -> {
@@ -191,6 +191,6 @@ public final class InvActions extends XPPlugin {
                 menu.updateInventory();
             }
         }, 0L, 5L);
-        getLogger().info("已加载");
+        info("已加载");
     }
 }
