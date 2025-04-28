@@ -64,7 +64,7 @@ jobs:
       - name: Upload with Version
         uses: actions/upload-artifact@v4
         with:
-          name: CnUsername-${{ steps.version.outputs.VERSION }}-all.jar
+          name: InvActions-${{ steps.version.outputs.VERSION }}-all.jar
           path: ShadowAllVer/build/libs/*.jar
 
   dependency-submission:
