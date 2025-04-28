@@ -91,6 +91,9 @@ public abstract class RootModule implements Listener {
                 if (!serverEnabled()) {
                     return -1;
                 }
+                if (!p.hasPermission("InvActions.use.module." + getName())) {
+                    return -2;
+                }
                 if (!playerEnabled(p)) {
                     return 0;
                 }
@@ -108,6 +111,10 @@ public abstract class RootModule implements Listener {
                        getNationalMessage("menu.name"),
                        getMenuLore(1)
                    ))
+                   .addMode(-2, ItemUtil.getItemStack(HandleCmd.MENU_WOOL_RED,
+                       getNationalMessage("menu.name"),
+                       getMenuLore(-2)
+                       ))
                    .setClickEffect((player, clickType, itemStack) -> {
                        try {
                            FieldUtil.setObjectField(SettingsUtil.getConfig(player), getName(), !playerEnabled(player));
@@ -120,11 +127,28 @@ public abstract class RootModule implements Listener {
     }
 
     private String[] getMenuLore(int state) {
+        String stateCode;
+        switch (state) {
+            case 0:
+                stateCode = "player_disabled";
+                break;
+            case 1:
+                stateCode = "player_enabled";
+                break;
+            case -1:
+                stateCode = "server_disabled";
+                break;
+            case -2:
+                stateCode = "perm_deny";
+                break;
+            default:
+                throw new IllegalStateException("出现非法的状态: " + state);
+        }
         ArrayList<String> list = new ArrayList<>(getNationalMessages("menu.lore"));  //不确定List具体类型，copy一份
         list.add("");
         list.add(LangUtil.getMessage(InvActions.getInstance(), "State.current")
                      + ": "
-                     + LangUtil.getMessage(InvActions.getInstance(), "State." + (state == 1 ? "player_enabled" : (state == 0 ? "player_disabled" : "server_disabled")))
+                     + LangUtil.getMessage(InvActions.getInstance(), "State." + stateCode)
         );
         return list.toArray(new String[0]);
     }
@@ -140,6 +164,7 @@ public abstract class RootModule implements Listener {
 
     public boolean playerEnabled(Player player) {
         if (!canLoad) return false;
+        if (!player.hasPermission("InvActions.use.module." + getName())) return false;
         try {
             return FieldUtil.<Boolean>getObjectField(SettingsUtil.getConfig(player), getName());
         } catch (ReflectiveOperationException ignored) {

@@ -152,6 +152,7 @@
         "current": "&f当前状态",
         "server_disabled": "&4服务端禁用",
         "player_disabled": "&c禁用",
-        "player_enabled": "&a启用"
+        "player_enabled": "&a启用",
+        "perm_deny": "&c权限不足"
     }
 }

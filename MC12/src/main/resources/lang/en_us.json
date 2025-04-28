@@ -151,6 +151,7 @@
         "current": "&fCurrent state:",
         "server_disabled": "&4Server disabled",
         "player_disabled": "&cDisabled",
-        "player_enabled": "&aEnabled"
+        "player_enabled": "&aEnabled",
+        "perm_deny": "&cPermission denied"
     }
 }
