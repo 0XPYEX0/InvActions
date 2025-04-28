@@ -3,9 +3,6 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-group = 'me.xpyex.plugin.invactions.bukkit'
-version = '1.3.0'
-
 repositories {
     mavenCentral()
 }
