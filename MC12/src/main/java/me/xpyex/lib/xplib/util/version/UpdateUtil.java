@@ -17,7 +17,7 @@ public class UpdateUtil extends RootUtil {
 
     public static String getUpdateFromGitHub(Plugin plugin) {
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL("https://api.github.com/repos/0XPYEX0/" + plugin.getName() + "/releases/latest").openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL("https://api.github.com/repos/XPPlugins/" + plugin.getName() + "/releases/latest").openConnection();
 
             connection.setReadTimeout(10 * 1000);
             connection.setRequestMethod("GET");

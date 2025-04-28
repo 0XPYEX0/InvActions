@@ -33,9 +33,7 @@ public class LangUtil extends RootUtil {
         String cacheKey = plugin.getName() + "-" + lang;
         String fileName = "lang/" + lang + ".json";
         if (!langCache.containsKey(cacheKey)) {
-            if (!new File(plugin.getDataFolder(), fileName).exists()) {
-                plugin.saveResource(fileName, false);  //看看插件里面有没有自带对应的语言文件，不覆盖用户创建的
-            }
+            plugin.saveResource(fileName, false);  //看看插件里面有没有自带对应的语言文件，不覆盖用户创建的
 
             JsonObject messages = ConfigUtil.getConfig(plugin, "lang/" + lang, JsonObject.class);  //从lang/zh.json之类的文件取出JsonObject
             if (messages == null) {  //当不存在这个配置文件时

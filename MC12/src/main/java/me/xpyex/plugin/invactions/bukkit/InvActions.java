@@ -66,7 +66,7 @@ public final class InvActions extends XPPlugin {
             info("&b开始检查更新");
             ValueUtil.optional(UpdateUtil.getUpdateFromGitHub(getInstance()), ver -> {
                 info("&a当前插件版本: &r" + getInstance().getDescription().getVersion() + " ,有一个更新的版本: " + ver);
-                info("&e前往&r https://gitee.com/XPYEX/InvActions/releases &e下载吧！");
+                info("&e前往&r https://github.com/XPPlugins/InvActions/releases &e下载吧！");
             }, () -> info("&a当前版本已是最新！"));
         });
 
@@ -74,7 +74,7 @@ public final class InvActions extends XPPlugin {
 
         info("已加载");
         info("感谢使用InvActions. 本插件在&6&oGitHub开源&r，谨防受骗. 作者QQ1723275529");
-        info("&eGitHub:&r https://github.com/0XPYEX0/InvActions");
+        info("&eGitHub:&r https://github.com/XPPlugins/InvActions");
     }
 
     public void checkHybrid() {
