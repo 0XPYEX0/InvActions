@@ -91,7 +91,7 @@ public abstract class RootModule implements Listener {
                 if (!serverEnabled()) {
                     return -1;
                 }
-                if (!p.hasPermission("InvActions.use.module." + getName())) {
+                if (InvActionsServerConfig.getConfig().PermCheck && !p.hasPermission("InvActions.use.module." + getName())) {
                     return -2;
                 }
                 if (!playerEnabled(p)) {
@@ -164,7 +164,7 @@ public abstract class RootModule implements Listener {
 
     public boolean playerEnabled(Player player) {
         if (!canLoad) return false;
-        if (!player.hasPermission("InvActions.use.module." + getName())) return false;
+        if (InvActionsServerConfig.getConfig().PermCheck && !player.hasPermission("InvActions.use.module." + getName())) return false;
         try {
             return FieldUtil.<Boolean>getObjectField(SettingsUtil.getConfig(player), getName());
         } catch (ReflectiveOperationException ignored) {
