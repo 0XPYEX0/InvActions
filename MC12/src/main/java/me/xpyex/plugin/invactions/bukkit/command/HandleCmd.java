@@ -1,9 +1,6 @@
 package me.xpyex.plugin.invactions.bukkit.command;
 
 import java.util.WeakHashMap;
-import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
-import me.xpyex.plugin.invactions.bukkit.module.RootModule;
 import me.xpyex.lib.xplib.bukkit.config.ConfigUtil;
 import me.xpyex.lib.xplib.bukkit.inventory.InvBuilder;
 import me.xpyex.lib.xplib.bukkit.inventory.ItemUtil;
@@ -12,6 +9,9 @@ import me.xpyex.lib.xplib.bukkit.inventory.button.UnmodifiableButton;
 import me.xpyex.lib.xplib.bukkit.language.LangUtil;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.bukkit.version.VersionUtil;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
+import me.xpyex.plugin.invactions.bukkit.module.RootModule;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -87,10 +87,10 @@ public class HandleCmd implements CommandExecutor {
 
                 Menu menu = new Menu((Player) sender);
                 menu.setPage(1, new InvBuilder("InvActions-设定-" + sender.getName(),
-                        "#########",
-                        "#abcdefg#",
-                        "#hijk   #",
-                        "########A"
+                            "#########",
+                            "#abcdefg#",
+                            "#hijk   #",
+                            "########A"
                         )
                                     .setSign("#", MENU_GLASS_PANE)
                                     .setSign(" ", InvUtil.AIR_STACK)

@@ -1,14 +1,14 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import java.util.HashMap;
-import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
-import me.xpyex.plugin.invactions.bukkit.enums.ToolType;
-import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.lib.xplib.api.Pair;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.util.reflect.MethodUtil;
 import me.xpyex.lib.xplib.util.strings.StrUtil;
 import me.xpyex.lib.xplib.util.value.ValueUtil;
+import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
+import me.xpyex.plugin.invactions.bukkit.enums.ToolType;
+import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -22,6 +22,35 @@ import org.bukkit.inventory.ItemStack;
 public class AutoTool extends RootModule {
     private static final HashMap<ToolType, ItemStack> TOOLS = new HashMap<>();
 
+    private static int getFastestToolSlot(Player player, Block block, ToolType type) {
+        if (player.getInventory().getItemInMainHand().getType().toString().contains("_" + type))
+            return player.getInventory().getHeldItemSlot();
+        Pair<Float, Integer> fastest = Pair.of(block.getBreakSpeed(player), player.getInventory().getHeldItemSlot());  //速度, Slot
+        ItemStack before = new ItemStack(player.getInventory().getItemInMainHand());
+        for (int slot = 0; slot < player.getInventory().getStorageContents().length; slot++) {
+            ItemStack content = player.getInventory().getStorageContents()[slot];
+            if (content == null) continue;
+
+            boolean shouldCompute = false;
+
+            if (type == ToolType.SHEARS && content.getType() == Material.SHEARS) {
+                shouldCompute = true;
+            } else if (StrUtil.endsWithIgnoreCaseOr(content.getType().toString(), "_" + type)) {
+                shouldCompute = true;
+            }
+
+            if (shouldCompute) {
+                player.getInventory().setItemInMainHand(content);
+                float breakSpeed = block.getBreakSpeed(player);
+                if (fastest.getKey() < breakSpeed) {
+                    fastest = Pair.of(breakSpeed, slot);
+                }
+            }
+        }
+        player.getInventory().setItemInMainHand(before);
+        return fastest.getValue() == -1 ? player.getInventory().getHeldItemSlot() : fastest.getValue();
+    }
+
     @Override
     public void registerCustomListener() {
         TOOLS.put(ToolType.AXE, new ItemStack(Material.DIAMOND_AXE));
@@ -34,7 +63,8 @@ public class AutoTool extends RootModule {
 
     @Override
     protected boolean canLoad() {
-        return MethodUtil.exist(Block.class, "getBreakSpeed", Player.class);  //1.17+
+        return MethodUtil.exist(Block.class, "getBreakSpeed", Player.class);
+        // 1.17+
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -88,34 +118,5 @@ public class AutoTool extends RootModule {
                 MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("changed"));
             }
         });
-    }
-
-    private static int getFastestToolSlot(Player player, Block block, ToolType type) {
-        if (player.getInventory().getItemInMainHand().getType().toString().contains("_" + type))
-            return player.getInventory().getHeldItemSlot();
-        Pair<Float, Integer> fastest = Pair.of(block.getBreakSpeed(player), player.getInventory().getHeldItemSlot());  //速度, Slot
-        ItemStack before = new ItemStack(player.getInventory().getItemInMainHand());
-        for (int slot = 0; slot < player.getInventory().getStorageContents().length; slot++) {
-            ItemStack content = player.getInventory().getStorageContents()[slot];
-            if (content == null) continue;
-
-            boolean shouldCompute = false;
-
-            if (type == ToolType.SHEARS && content.getType() == Material.SHEARS) {
-                shouldCompute = true;
-            } else if (StrUtil.endsWithIgnoreCaseOr(content.getType().toString(), "_" + type)) {
-                shouldCompute = true;
-            }
-
-            if (shouldCompute) {
-                player.getInventory().setItemInMainHand(content);
-                float breakSpeed = block.getBreakSpeed(player);
-                if (fastest.getKey() < breakSpeed) {
-                    fastest = Pair.of(breakSpeed, slot);
-                }
-            }
-        }
-        player.getInventory().setItemInMainHand(before);
-        return fastest.getValue() == -1 ? player.getInventory().getHeldItemSlot() : fastest.getValue();
     }
 }

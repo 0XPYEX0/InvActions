@@ -8,8 +8,8 @@ import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.lib.xplib.util.RootUtil;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
 import org.jetbrains.annotations.NotNull;
 import sun.reflect.Reflection;
 
@@ -21,7 +21,8 @@ public class ClassUtil extends RootUtil {
         if (!CLASS_CACHE.containsKey(name)) {
             try {
                 if (needInitClass) CLASS_CACHE.put(name, Class.forName(name));
-                else CLASS_CACHE.put(name, Class.forName(name, needInitClass, Reflection.getCallerClass().getClassLoader()));
+                else
+                    CLASS_CACHE.put(name, Class.forName(name, needInitClass, Reflection.getCallerClass().getClassLoader()));
             } catch (ReflectiveOperationException ignored) {
                 try {
                     CLASS_CACHE.put(name, Class.forName(name, needInitClass, ClassLoader.getSystemClassLoader()));

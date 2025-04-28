@@ -1,6 +1,5 @@
 package me.xpyex.lib.xplib.bukkit.inventory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;

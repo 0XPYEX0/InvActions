@@ -2,10 +2,10 @@ package me.xpyex.plugin.invactions.bukkit.module;
 
 import java.util.UUID;
 import java.util.WeakHashMap;
-import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.util.strings.StrUtil;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

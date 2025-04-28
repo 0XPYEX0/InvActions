@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.WeakHashMap;
 import lombok.Getter;
-import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
-import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import me.xpyex.lib.xplib.bukkit.config.ConfigUtil;
 import me.xpyex.lib.xplib.bukkit.inventory.ItemUtil;
 import me.xpyex.lib.xplib.bukkit.inventory.Menu;
@@ -19,6 +15,10 @@ import me.xpyex.lib.xplib.bukkit.inventory.button.UnmodifiableButton;
 import me.xpyex.lib.xplib.bukkit.language.LangUtil;
 import me.xpyex.lib.xplib.util.reflect.FieldUtil;
 import me.xpyex.lib.xplib.util.value.ValueUtil;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
+import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -26,15 +26,16 @@ import org.bukkit.event.Listener;
 public abstract class RootModule implements Listener {
     public static String SETTING_HELP = "&e该功能在 &f/InvActions &e中调整";
     public static ArrayList<RootModule> modules = new ArrayList<>();
-    private final boolean canLoad;
-    private final WeakHashMap<UUID, Long> cooldown = new WeakHashMap<>();
 
     static {
         ValueUtil.ifPresent(LangUtil.getMessage(InvActions.getInstance(), "ActionBarSuffix"), s -> SETTING_HELP = s);
     }
 
+    private final boolean canLoad;
+    private final WeakHashMap<UUID, Long> cooldown = new WeakHashMap<>();
     @Getter
-    private final String name = getClass().getSimpleName();;
+    private final String name = getClass().getSimpleName();
+    ;
 
     public RootModule() {
         boolean canLoad1;

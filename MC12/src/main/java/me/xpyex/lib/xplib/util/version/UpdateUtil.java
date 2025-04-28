@@ -8,9 +8,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import me.xpyex.lib.xplib.api.Version;
-import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.lib.xplib.bukkit.config.GsonUtil;
 import me.xpyex.lib.xplib.util.RootUtil;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
 import org.bukkit.plugin.Plugin;
 
 public class UpdateUtil extends RootUtil {

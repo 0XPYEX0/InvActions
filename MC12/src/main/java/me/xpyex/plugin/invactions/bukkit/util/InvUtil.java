@@ -1,9 +1,9 @@
 package me.xpyex.plugin.invactions.bukkit.util;
 
-import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.util.value.ValueUtil;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;

@@ -11,9 +11,9 @@ repositories {
 }
 
 dependencies {
-    implementation project (":MC12")
-    implementation project (":MC13")
-    implementation project (":MC17")
+    implementation project(":MC12")
+    implementation project(":MC13")
+    implementation project(":MC17")
 }
 
 shadowJar {

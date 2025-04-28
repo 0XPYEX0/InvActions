@@ -12,9 +12,9 @@ import me.xpyex.lib.xplib.api.Pair;
 import me.xpyex.lib.xplib.bukkit.config.ConfigUtil;
 import me.xpyex.lib.xplib.bukkit.config.GsonUtil;
 import me.xpyex.lib.xplib.bukkit.core.XPPlugin;
-import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.lib.xplib.util.RootUtil;
 import me.xpyex.lib.xplib.util.value.ValueUtil;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 

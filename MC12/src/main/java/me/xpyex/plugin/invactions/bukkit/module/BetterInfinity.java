@@ -1,18 +1,14 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
-import me.xpyex.lib.xplib.api.Pair;
+import me.xpyex.lib.xplib.bukkit.inventory.ItemUtil;
 import me.xpyex.lib.xplib.bukkit.version.VersionUtil;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.lib.xplib.bukkit.inventory.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -28,6 +24,7 @@ public class BetterInfinity extends RootModule {
     @Override
     protected boolean canLoad() {
         return VersionUtil.getMainVersion() < 21;
+        //
     }
 
     @EventHandler(ignoreCancelled = true)

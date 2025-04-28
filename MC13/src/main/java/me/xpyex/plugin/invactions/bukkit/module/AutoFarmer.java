@@ -1,12 +1,12 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import java.util.Collection;
-import me.xpyex.plugin.invactions.bukkit.InvActions;
-import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import me.xpyex.lib.xplib.bukkit.inventory.ItemUtil;
 import me.xpyex.lib.xplib.bukkit.language.LangUtil;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.util.strings.StrUtil;
+import me.xpyex.plugin.invactions.bukkit.InvActions;
+import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

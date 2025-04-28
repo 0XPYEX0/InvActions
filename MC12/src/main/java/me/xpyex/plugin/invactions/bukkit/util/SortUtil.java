@@ -2,8 +2,8 @@ package me.xpyex.plugin.invactions.bukkit.util;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
-import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.lib.xplib.api.Pair;
+import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

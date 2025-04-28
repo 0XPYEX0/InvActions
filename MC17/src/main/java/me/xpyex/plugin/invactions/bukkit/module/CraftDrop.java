@@ -1,8 +1,8 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
-import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.util.reflect.MethodUtil;
+import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

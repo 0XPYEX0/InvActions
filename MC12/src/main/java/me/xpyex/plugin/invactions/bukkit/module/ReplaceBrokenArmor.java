@@ -1,9 +1,9 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
+import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.enums.ItemType;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
-import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerItemBreakEvent;

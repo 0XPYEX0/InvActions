@@ -1,10 +1,10 @@
 package me.xpyex.plugin.invactions.bukkit.module;
 
 import java.io.File;
+import me.xpyex.lib.xplib.bukkit.config.ConfigUtil;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
 import me.xpyex.plugin.invactions.bukkit.util.SettingsUtil;
-import me.xpyex.lib.xplib.bukkit.config.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
