@@ -91,7 +91,7 @@ public abstract class RootModule implements Listener {
                 if (!serverEnabled()) {
                     return -1;
                 }
-                if (InvActionsServerConfig.getConfig().PermCheck && !p.hasPermission("InvActions.use.module." + getName())) {
+                if (InvActionsServerConfig.getCurrent().isPermCheck() && !p.hasPermission("InvActions.use.module." + getName())) {
                     return -2;
                 }
                 if (!playerEnabled(p)) {
@@ -114,10 +114,10 @@ public abstract class RootModule implements Listener {
                    .addMode(-2, ItemUtil.getItemStack(HandleCmd.MENU_WOOL_RED,
                        getNationalMessage("menu.name"),
                        getMenuLore(-2)
-                       ))
+                   ))
                    .setClickEffect((player, clickType, itemStack) -> {
                        try {
-                           FieldUtil.setObjectField(SettingsUtil.getConfig(player), getName(), !playerEnabled(player));
+                           FieldUtil.setInstanceField(SettingsUtil.getConfig(player), getName(), !playerEnabled(player));
                        } catch (ReflectiveOperationException e) {
                            throw new RuntimeException(e);
                        }
@@ -156,7 +156,7 @@ public abstract class RootModule implements Listener {
     public boolean serverEnabled() {
         if (!canLoad) return false;
         try {
-            return FieldUtil.<Boolean>getObjectField(InvActionsServerConfig.getConfig(), getName());
+            return FieldUtil.<Boolean>getInstanceField(InvActionsServerConfig.getCurrent(), getName());
         } catch (ReflectiveOperationException ignored) {
             return false;
         }
@@ -164,9 +164,10 @@ public abstract class RootModule implements Listener {
 
     public boolean playerEnabled(Player player) {
         if (!canLoad) return false;
-        if (InvActionsServerConfig.getConfig().PermCheck && !player.hasPermission("InvActions.use.module." + getName())) return false;
+        if (InvActionsServerConfig.getCurrent().isPermCheck() && !player.hasPermission("InvActions.use.module." + getName()))
+            return false;
         try {
-            return FieldUtil.<Boolean>getObjectField(SettingsUtil.getConfig(player), getName());
+            return FieldUtil.<Boolean>getInstanceField(SettingsUtil.getConfig(player), getName());
         } catch (ReflectiveOperationException ignored) {
             return false;
         }

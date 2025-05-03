@@ -3,16 +3,15 @@ package me.xpyex.lib.xplib.bukkit.language;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 import me.xpyex.lib.xplib.api.Pair;
 import me.xpyex.lib.xplib.bukkit.config.ConfigUtil;
-import me.xpyex.lib.xplib.bukkit.config.GsonUtil;
 import me.xpyex.lib.xplib.bukkit.core.XPPlugin;
 import me.xpyex.lib.xplib.util.RootUtil;
+import me.xpyex.lib.xplib.util.gson.GsonUtil;
 import me.xpyex.lib.xplib.util.value.ValueUtil;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import org.bukkit.Material;
@@ -27,7 +26,7 @@ public class LangUtil extends RootUtil {
     private static Pair<JsonObject, String> getFinalJsonObj(XPPlugin plugin, String key) {
         ValueUtil.notEmpty("参数不应为空值", plugin, key);
 
-        String lang = ValueUtil.getOrDefault(ConfigUtil.getConfig(plugin, JsonObject.class).get("lang"),
+        String lang = ValueUtil.getOrDefault(ConfigUtil.getConfig(plugin, JsonObject.class).get("Lang"),
                 DEFAULT_LANG)
                           .getAsString();  //从config.json读取lang设定项，如zh、en等
         String cacheKey = plugin.getName() + "-" + lang;

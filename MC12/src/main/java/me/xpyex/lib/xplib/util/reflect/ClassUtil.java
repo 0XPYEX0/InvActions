@@ -1,6 +1,7 @@
 package me.xpyex.lib.xplib.util.reflect;
 
 import java.io.File;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -8,9 +9,12 @@ import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Collectors;
+import me.xpyex.lib.xplib.api.Pair;
 import me.xpyex.lib.xplib.util.RootUtil;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sun.reflect.Reflection;
 
 public class ClassUtil extends RootUtil {
@@ -80,12 +84,39 @@ public class ClassUtil extends RootUtil {
                             e.printStackTrace();
                         }
                     }
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
         }
         return classList;
+    }
+
+    /**
+     * 在所有jar内扫描，返回包含packagePath的类的实例
+     *
+     * @param packagePath 包名，仅做contains检查
+     * @param parentClass 扫描到的Class必须继承parentClass，若填入null则忽略此条件
+     * @return 包含packagePath的类的实例，或Pair< Class< ? >, Throwable>，表示无法构建实例
+     */
+    public static List<Object> scanAndGetClassInstances(String packagePath, @Nullable Class<?> parentClass) {
+        if (parentClass == null) parentClass = Object.class;
+        return getClasses(packagePath).stream()
+                   .filter(parentClass::isAssignableFrom)
+                   .filter(clazz -> !clazz.isInterface())
+                   .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
+                   .filter(clazz -> !clazz.isPrimitive())
+                   .filter(clazz -> !clazz.isArray())
+                   .filter(clazz -> !clazz.isAnnotation())
+                   .filter(clazz -> !clazz.isEnum())
+                   .map(clazz -> {
+                       try {
+                           return clazz.getConstructor().newInstance();
+                       } catch (Throwable e) {
+                           return Pair.of(clazz, e);
+                       }
+                   })
+                   .collect(Collectors.toList());
     }
 
     protected static boolean classEquals(Class<?> class1, Class<?> class2) {

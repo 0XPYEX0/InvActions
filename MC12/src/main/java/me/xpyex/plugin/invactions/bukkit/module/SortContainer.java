@@ -56,7 +56,7 @@ public class SortContainer extends RootModule {
 
     @EventHandler(ignoreCancelled = true)
     public void onPressFWithoutInv(PlayerSwapHandItemsEvent event) {
-        if (!InvActionsServerConfig.getConfig().DefaultF) return;
+        if (!InvActionsServerConfig.getCurrent().isDefaultF()) return;
         if (!isEndedCooldown(event.getPlayer(), 1000)) return;  //每个玩家一秒内只能整理一次容器
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(InvActions.getInstance(), () -> {
@@ -71,7 +71,7 @@ public class SortContainer extends RootModule {
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
             return;
         }
-        if (SettingsUtil.getConfig(event.getPlayer()).DefaultF || (event.getPlayer().isSneaking() && event.getPlayer().getLocation().getPitch() == 90)) {
+        if (SettingsUtil.getConfig(event.getPlayer()).isDefaultF() || (event.getPlayer().isSneaking() && event.getPlayer().getLocation().getPitch() == 90)) {
             event.setCancelled(true);
             SortUtil.sortInv(event.getPlayer().getInventory());
             MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("player"));

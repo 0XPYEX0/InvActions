@@ -7,6 +7,7 @@ import java.util.HashMap;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.util.RootUtil;
 import me.xpyex.lib.xplib.util.files.FileUtil;
+import me.xpyex.lib.xplib.util.gson.GsonUtil;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigUtil extends RootUtil {

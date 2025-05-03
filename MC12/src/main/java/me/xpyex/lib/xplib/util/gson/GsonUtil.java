@@ -1,17 +1,19 @@
-package me.xpyex.lib.xplib.bukkit.config;
+package me.xpyex.lib.xplib.util.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import java.lang.reflect.Method;
+import com.google.gson.JsonPrimitive;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import me.xpyex.lib.xplib.util.RootUtil;
+import me.xpyex.lib.xplib.util.reflect.ConstructorUtil;
+import me.xpyex.lib.xplib.util.reflect.FieldUtil;
+import me.xpyex.lib.xplib.util.reflect.MethodUtil;
 
 public class GsonUtil extends RootUtil {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
@@ -75,22 +77,35 @@ public class GsonUtil extends RootUtil {
      * @param o1 要被复制的JsonObject
      * @return 被复制的JsonObject
      */
-    public static JsonObject copy(JsonObject o1) {
+    @SuppressWarnings("unchecked")
+    public static <T extends JsonElement> T copy(T o1) {
         try {
-            return o1.deepCopy();
+            return (T) o1.deepCopy();
         } catch (IllegalAccessError ignored) {
             try {
-                Method method = JsonObject.class.getMethod("deepCopy");
-                method.setAccessible(true);
-                return (JsonObject) method.invoke(o1);  //司马Gson，反射看你听不听话
+                return MethodUtil.executeInstanceMethod(o1, "deepCopy");  //司马Gson，反射看你听不听话
             } catch (ReflectiveOperationException ignored1) {
-                JsonObject result = new JsonObject();
-                for (Map.Entry<String, JsonElement> entry : o1.entrySet()) {
-                    result.add(entry.getKey(), entry.getValue());
+                if (o1.isJsonObject()) {
+                    JsonObject obj = (JsonObject) o1;
+                    JsonObject result = new JsonObject();
+                    obj.entrySet().forEach(entry -> result.add(entry.getKey(), copy(entry.getValue())));
+                    return (T) result;
+                } else if (o1.isJsonArray()) {
+                    JsonArray array = (JsonArray) o1;
+                    JsonArray result = new JsonArray();
+                    array.forEach(result::add);
+                    return (T) result;
+                } else if (o1.isJsonPrimitive()) {
+                    JsonPrimitive primitive = (JsonPrimitive) o1;
+                    try {
+                        return (T) ConstructorUtil.newInstance(JsonPrimitive.class, FieldUtil.getInstanceField(primitive, "value"));
+                    } catch (ReflectiveOperationException e) {
+                        e.printStackTrace();
+                    }
                 }
-                return result;
             }
         }
+        throw new IllegalArgumentException("传入的对象无法被复制");
     }
 
     /**
@@ -119,9 +134,7 @@ public class GsonUtil extends RootUtil {
             return array.asList();
         } catch (NoSuchMethodError e) {
             List<JsonElement> list = new ArrayList<>();
-            for (int i = 0; i < array.size(); i++) {
-                list.add(array.get(i));
-            }
+            array.forEach(list::add);
             return list;
         }
     }

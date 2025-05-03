@@ -11,10 +11,10 @@ import me.xpyex.lib.xplib.util.value.ValueUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class MethodUtil extends RootUtil {
+    protected static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
     private static final WeakHashMap<String, Method> METHOD_CACHE = new WeakHashMap<>();
-    private static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
 
-    private static List<String> getClassNames(Class<?>[] classes) {
+    protected static List<String> getClassNames(Class<?>[] classes) {
         return (classes == null || classes.length == 0) ? Collections.emptyList() : Arrays.stream(classes).map(Class::getName).collect(Collectors.toList());
     }
 

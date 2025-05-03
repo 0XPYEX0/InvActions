@@ -17,7 +17,7 @@ public class InvUtil {
         String className = inv.getHolder() != null ? inv.getHolder().getClass().getName() : "null";
         String simpleName = inv.getHolder() != null ? inv.getHolder().getClass().getSimpleName() : "null";
         MsgUtil.debugLog(InvActions.getInstance(), "InvUtil.isNotMenu(): " + className);
-        if (InvActionsServerConfig.getConfig().AllowInvs.contains(simpleName)) {
+        if (InvActionsServerConfig.getCurrent().getAllowInvs().contains(simpleName)) {
             return true;
         }
         if (inv.getHolder() == null || inv.getHolder() instanceof Player) {

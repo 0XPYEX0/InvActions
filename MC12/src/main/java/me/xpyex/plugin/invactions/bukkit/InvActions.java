@@ -2,8 +2,8 @@ package me.xpyex.plugin.invactions.bukkit;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Modifier;
 import java.net.URLClassLoader;
+import me.xpyex.lib.xplib.api.Pair;
 import me.xpyex.lib.xplib.bukkit.config.ConfigUtil;
 import me.xpyex.lib.xplib.bukkit.core.XPPlugin;
 import me.xpyex.lib.xplib.bukkit.inventory.HandleMenu;
@@ -16,6 +16,7 @@ import me.xpyex.lib.xplib.util.version.UpdateUtil;
 import me.xpyex.plugin.invactions.bukkit.command.HandleCmd;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsConfig;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
+import me.xpyex.plugin.invactions.bukkit.message.InvActionsMessage;
 import me.xpyex.plugin.invactions.bukkit.module.HandleEvent;
 import me.xpyex.plugin.invactions.bukkit.module.InventoryF;
 import me.xpyex.plugin.invactions.bukkit.module.RootModule;
@@ -114,10 +115,27 @@ public final class InvActions extends XPPlugin {
     }
 
     public void updateServerConfig() {
-        ConfigUtil.saveConfig(getInstance(), "config", InvActionsServerConfig.getDefault(), false, false);
+        String configPath = "config";
+        ConfigUtil.saveConfig(getInstance(), configPath, InvActionsServerConfig.getDefault(), false, false);
         //如果原先没有文件，先新建一份
-        ConfigUtil.saveConfig(getInstance(), "config", ConfigUtil.getConfig(this, InvActionsServerConfig.class), true);
+        ConfigUtil.saveConfig(getInstance(), configPath, ConfigUtil.getConfig(this, InvActionsServerConfig.class), true);
         //更新服务端config.json
+
+        String langPath = "lang" + File.separator + InvActionsServerConfig.getCurrent().getLang();
+        try {
+            File langFile = new File(getDataFolder(), langPath + ".json");
+            if (!langFile.exists()) {
+                langFile.getParentFile().exists();
+                saveResource(langPath + ".json", false);
+            }
+        } catch (IllegalArgumentException ignored) {
+            warn("&c未找到&r" + langPath + ".json&c，将使用&r" + "zh_cn.json&c作为默认语言文件，您可以自行更改内容");
+            warn("&cCan't find `" + langPath + ".json` , use `zh_cn.json` as default. You can edit it by yourself.");
+        }
+        ConfigUtil.saveConfig(getInstance(), langPath, InvActionsMessage.getChineseDefault(), false, false);
+        //如果原先没有文件，先新建一份，以简体中文为默认
+        ConfigUtil.saveConfig(getInstance(), langPath, ConfigUtil.getConfig(this, langPath, InvActionsMessage.class), true);
+        //更新服务端语言文件，如zh_cn.json
     }
 
     public void updatePlayersConfig() {
@@ -131,25 +149,13 @@ public final class InvActions extends XPPlugin {
 
     public void registerListeners() {
         getServer().getScheduler().runTaskAsynchronously(getInstance(), () -> {
-            for (Class<?> moduleClass : ClassUtil.getClasses("me.xpyex.plugin.invactions.bukkit.module")) {
-                if (RootModule.class.isAssignableFrom(moduleClass)) {  //moduleClass是RootModule的子类，继承RootModule
-                    if (
-                        moduleClass.isPrimitive()
-                            || moduleClass.isArray()
-                            || moduleClass.isInterface()
-                            || moduleClass.isAnnotation()
-                            || moduleClass.isEnum()
-                            || (moduleClass.getModifiers() & Modifier.ABSTRACT) > 0
-                    ) continue;
-
-                    try {
-                        moduleClass.getConstructor().newInstance();
-                    } catch (Throwable e) {
-                        if (InvActionsServerConfig.getConfig().Debug) e.printStackTrace();
-                        warn("&c加载模块 &r" + moduleClass.getSimpleName() + " &c时出错: &e" + e);
-                    }
-                }
-            }
+            ClassUtil.scanAndGetClassInstances("me.xpyex.plugin.invactions.bukkit.module", RootModule.class)
+                .stream()
+                .filter(o -> o instanceof Pair)
+                .forEach(o -> {
+                    Pair<Class<?>, Exception> pair = (Pair<Class<?>, Exception>) o;
+                    warn("&c加载模块 &r" + pair.getKey().getSimpleName() + " &c时出错: &e" + pair.getValue());
+                });
         });
         registerListener(new HandleEvent());
         try {

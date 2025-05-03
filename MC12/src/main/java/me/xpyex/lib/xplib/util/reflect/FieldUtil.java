@@ -30,7 +30,7 @@ public class FieldUtil extends RootUtil {
 
     @Nullable
     @SuppressWarnings("unchecked")
-    public static <T> T getObjectField(Object obj, String key) throws ReflectiveOperationException {
+    public static <T> T getInstanceField(Object obj, String key) throws ReflectiveOperationException {
         Field field = getClassField(obj.getClass(), key);
         try {
             boolean accessible = field.isAccessible();
@@ -63,7 +63,7 @@ public class FieldUtil extends RootUtil {
         return getStaticField(ClassUtil.getClass(className, true, false), key);
     }
 
-    public static void setObjectField(Object obj, String key, Object value) throws ReflectiveOperationException {
+    public static void setInstanceField(Object obj, String key, Object value) throws ReflectiveOperationException {
         Field field = getClassField(obj.getClass(), key);
         try {
             boolean accessible = field.isAccessible();
@@ -89,7 +89,7 @@ public class FieldUtil extends RootUtil {
         for (Field declaredField : clazz.getDeclaredFields()) {  //仅复制该Class变量
             String fieldName = declaredField.getName();
             try {
-                setObjectField(target, fieldName, getObjectField(origin, fieldName));
+                setInstanceField(target, fieldName, getInstanceField(origin, fieldName));
             } catch (ReflectiveOperationException e) {
                 e.printStackTrace();
             }

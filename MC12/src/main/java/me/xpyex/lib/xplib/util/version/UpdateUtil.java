@@ -8,13 +8,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import me.xpyex.lib.xplib.api.Version;
-import me.xpyex.lib.xplib.bukkit.config.GsonUtil;
 import me.xpyex.lib.xplib.util.RootUtil;
+import me.xpyex.lib.xplib.util.gson.GsonUtil;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import org.bukkit.plugin.Plugin;
 
 public class UpdateUtil extends RootUtil {
-
     public static String getUpdateFromGitHub(Plugin plugin) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL("https://api.github.com/repos/XPPlugins/" + plugin.getName() + "/releases/latest").openConnection();
@@ -38,8 +37,7 @@ public class UpdateUtil extends RootUtil {
         return null;
     }
 
-
-    private static byte[] readInputStream(InputStream inputStream) throws IOException {
+    public static byte[] readInputStream(InputStream inputStream) throws IOException {
         try (ByteArrayOutputStream ba = new ByteArrayOutputStream(16384)) {
             int nRead;
             byte[] data = new byte[4096];

@@ -11,6 +11,7 @@ import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.bukkit.version.VersionUtil;
 import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
+import me.xpyex.plugin.invactions.bukkit.message.InvActionsMessage;
 import me.xpyex.plugin.invactions.bukkit.module.RootModule;
 import me.xpyex.plugin.invactions.bukkit.util.InvUtil;
 import org.bukkit.Bukkit;
@@ -70,8 +71,8 @@ public class HandleCmd implements CommandExecutor {
                     if (args.length > 2) {
                         sender.sendMessage("Invs内容不可包含空格，多余的参数已被忽略");
                     }
-                    InvActionsServerConfig.getConfig().AllowInvs.add(args[1]);
-                    ConfigUtil.saveConfig(InvActions.getInstance(), "config", InvActionsServerConfig.getConfig(), true);
+                    InvActionsServerConfig.getCurrent().getAllowInvs().add(args[1]);
+                    ConfigUtil.saveConfig(InvActions.getInstance(), "config", InvActionsServerConfig.getCurrent(), true);
                     ConfigUtil.reload(InvActions.getInstance());
                     sender.sendMessage("已允许整理 " + args[1]);
                     return;
@@ -97,8 +98,8 @@ public class HandleCmd implements CommandExecutor {
                     )
                     .setSign("A", new UnmodifiableButton(menu, (player -> player.hasPermission("InvActions.admin") ? 1 : 0))
                                       .addMode(1, ItemUtil.getItemStack(MENU_WOOL_ORANGE,
-                                          LangUtil.getMessage(InvActions.getInstance(), "Reload.menu.name"),
-                                          LangUtil.getMessages(InvActions.getInstance(), "Reload.menu.lore").toArray(new String[0])))
+                                          InvActionsMessage.getCurrent().getReload().getMenu().getName(),
+                                          InvActionsMessage.getCurrent().getReload().getMenu().getLore().toArray(new String[0])))
                                       .addMode(0, MENU_GLASS_PANE)
                                       .setClickEffect(((player, clickType, itemStack) -> {
                                           if (!player.hasPermission("InvActions.admin")) {  //玩家没权限的时候
