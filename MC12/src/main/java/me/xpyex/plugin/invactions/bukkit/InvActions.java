@@ -176,7 +176,7 @@ public final class InvActions extends XPPlugin {
                     URLClassLoader classLoader = (URLClassLoader) xpLib.getClass().getClassLoader();
                     xpLib.getLogger().info("即将自动删除");
                     try {
-                        File file = MethodUtil.executeInstanceMethod(xpLib, "getFile");
+                        File file = removePaperRemapPath(MethodUtil.executeInstanceMethod(xpLib, "getFile"));
                         File folderFile = xpLib.getDataFolder();
 
                         getServer().getPluginManager().disablePlugin(xpLib);
@@ -200,5 +200,9 @@ public final class InvActions extends XPPlugin {
             }
         }, 0L, 5L);
         info("已加载");
+    }
+
+    private static File removePaperRemapPath(File oldFile) {
+        return new File(oldFile.getPath().replace(File.separator + ".paper-remapped" + File.separator, File.separator));
     }
 }
