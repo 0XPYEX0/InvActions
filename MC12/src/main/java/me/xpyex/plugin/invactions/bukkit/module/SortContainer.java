@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
@@ -82,5 +83,13 @@ public class SortContainer extends RootModule {
     @Override
     public String getName() {
         return "DefaultF";
+    }
+
+    @Override
+    public boolean playerEnabled(Player player) {
+        if (!canLoad) return false;
+        if (InvActionsServerConfig.getCurrent().isPermCheck() && !player.hasPermission("InvActions.use.module." + getName()))
+            return false;
+        return true;
     }
 }

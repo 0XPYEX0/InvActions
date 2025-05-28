@@ -31,7 +31,7 @@ public abstract class RootModule implements Listener {
         ValueUtil.ifPresent(LangUtil.getMessage(InvActions.getInstance(), "ActionBarSuffix"), s -> SETTING_HELP = s);
     }
 
-    private final boolean canLoad;
+    protected final boolean canLoad;
     private final WeakHashMap<UUID, Long> cooldown = new WeakHashMap<>();
     @Getter
     private final String name = getClass().getSimpleName();
