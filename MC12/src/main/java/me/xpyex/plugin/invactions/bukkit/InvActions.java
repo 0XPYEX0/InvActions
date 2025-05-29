@@ -32,6 +32,10 @@ public final class InvActions extends XPPlugin {
         //
     }
 
+    private static File removePaperRemapPath(File oldFile) {
+        return new File(oldFile.getPath().replace(File.separator + ".paper-remapped" + File.separator, File.separator));
+    }
+
     @Override
     public void onDisable() {
         for (Menu menu : Menu.getMenus().values()) {
@@ -200,9 +204,5 @@ public final class InvActions extends XPPlugin {
             }
         }, 0L, 5L);
         info("已加载");
-    }
-
-    private static File removePaperRemapPath(File oldFile) {
-        return new File(oldFile.getPath().replace(File.separator + ".paper-remapped" + File.separator, File.separator));
     }
 }

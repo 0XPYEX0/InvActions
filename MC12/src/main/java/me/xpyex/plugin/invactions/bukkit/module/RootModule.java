@@ -28,7 +28,7 @@ public abstract class RootModule implements Listener {
     public static ArrayList<RootModule> modules = new ArrayList<>();
 
     static {
-        ValueUtil.ifPresent(LangUtil.getMessage(InvActions.getInstance(), "ActionBarSuffix"), s -> SETTING_HELP = s);
+        ValueUtil.ifPresent(LangUtil.getMessage("ActionBarSuffix"), s -> SETTING_HELP = s);
     }
 
     protected final boolean canLoad;
@@ -72,12 +72,12 @@ public abstract class RootModule implements Listener {
 
     public final String getNationalMessage(String key, Object... toFormatObj) {
         if (key == null || toFormatObj == null) return "";
-        String lang = LangUtil.getMessage(InvActions.getInstance(), getName() + "." + key);
+        String lang = LangUtil.getMessage(getName() + "." + key);
         return MessageFormat.format(lang, toFormatObj);
     }
 
     public final List<String> getNationalMessages(String key) {
-        return LangUtil.getMessages(InvActions.getInstance(), getName() + "." + key);
+        return LangUtil.getMessages(getName() + "." + key);
     }
 
     public final String getMessageWithSuffix(String key, Object... toFormatObj) {
@@ -145,9 +145,9 @@ public abstract class RootModule implements Listener {
         }
         ArrayList<String> list = new ArrayList<>(getNationalMessages("menu.lore"));  //不确定List具体类型，copy一份
         list.add("");
-        list.add(LangUtil.getMessage(InvActions.getInstance(), "State.current")
+        list.add(LangUtil.getMessage("State.current")
                      + ": "
-                     + LangUtil.getMessage(InvActions.getInstance(), "State." + stateCode)
+                     + LangUtil.getMessage("State." + stateCode)
         );
         return list.toArray(new String[0]);
     }

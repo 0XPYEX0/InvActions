@@ -56,7 +56,7 @@ public class HandleCmd implements CommandExecutor {
                     }
                     ConfigUtil.reload(InvActions.getInstance());
                     InvActions.getInstance().updateServerConfig();
-                    sender.sendMessage(MsgUtil.getColorMsg(LangUtil.getMessage(InvActions.getInstance(), "Reload.reload")));
+                    sender.sendMessage(MsgUtil.getColorMsg(LangUtil.getMessage("Reload.reload")));
                     return;
                 }
                 if (args[0].equalsIgnoreCase("addInvs")) {

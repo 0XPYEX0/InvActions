@@ -47,15 +47,15 @@ public class EggCatcher extends RootModule {
                         Integer chance = InvActionsServerConfig.getCurrent().getEggCatcher_Chance().get(hitEntityType.toString());
                         if (chance == null || chance == 100) {
                             if (catchEntity(event.getHitEntity()) != null) {
-                                MsgUtil.sendActionBar(p, getMessageWithSuffix("caught", LangUtil.getTranslationName(InvActions.getInstance(), hitEntityType)));
+                                MsgUtil.sendActionBar(p, getMessageWithSuffix("caught", LangUtil.getTranslationName(hitEntityType)));
                             }
                         } else if (chance > 0 && chance < 100) {
                             if (RANDOM.nextInt(100) < chance) {
                                 if (catchEntity(event.getHitEntity()) != null) {
-                                    MsgUtil.sendActionBar(p, getMessageWithSuffix("caught", LangUtil.getTranslationName(InvActions.getInstance(), hitEntityType)));
+                                    MsgUtil.sendActionBar(p, getMessageWithSuffix("caught", LangUtil.getTranslationName(hitEntityType)));
                                 }
                             } else {
-                                MsgUtil.sendActionBar(p, getMessageWithSuffix("failed", LangUtil.getTranslationName(InvActions.getInstance(), hitEntityType)));
+                                MsgUtil.sendActionBar(p, getMessageWithSuffix("failed", LangUtil.getTranslationName(hitEntityType)));
                             }
                         }
                     }

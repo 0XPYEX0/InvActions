@@ -5,7 +5,6 @@ import me.xpyex.lib.xplib.bukkit.inventory.ItemUtil;
 import me.xpyex.lib.xplib.bukkit.language.LangUtil;
 import me.xpyex.lib.xplib.bukkit.strings.MsgUtil;
 import me.xpyex.lib.xplib.util.strings.StrUtil;
-import me.xpyex.plugin.invactions.bukkit.InvActions;
 import me.xpyex.plugin.invactions.bukkit.config.InvActionsServerConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -47,7 +46,7 @@ public class AutoFarmer extends RootModule {
                         return;  //防止收割被保护的地方
                     }
                     event.setCancelled(true);
-                    MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("harvest", LangUtil.getItemName(InvActions.getInstance(), event.getClickedBlock().getType())));
+                    MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("harvest", LangUtil.getItemName(event.getClickedBlock().getType())));
                     event.getClickedBlock().breakNaturally(event.getPlayer().getInventory().getItemInMainHand());
                     return;
                 }
@@ -83,7 +82,7 @@ public class AutoFarmer extends RootModule {
                         }
                         event.getClickedBlock().getLocation().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), drop);
                     }
-                    MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("harvest_and_plant", LangUtil.getItemName(InvActions.getInstance(), event.getClickedBlock().getType())));
+                    MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("harvest_and_plant", LangUtil.getItemName(event.getClickedBlock().getType())));
                 }
             }
         }

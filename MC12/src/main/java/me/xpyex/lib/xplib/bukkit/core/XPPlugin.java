@@ -57,4 +57,11 @@ public abstract class XPPlugin extends JavaPlugin {
             getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[ERROR] &b[" + this.getDescription().getName() + "] &r" + message));
         }
     }
+
+    @Override
+    public void saveResource(String path, boolean replace) {
+        if (getResource(path) != null) {
+            super.saveResource(path, replace);
+        }
+    }
 }

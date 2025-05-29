@@ -68,7 +68,7 @@ public class SortContainer extends RootModule {
         if (target.getState() instanceof Container && event.getPlayer().isSneaking()) {  //看向容器了, Shift+F
             event.setCancelled(true);
             SortUtil.sortInv(((Container) target.getState()).getInventory());
-            MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("target", LangUtil.getItemName(InvActions.getInstance(), target.getType())));
+            MsgUtil.sendActionBar(event.getPlayer(), getMessageWithSuffix("target", LangUtil.getItemName(target.getType())));
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
             return;
         }
