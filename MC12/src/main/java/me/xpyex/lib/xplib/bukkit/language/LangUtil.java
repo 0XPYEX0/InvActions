@@ -3,6 +3,7 @@ package me.xpyex.lib.xplib.bukkit.language;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -32,9 +33,11 @@ public class LangUtil extends RootUtil {
         String cacheKey = plugin.getName() + "-" + lang;
         String fileName = "lang/" + lang + ".json";
         if (!langCache.containsKey(cacheKey)) {
-            plugin.saveResource(fileName, false);  //看看插件里面有没有自带对应的语言文件，不覆盖用户创建的
+            if (plugin.getResource(fileName) != null) {
+                plugin.saveResource(fileName, false);  //看看插件里面有没有自带对应的语言文件，不覆盖用户创建的
+            }
 
-            JsonObject messages = ConfigUtil.getConfig(plugin, "lang/" + lang, JsonObject.class);  //从lang/zh.json之类的文件取出JsonObject
+            JsonObject messages = ConfigUtil.getConfig(plugin, "lang" + File.separator + lang, JsonObject.class);  //从lang/zh.json之类的文件取出JsonObject
             if (messages == null) {  //当不存在这个配置文件时
                 plugin.getLogger().warning("找不到对应的语言文件，或内容非JSON文本: " + fileName);
                 plugin.getLogger().warning("请调整 config.json 内的 lang 项");

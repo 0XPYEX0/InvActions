@@ -35,7 +35,6 @@ public abstract class RootModule implements Listener {
     private final WeakHashMap<UUID, Long> cooldown = new WeakHashMap<>();
     @Getter
     private final String name = getClass().getSimpleName();
-    ;
 
     public RootModule() {
         boolean canLoad1;
